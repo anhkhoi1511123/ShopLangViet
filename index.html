@@ -6,27 +6,629 @@
   <title>Shop Làng Việt</title>
   <meta
     name="description"
-    content="Shop Làng Việt - Dịch vụ Blox Fruit với giao diện đẹp, dễ nhìn và có thể đổi theme."
+    content="Shop Làng Việt - Dịch vụ Blox Fruit với giao diện đẹp, hiện đại và có thể đổi theme."
   />
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --bg: linear-gradient(135deg, #4d0f0f 0%, #7a1717 45%, #120c0c 100%);
+      --bg-soft: rgba(255, 255, 255, 0.08);
+      --panel: rgba(255, 255, 255, 0.08);
+      --panel-strong: rgba(255, 255, 255, 0.12);
+      --text: #fffaf0;
+      --text-soft: #f6e7bf;
+      --title: #f6cf62;
+      --accent: #d4af37;
+      --accent-2: #f4d97d;
+      --border: rgba(244, 217, 125, 0.22);
+      --btn-text: #161616;
+      --shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+      --nav-bg: rgba(16, 10, 10, 0.72);
+      --grid: rgba(255, 255, 255, 0.06);
+    }
+
+    html[data-theme="dark"] {
+      --bg: linear-gradient(135deg, #050505 0%, #101010 50%, #1d1d1d 100%);
+      --bg-soft: rgba(255, 255, 255, 0.05);
+      --panel: rgba(255, 255, 255, 0.05);
+      --panel-strong: rgba(255, 255, 255, 0.08);
+      --text: #f5f5f5;
+      --text-soft: #d8d8d8;
+      --title: #ffffff;
+      --accent: #ffffff;
+      --accent-2: #bdbdbd;
+      --border: rgba(255, 255, 255, 0.12);
+      --btn-text: #101010;
+      --shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+      --nav-bg: rgba(0, 0, 0, 0.72);
+      --grid: rgba(255, 255, 255, 0.05);
+    }
+
+    html[data-theme="light"] {
+      --bg: linear-gradient(135deg, #ffffff 0%, #f4f4f4 55%, #ececec 100%);
+      --bg-soft: rgba(255, 255, 255, 0.72);
+      --panel: rgba(255, 255, 255, 0.75);
+      --panel-strong: rgba(255, 255, 255, 0.92);
+      --text: #171717;
+      --text-soft: #535353;
+      --title: #8b1e1e;
+      --accent: #8b1e1e;
+      --accent-2: #d4af37;
+      --border: rgba(139, 30, 30, 0.14);
+      --btn-text: #ffffff;
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+      --nav-bg: rgba(255, 255, 255, 0.8);
+      --grid: rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.3s ease, color 0.3s ease;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, var(--grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      z-index: -3;
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 999px;
+      filter: blur(70px);
+      pointer-events: none;
+      z-index: -2;
+      opacity: 0.8;
+    }
+
+    .orb-1 {
+      width: 280px;
+      height: 280px;
+      top: -60px;
+      left: -40px;
+      background: rgba(244, 217, 125, 0.16);
+    }
+
+    .orb-2 {
+      width: 320px;
+      height: 320px;
+      bottom: -60px;
+      right: -70px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 99;
+      backdrop-filter: blur(12px);
+      background: var(--nav-bg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      min-height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-badge {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #111;
+      box-shadow: var(--shadow);
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--title);
+      line-height: 1.1;
+    }
+
+    .brand-sub {
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--text-soft);
+      opacity: 0.95;
+    }
+
+    .menu {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .menu a {
+      font-weight: 700;
+      color: var(--text);
+      opacity: 0.92;
+      transition: 0.2s ease;
+    }
+
+    .menu a:hover {
+      color: var(--title);
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      padding: 70px 0 34px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      color: var(--title);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 18px 0 0;
+      font-size: clamp(40px, 7vw, 72px);
+      line-height: 1.05;
+      color: var(--title);
+    }
+
+    .subtitle {
+      margin: 18px 0 0;
+      max-width: 700px;
+      font-size: 18px;
+      line-height: 1.75;
+      color: var(--text-soft);
+    }
+
+    .hero-actions {
+      margin-top: 28px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      min-height: 52px;
+      padding: 0 22px;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.98;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: var(--btn-text);
+    }
+
+    .btn-secondary {
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .hero-stats {
+      margin-top: 26px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      min-width: 145px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-number {
+      display: block;
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--title);
+    }
+
+    .stat-text {
+      display: block;
+      margin-top: 6px;
+      color: var(--text-soft);
+      font-size: 14px;
+    }
+
+    .glass {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 26px;
+      border-radius: 24px;
+    }
+
+    .hero-card h3 {
+      margin: 0 0 16px;
+      font-size: 28px;
+      color: var(--title);
+    }
+
+    .info {
+      display: grid;
+      gap: 14px;
+    }
+
+    .info-item {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--panel-strong);
+    }
+
+    .info-label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-soft);
+      margin-bottom: 6px;
+    }
+
+    .info-value {
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    .badges {
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .badges span {
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: var(--panel-strong);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    section {
+      padding: 24px 0 58px;
+    }
+
+    .section-kicker {
+      display: inline-block;
+      margin-bottom: 10px;
+      color: var(--title);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 38px;
+      color: var(--title);
+      text-align: center;
+    }
+
+    .section-title.left {
+      text-align: left;
+    }
+
+    .section-desc {
+      margin: 12px auto 0;
+      max-width: 760px;
+      line-height: 1.75;
+      color: var(--text-soft);
+      text-align: center;
+    }
+
+    .section-desc.left {
+      text-align: left;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .theme-box,
+    .highlight-box,
+    .contact-box {
+      padding: 28px;
+      border-radius: 24px;
+    }
+
+    .theme-switcher {
+      margin-top: 22px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .theme-btn {
+      min-width: 220px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: var(--panel-strong);
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: 0.2s ease;
+    }
+
+    .theme-btn:hover,
+    .theme-btn.active {
+      transform: translateY(-2px);
+      border-color: var(--title);
+      box-shadow: var(--shadow);
+    }
+
+    .dots {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .red { background: #8b1e1e; }
+    .gold { background: #d4af37; }
+    .black { background: #111111; }
+    .white { background: #ffffff; }
+    .gray { background: #6f6f6f; }
+    .soft { background: #ececec; }
+
+    .services-grid {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .service-card {
+      padding: 26px 22px;
+      border-radius: 22px;
+      transition: transform 0.22s ease, border-color 0.22s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--title);
+    }
+
+    .service-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      font-size: 26px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #111;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .service-card h3 {
+      margin: 0 0 12px;
+      font-size: 24px;
+      color: var(--title);
+    }
+
+    .service-card p {
+      margin: 0;
+      color: var(--text-soft);
+      line-height: 1.75;
+    }
+
+    .highlight-grid {
+      display: grid;
+      grid-template-columns: 1fr 0.95fr;
+      gap: 26px;
+      align-items: center;
+    }
+
+    .features {
+      display: grid;
+      gap: 14px;
+    }
+
+    .feature {
+      padding: 16px 18px;
+      border-radius: 18px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      background: var(--panel-strong);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #111;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .feature p {
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .contact-box {
+      text-align: center;
+    }
+
+    .contact-actions {
+      margin-top: 24px;
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .footer {
+      border-top: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.14);
+    }
+
+    .footer-inner {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--text-soft);
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .highlight-grid,
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-right {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .nav {
+        flex-direction: column;
+        justify-content: center;
+        padding: 14px 0;
+      }
+
+      .menu {
+        justify-content: center;
+      }
+
+      .section-title {
+        font-size: 30px;
+      }
+
+      .theme-btn {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .btn {
+        width: 100%;
+      }
+
+      .hero {
+        padding-top: 52px;
+      }
+
+      .hero-card,
+      .theme-box,
+      .highlight-box,
+      .contact-box {
+        padding: 22px 18px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="bg-orb orb-1"></div>
-  <div class="bg-orb orb-2"></div>
-  <div class="bg-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
 
-  <header class="site-header">
+  <header class="header">
     <div class="container nav">
-      <a href="#top" class="logo-wrap">
-        <div class="logo-badge">LV</div>
+      <a href="#top" class="brand">
+        <div class="brand-badge">LV</div>
         <div>
-          <div class="logo">Shop Làng Việt</div>
-          <div class="logo-sub">Blox Fruit Service</div>
+          <div class="brand-title">Shop Làng Việt</div>
+          <div class="brand-sub">Blox Fruit Service</div>
         </div>
       </a>
 
       <nav class="menu">
         <a href="#gioi-thieu">Giới thiệu</a>
+        <a href="#theme">Theme</a>
         <a href="#dich-vu">Dịch vụ</a>
         <a href="#lien-he">Liên hệ</a>
       </nav>
@@ -35,15 +637,16 @@
 
   <main id="top">
     <section class="hero" id="gioi-thieu">
-      <div class="container hero-layout">
+      <div class="container hero-grid">
         <div class="hero-left">
-          <p class="tag">SHOP BLOX FRUIT</p>
+          <span class="tag">SHOP BLOX FRUIT</span>
           <h1>Shop Làng Việt</h1>
           <p class="subtitle">
-            Giao diện đơn giản nhưng bắt mắt, dễ nhìn, dễ liên hệ và có thể đổi theme theo phong cách bạn thích.
+            Giao diện gọn nhưng phải đẹp, dễ nhìn, bắt mắt hơn và có thể đổi theme theo đúng màu bạn thích:
+            đỏ thẫm - vàng sang - đen - trắng.
           </p>
 
-          <div class="hero-buttons">
+          <div class="hero-actions">
             <a
               class="btn btn-primary"
               href="https://discord.gg/RdZpev84xK"
@@ -59,37 +662,40 @@
           </div>
 
           <div class="hero-stats">
-            <div class="mini-card">
-              <span class="mini-number">3</span>
-              <span class="mini-text">Theme đổi màu</span>
+            <div class="stat">
+              <span class="stat-number">3</span>
+              <span class="stat-text">Theme đổi màu</span>
             </div>
-            <div class="mini-card">
-              <span class="mini-number">24/7</span>
-              <span class="mini-text">Dễ liên hệ</span>
+            <div class="stat">
+              <span class="stat-number">24/7</span>
+              <span class="stat-text">Dễ liên hệ</span>
             </div>
-            <div class="mini-card">
-              <span class="mini-number">VIP</span>
-              <span class="mini-text">Phong cách riêng</span>
+            <div class="stat">
+              <span class="stat-number">VIP</span>
+              <span class="stat-text">Phong cách riêng</span>
             </div>
           </div>
         </div>
 
         <div class="hero-right">
-          <div class="hero-panel glass">
+          <div class="hero-card glass">
             <h3>Thông tin nhanh</h3>
-            <div class="info-list">
+
+            <div class="info">
               <div class="info-item">
                 <span class="info-label">Tên shop</span>
                 <span class="info-value">Shop Làng Việt</span>
               </div>
+
               <div class="info-item">
                 <span class="info-label">Discord profile</span>
                 <span class="info-value" id="discordName">ngai_hamster</span>
               </div>
+
               <div class="info-item">
                 <span class="info-label">Discord server</span>
                 <a
-                  class="info-link"
+                  class="info-value"
                   href="https://discord.gg/RdZpev84xK"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -99,39 +705,37 @@
               </div>
             </div>
 
-            <div class="feature-badges">
+            <div class="badges">
               <span>Uy tín</span>
               <span>Dễ liên hệ</span>
-              <span>Giao diện đẹp</span>
+              <span>Gọn & đẹp</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="theme-section">
+    <section id="theme">
       <div class="container">
-        <div class="theme-card glass">
-          <div>
-            <p class="section-kicker">Theme setting</p>
-            <h2 class="section-title left">Chỉnh màu shop</h2>
-            <p class="section-desc">
-              Chọn kiểu màu bạn thích. Theme sẽ được lưu lại trên trình duyệt của bạn.
-            </p>
-          </div>
+        <div class="theme-box glass">
+          <span class="section-kicker">Theme setting</span>
+          <h2 class="section-title left">Chỉnh màu shop</h2>
+          <p class="section-desc left">
+            Chọn kiểu màu bạn thích. Theme sẽ được lưu ngay trên trình duyệt.
+          </p>
 
           <div class="theme-switcher">
             <button class="theme-btn active" data-theme="vietnam" type="button">
-              <span class="theme-dots">
+              <span class="dots">
                 <span class="dot red"></span>
                 <span class="dot gold"></span>
                 <span class="dot black"></span>
               </span>
-              Đỏ thẫm / Vàng
+              Đỏ thẫm / Vàng sang
             </button>
 
             <button class="theme-btn" data-theme="dark" type="button">
-              <span class="theme-dots">
+              <span class="dots">
                 <span class="dot black"></span>
                 <span class="dot gray"></span>
                 <span class="dot white"></span>
@@ -140,10 +744,10 @@
             </button>
 
             <button class="theme-btn" data-theme="light" type="button">
-              <span class="theme-dots">
+              <span class="dots">
                 <span class="dot white"></span>
                 <span class="dot soft"></span>
-                <span class="dot darktext"></span>
+                <span class="dot red"></span>
               </span>
               Trắng
             </button>
@@ -152,72 +756,72 @@
       </div>
     </section>
 
-    <section class="services" id="dich-vu">
+    <section id="dich-vu">
       <div class="container">
-        <p class="section-kicker center">DỊCH VỤ</p>
+        <span class="section-kicker" style="display:block;text-align:center;">Dịch vụ</span>
         <h2 class="section-title">Dịch vụ cơ bản</h2>
-        <p class="section-desc center">
-          Bố cục gọn gàng, nổi bật, dễ nhìn trên cả điện thoại và máy tính.
+        <p class="section-desc">
+          Bố cục gọn gàng hơn, card nổi rõ hơn, nhìn sáng và đỡ trống hơn nhiều.
         </p>
 
-        <div class="service-grid">
-          <article class="card glass">
-            <div class="card-icon">⚔️</div>
+        <div class="services-grid">
+          <article class="service-card glass">
+            <div class="service-icon">⚔️</div>
             <h3>Cày level</h3>
             <p>Hỗ trợ cày level nhanh, phù hợp cho người mới hoặc người muốn đẩy tiến độ.</p>
           </article>
 
-          <article class="card glass">
-            <div class="card-icon">💰</div>
+          <article class="service-card glass">
+            <div class="service-icon">💰</div>
             <h3>Farm beli</h3>
-            <p>Farm beli theo mục tiêu, dễ trao đổi trực tiếp qua Discord để chốt đơn nhanh.</p>
+            <p>Farm beli theo mục tiêu, dễ trao đổi trực tiếp qua Discord để chốt đơn nhanh hơn.</p>
           </article>
 
-          <article class="card glass">
-            <div class="card-icon">🔥</div>
+          <article class="service-card glass">
+            <div class="service-icon">🔥</div>
             <h3>Raid / Thức tỉnh</h3>
-            <p>Nhận hỗ trợ các mục tiêu cơ bản, trình bày rõ ràng và dễ tùy chỉnh về sau.</p>
+            <p>Nhận hỗ trợ các mục tiêu cơ bản trong game với cách trình bày rõ ràng, đẹp mắt.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="highlight">
+    <section>
       <div class="container">
         <div class="highlight-box glass">
-          <div class="highlight-text">
-            <p class="section-kicker">PHONG CÁCH</p>
+          <div>
+            <span class="section-kicker">Phong cách</span>
             <h2 class="section-title left">Đơn giản nhưng vẫn nổi bật</h2>
             <p class="section-desc left">
-              Tông màu đỏ thẫm, vàng sang, đen và trắng giúp shop nhìn vừa mạnh mẽ vừa sang trọng, đúng kiểu riêng của bạn.
+              Màu đỏ thẫm và vàng tạo cảm giác sang hơn, theme đen mạnh mẽ hơn, theme trắng thì sáng và sạch hơn.
             </p>
           </div>
 
-          <div class="highlight-list">
-            <div class="highlight-item">
-              <span>✨</span>
-              <p>UI sáng sủa, bắt mắt</p>
+          <div class="features">
+            <div class="feature">
+              <div class="feature-icon">✨</div>
+              <p>UI sáng hơn, dễ nhìn hơn</p>
             </div>
-            <div class="highlight-item">
-              <span>🎨</span>
-              <p>Đổi theme chỉ với 1 nút</p>
+            <div class="feature">
+              <div class="feature-icon">🎨</div>
+              <p>Đổi theme trực tiếp trên web</p>
             </div>
-            <div class="highlight-item">
-              <span>📱</span>
-              <p>Responsive trên mobile</p>
+            <div class="feature">
+              <div class="feature-icon">📱</div>
+              <p>Responsive trên điện thoại</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="contact" id="lien-he">
+    <section id="lien-he">
       <div class="container">
         <div class="contact-box glass">
-          <p class="section-kicker center">LIÊN HỆ</p>
+          <span class="section-kicker">Liên hệ</span>
           <h2 class="section-title">Kết nối với Shop Làng Việt</h2>
-          <p class="section-desc center">
-            Bạn có thể vào server hoặc copy Discord profile để liên hệ nhanh.
+          <p class="section-desc">
+            Có thể vào server hoặc copy Discord profile để liên hệ nhanh.
           </p>
 
           <div class="contact-actions">
@@ -239,12 +843,63 @@
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-box">
+  <footer class="footer">
+    <div class="container footer-inner">
       <p>© <span id="year"></span> Shop Làng Việt. All rights reserved.</p>
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    const discordName = "ngai_hamster";
+    const root = document.documentElement;
+    const themeButtons = document.querySelectorAll(".theme-btn");
+    const copyBtnTop = document.getElementById("copyDiscordBtn");
+    const copyBtnBottom = document.getElementById("copyDiscordBtnBottom");
+    const year = document.getElementById("year");
+
+    function applyTheme(themeName) {
+      root.setAttribute("data-theme", themeName);
+      localStorage.setItem("shopTheme", themeName);
+
+      themeButtons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.theme === themeName);
+      });
+    }
+
+    function copyDiscordName() {
+      navigator.clipboard.writeText(discordName)
+        .then(() => {
+          alert("Đã copy Discord profile: " + discordName);
+        })
+        .catch(() => {
+          alert("Không copy tự động được. Discord của bạn là: " + discordName);
+        });
+    }
+
+    const savedTheme = localStorage.getItem("shopTheme");
+    if (savedTheme) {
+      applyTheme(savedTheme);
+    } else {
+      applyTheme("vietnam");
+    }
+
+    themeButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        applyTheme(button.dataset.theme);
+      });
+    });
+
+    if (copyBtnTop) {
+      copyBtnTop.addEventListener("click", copyDiscordName);
+    }
+
+    if (copyBtnBottom) {
+      copyBtnBottom.addEventListener("click", copyDiscordName);
+    }
+
+    if (year) {
+      year.textContent = new Date().getFullYear();
+    }
+  </script>
 </body>
 </html>
