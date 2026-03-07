@@ -6,58 +6,61 @@
   <title>Shop Làng Việt</title>
   <meta
     name="description"
-    content="Shop Làng Việt - Dịch vụ Blox Fruit với giao diện đẹp, hiện đại và có thể đổi theme."
+    content="Shop Làng Việt - Dịch vụ Blox Fruit với giao diện đẹp, gọn gàng và có bảng setting theme bật ra khi bấm nút."
   />
   <style>
     :root {
-      --bg: linear-gradient(135deg, #4d0f0f 0%, #7a1717 45%, #120c0c 100%);
+      --bg: linear-gradient(135deg, #4b0d0d 0%, #7b1515 45%, #140b0b 100%);
       --bg-soft: rgba(255, 255, 255, 0.08);
       --panel: rgba(255, 255, 255, 0.08);
       --panel-strong: rgba(255, 255, 255, 0.12);
-      --text: #fffaf0;
-      --text-soft: #f6e7bf;
-      --title: #f6cf62;
+      --text: #fff9ef;
+      --text-soft: #f6e9c8;
+      --title: #f2c94c;
       --accent: #d4af37;
-      --accent-2: #f4d97d;
-      --border: rgba(244, 217, 125, 0.22);
-      --btn-text: #161616;
-      --shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
-      --nav-bg: rgba(16, 10, 10, 0.72);
-      --grid: rgba(255, 255, 255, 0.06);
+      --accent-2: #f6d96e;
+      --border: rgba(244, 217, 125, 0.24);
+      --btn-text: #111111;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+      --nav-bg: rgba(20, 11, 11, 0.78);
+      --grid: rgba(255, 255, 255, 0.05);
+      --overlay: rgba(0, 0, 0, 0.45);
     }
 
     html[data-theme="dark"] {
-      --bg: linear-gradient(135deg, #050505 0%, #101010 50%, #1d1d1d 100%);
+      --bg: linear-gradient(135deg, #050505 0%, #101010 50%, #1c1c1c 100%);
       --bg-soft: rgba(255, 255, 255, 0.05);
       --panel: rgba(255, 255, 255, 0.05);
       --panel-strong: rgba(255, 255, 255, 0.08);
-      --text: #f5f5f5;
+      --text: #f7f7f7;
       --text-soft: #d8d8d8;
       --title: #ffffff;
       --accent: #ffffff;
-      --accent-2: #bdbdbd;
+      --accent-2: #bebebe;
       --border: rgba(255, 255, 255, 0.12);
-      --btn-text: #101010;
-      --shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
-      --nav-bg: rgba(0, 0, 0, 0.72);
+      --btn-text: #111111;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.38);
+      --nav-bg: rgba(0, 0, 0, 0.76);
       --grid: rgba(255, 255, 255, 0.05);
+      --overlay: rgba(0, 0, 0, 0.55);
     }
 
     html[data-theme="light"] {
-      --bg: linear-gradient(135deg, #ffffff 0%, #f4f4f4 55%, #ececec 100%);
-      --bg-soft: rgba(255, 255, 255, 0.72);
-      --panel: rgba(255, 255, 255, 0.75);
+      --bg: linear-gradient(135deg, #ffffff 0%, #f4f4f4 50%, #ededed 100%);
+      --bg-soft: rgba(255, 255, 255, 0.75);
+      --panel: rgba(255, 255, 255, 0.76);
       --panel-strong: rgba(255, 255, 255, 0.92);
-      --text: #171717;
-      --text-soft: #535353;
+      --text: #1a1a1a;
+      --text-soft: #4f4f4f;
       --title: #8b1e1e;
       --accent: #8b1e1e;
       --accent-2: #d4af37;
       --border: rgba(139, 30, 30, 0.14);
       --btn-text: #ffffff;
       --shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
-      --nav-bg: rgba(255, 255, 255, 0.8);
+      --nav-bg: rgba(255, 255, 255, 0.82);
       --grid: rgba(0, 0, 0, 0.05);
+      --overlay: rgba(0, 0, 0, 0.18);
     }
 
     * {
@@ -75,8 +78,8 @@
       color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
-      transition: background 0.3s ease, color 0.3s ease;
       position: relative;
+      transition: background 0.3s ease, color 0.3s ease;
     }
 
     body::before {
@@ -87,38 +90,42 @@
         linear-gradient(to right, var(--grid) 1px, transparent 1px),
         linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
       background-size: 32px 32px;
-      pointer-events: none;
       z-index: -3;
+      pointer-events: none;
     }
 
     .orb {
       position: fixed;
       border-radius: 999px;
-      filter: blur(70px);
-      pointer-events: none;
+      filter: blur(80px);
       z-index: -2;
+      pointer-events: none;
       opacity: 0.8;
     }
 
     .orb-1 {
-      width: 280px;
-      height: 280px;
-      top: -60px;
-      left: -40px;
+      width: 300px;
+      height: 300px;
+      top: -70px;
+      left: -50px;
       background: rgba(244, 217, 125, 0.16);
     }
 
     .orb-2 {
-      width: 320px;
-      height: 320px;
-      bottom: -60px;
-      right: -70px;
+      width: 360px;
+      height: 360px;
+      right: -100px;
+      bottom: -80px;
       background: rgba(255, 255, 255, 0.08);
     }
 
     a {
       color: inherit;
       text-decoration: none;
+    }
+
+    button {
+      font: inherit;
     }
 
     .container {
@@ -129,7 +136,7 @@
     .header {
       position: sticky;
       top: 0;
-      z-index: 99;
+      z-index: 90;
       backdrop-filter: blur(12px);
       background: var(--nav-bg);
       border-bottom: 1px solid var(--border);
@@ -165,15 +172,14 @@
     .brand-title {
       font-size: 28px;
       font-weight: 800;
-      color: var(--title);
       line-height: 1.1;
+      color: var(--title);
     }
 
     .brand-sub {
       margin-top: 4px;
       font-size: 13px;
       color: var(--text-soft);
-      opacity: 0.95;
     }
 
     .menu {
@@ -185,8 +191,7 @@
 
     .menu a {
       font-weight: 700;
-      color: var(--text);
-      opacity: 0.92;
+      opacity: 0.94;
       transition: 0.2s ease;
     }
 
@@ -196,12 +201,12 @@
     }
 
     .hero {
-      padding: 70px 0 34px;
+      padding: 74px 0 36px;
     }
 
     .hero-grid {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
+      grid-template-columns: 1.15fr 0.85fr;
       gap: 28px;
       align-items: center;
     }
@@ -221,14 +226,14 @@
 
     h1 {
       margin: 18px 0 0;
-      font-size: clamp(40px, 7vw, 72px);
-      line-height: 1.05;
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: 1.04;
       color: var(--title);
     }
 
     .subtitle {
       margin: 18px 0 0;
-      max-width: 700px;
+      max-width: 720px;
       font-size: 18px;
       line-height: 1.75;
       color: var(--text-soft);
@@ -246,12 +251,11 @@
       padding: 0 22px;
       border: none;
       border-radius: 14px;
-      font-size: 16px;
-      font-weight: 800;
-      cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      font-weight: 800;
+      cursor: pointer;
       transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease;
       box-shadow: var(--shadow);
     }
@@ -273,7 +277,7 @@
     }
 
     .hero-stats {
-      margin-top: 26px;
+      margin-top: 28px;
       display: flex;
       gap: 14px;
       flex-wrap: wrap;
@@ -290,7 +294,7 @@
 
     .stat-number {
       display: block;
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 900;
       color: var(--title);
     }
@@ -310,13 +314,13 @@
     }
 
     .hero-card {
-      padding: 26px;
       border-radius: 24px;
+      padding: 26px;
     }
 
     .hero-card h3 {
       margin: 0 0 16px;
-      font-size: 28px;
+      font-size: 30px;
       color: var(--title);
     }
 
@@ -364,8 +368,9 @@
     }
 
     .section-kicker {
-      display: inline-block;
+      display: block;
       margin-bottom: 10px;
+      text-align: center;
       color: var(--title);
       font-weight: 800;
       letter-spacing: 0.08em;
@@ -375,9 +380,9 @@
 
     .section-title {
       margin: 0;
+      text-align: center;
       font-size: 38px;
       color: var(--title);
-      text-align: center;
     }
 
     .section-title.left {
@@ -387,9 +392,9 @@
     .section-desc {
       margin: 12px auto 0;
       max-width: 760px;
+      text-align: center;
       line-height: 1.75;
       color: var(--text-soft);
-      text-align: center;
     }
 
     .section-desc.left {
@@ -397,62 +402,6 @@
       margin-left: 0;
       margin-right: 0;
     }
-
-    .theme-box,
-    .highlight-box,
-    .contact-box {
-      padding: 28px;
-      border-radius: 24px;
-    }
-
-    .theme-switcher {
-      margin-top: 22px;
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-
-    .theme-btn {
-      min-width: 220px;
-      padding: 14px 16px;
-      border-radius: 18px;
-      border: 1px solid var(--border);
-      background: var(--panel-strong);
-      color: var(--text);
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: 0.2s ease;
-    }
-
-    .theme-btn:hover,
-    .theme-btn.active {
-      transform: translateY(-2px);
-      border-color: var(--title);
-      box-shadow: var(--shadow);
-    }
-
-    .dots {
-      display: flex;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-
-    .dot {
-      width: 16px;
-      height: 16px;
-      border-radius: 999px;
-      border: 1px solid rgba(0, 0, 0, 0.08);
-    }
-
-    .red { background: #8b1e1e; }
-    .gold { background: #d4af37; }
-    .black { background: #111111; }
-    .white { background: #ffffff; }
-    .gray { background: #6f6f6f; }
-    .soft { background: #ececec; }
 
     .services-grid {
       margin-top: 28px;
@@ -493,8 +442,14 @@
 
     .service-card p {
       margin: 0;
-      color: var(--text-soft);
       line-height: 1.75;
+      color: var(--text-soft);
+    }
+
+    .highlight-box,
+    .contact-box {
+      border-radius: 24px;
+      padding: 28px;
     }
 
     .highlight-grid {
@@ -561,6 +516,142 @@
       color: var(--text-soft);
     }
 
+    .settings-fab {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      width: 60px;
+      height: 60px;
+      border: none;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #111;
+      font-size: 28px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      z-index: 130;
+      transition: transform 0.2s ease;
+    }
+
+    .settings-fab:hover {
+      transform: translateY(-3px) rotate(10deg);
+    }
+
+    .settings-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--overlay);
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.22s ease;
+      z-index: 131;
+    }
+
+    .settings-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .settings-panel {
+      position: fixed;
+      right: 22px;
+      bottom: 94px;
+      width: min(380px, calc(100vw - 24px));
+      padding: 20px;
+      border-radius: 24px;
+      z-index: 132;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(16px) scale(0.96);
+      transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
+    }
+
+    .settings-panel.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    .settings-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .settings-header h3 {
+      margin: 0;
+      font-size: 24px;
+      color: var(--title);
+    }
+
+    .settings-close {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--panel-strong);
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .settings-text {
+      margin: 0 0 16px;
+      color: var(--text-soft);
+      line-height: 1.6;
+    }
+
+    .theme-switcher {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .theme-btn {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--panel-strong);
+      color: var(--text);
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .theme-btn:hover,
+    .theme-btn.active {
+      transform: translateY(-2px);
+      border-color: var(--title);
+      box-shadow: var(--shadow);
+    }
+
+    .dots {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .red { background: #8b1e1e; }
+    .gold { background: #d4af37; }
+    .black { background: #111111; }
+    .white { background: #ffffff; }
+    .gray { background: #666666; }
+    .soft { background: #ececec; }
+
     @media (max-width: 980px) {
       .hero-grid,
       .highlight-grid,
@@ -587,11 +678,6 @@
       .section-title {
         font-size: 30px;
       }
-
-      .theme-btn {
-        width: 100%;
-        min-width: 0;
-      }
     }
 
     @media (max-width: 560px) {
@@ -604,10 +690,25 @@
       }
 
       .hero-card,
-      .theme-box,
       .highlight-box,
-      .contact-box {
+      .contact-box,
+      .settings-panel {
         padding: 22px 18px;
+      }
+
+      .settings-fab {
+        right: 16px;
+        bottom: 16px;
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+      }
+
+      .settings-panel {
+        right: 12px;
+        left: 12px;
+        bottom: 82px;
+        width: auto;
       }
     }
   </style>
@@ -628,7 +729,6 @@
 
       <nav class="menu">
         <a href="#gioi-thieu">Giới thiệu</a>
-        <a href="#theme">Theme</a>
         <a href="#dich-vu">Dịch vụ</a>
         <a href="#lien-he">Liên hệ</a>
       </nav>
@@ -642,8 +742,8 @@
           <span class="tag">SHOP BLOX FRUIT</span>
           <h1>Shop Làng Việt</h1>
           <p class="subtitle">
-            Giao diện gọn nhưng phải đẹp, dễ nhìn, bắt mắt hơn và có thể đổi theme theo đúng màu bạn thích:
-            đỏ thẫm - vàng sang - đen - trắng.
+            Giao diện đẹp hơn, gọn hơn, sinh động hơn. Phần chỉnh theme không còn hiện sẵn trên trang,
+            mà được đưa vào nút setting để khi bấm mới bung ra bảng cài đặt.
           </p>
 
           <div class="hero-actions">
@@ -715,53 +815,12 @@
       </div>
     </section>
 
-    <section id="theme">
-      <div class="container">
-        <div class="theme-box glass">
-          <span class="section-kicker">Theme setting</span>
-          <h2 class="section-title left">Chỉnh màu shop</h2>
-          <p class="section-desc left">
-            Chọn kiểu màu bạn thích. Theme sẽ được lưu ngay trên trình duyệt.
-          </p>
-
-          <div class="theme-switcher">
-            <button class="theme-btn active" data-theme="vietnam" type="button">
-              <span class="dots">
-                <span class="dot red"></span>
-                <span class="dot gold"></span>
-                <span class="dot black"></span>
-              </span>
-              Đỏ thẫm / Vàng sang
-            </button>
-
-            <button class="theme-btn" data-theme="dark" type="button">
-              <span class="dots">
-                <span class="dot black"></span>
-                <span class="dot gray"></span>
-                <span class="dot white"></span>
-              </span>
-              Đen
-            </button>
-
-            <button class="theme-btn" data-theme="light" type="button">
-              <span class="dots">
-                <span class="dot white"></span>
-                <span class="dot soft"></span>
-                <span class="dot red"></span>
-              </span>
-              Trắng
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section id="dich-vu">
       <div class="container">
-        <span class="section-kicker" style="display:block;text-align:center;">Dịch vụ</span>
+        <span class="section-kicker">Dịch vụ</span>
         <h2 class="section-title">Dịch vụ cơ bản</h2>
         <p class="section-desc">
-          Bố cục gọn gàng hơn, card nổi rõ hơn, nhìn sáng và đỡ trống hơn nhiều.
+          Bố cục gọn gàng, card nổi rõ hơn, nhìn sáng và đỡ rối hơn nhiều.
         </p>
 
         <div class="services-grid">
@@ -789,26 +848,29 @@
     <section>
       <div class="container">
         <div class="highlight-box glass">
-          <div>
-            <span class="section-kicker">Phong cách</span>
-            <h2 class="section-title left">Đơn giản nhưng vẫn nổi bật</h2>
-            <p class="section-desc left">
-              Màu đỏ thẫm và vàng tạo cảm giác sang hơn, theme đen mạnh mẽ hơn, theme trắng thì sáng và sạch hơn.
-            </p>
-          </div>
+          <div class="highlight-grid">
+            <div>
+              <span class="section-kicker" style="text-align:left;">Phong cách</span>
+              <h2 class="section-title left">Đơn giản nhưng vẫn nổi bật</h2>
+              <p class="section-desc left">
+                Màu đỏ thẫm và vàng tạo cảm giác sang hơn, theme đen mạnh mẽ hơn,
+                còn theme trắng thì sáng và sạch hơn.
+              </p>
+            </div>
 
-          <div class="features">
-            <div class="feature">
-              <div class="feature-icon">✨</div>
-              <p>UI sáng hơn, dễ nhìn hơn</p>
-            </div>
-            <div class="feature">
-              <div class="feature-icon">🎨</div>
-              <p>Đổi theme trực tiếp trên web</p>
-            </div>
-            <div class="feature">
-              <div class="feature-icon">📱</div>
-              <p>Responsive trên điện thoại</p>
+            <div class="features">
+              <div class="feature">
+                <div class="feature-icon">✨</div>
+                <p>UI sáng hơn, dễ nhìn hơn</p>
+              </div>
+              <div class="feature">
+                <div class="feature-icon">🎨</div>
+                <p>Đổi theme bằng bảng setting bật ra</p>
+              </div>
+              <div class="feature">
+                <div class="feature-icon">📱</div>
+                <p>Responsive trên điện thoại</p>
+              </div>
             </div>
           </div>
         </div>
@@ -821,7 +883,7 @@
           <span class="section-kicker">Liên hệ</span>
           <h2 class="section-title">Kết nối với Shop Làng Việt</h2>
           <p class="section-desc">
-            Có thể vào server hoặc copy Discord profile để liên hệ nhanh.
+            Bạn có thể vào server hoặc copy Discord profile để liên hệ nhanh.
           </p>
 
           <div class="contact-actions">
@@ -849,13 +911,67 @@
     </div>
   </footer>
 
+  <button class="settings-fab" id="settingsToggle" type="button" aria-label="Mở cài đặt">
+    ⚙
+  </button>
+
+  <div class="settings-overlay" id="settingsOverlay"></div>
+
+  <div class="settings-panel glass" id="settingsPanel">
+    <div class="settings-header">
+      <h3>Cài đặt giao diện</h3>
+      <button class="settings-close" id="settingsClose" type="button" aria-label="Đóng">
+        ✕
+      </button>
+    </div>
+
+    <p class="settings-text">
+      Chọn màu theme cho shop của bạn:
+    </p>
+
+    <div class="theme-switcher">
+      <button class="theme-btn active" data-theme="vietnam" type="button">
+        <span class="dots">
+          <span class="dot red"></span>
+          <span class="dot gold"></span>
+          <span class="dot black"></span>
+        </span>
+        Đỏ thẫm / Vàng sang
+      </button>
+
+      <button class="theme-btn" data-theme="dark" type="button">
+        <span class="dots">
+          <span class="dot black"></span>
+          <span class="dot gray"></span>
+          <span class="dot white"></span>
+        </span>
+        Đen
+      </button>
+
+      <button class="theme-btn" data-theme="light" type="button">
+        <span class="dots">
+          <span class="dot white"></span>
+          <span class="dot soft"></span>
+          <span class="dot red"></span>
+        </span>
+        Trắng
+      </button>
+    </div>
+  </div>
+
   <script>
     const discordName = "ngai_hamster";
     const root = document.documentElement;
+
     const themeButtons = document.querySelectorAll(".theme-btn");
     const copyBtnTop = document.getElementById("copyDiscordBtn");
     const copyBtnBottom = document.getElementById("copyDiscordBtnBottom");
     const year = document.getElementById("year");
+
+    const settingsToggle = document.getElementById("settingsToggle");
+    const settingsPanel = document.getElementById("settingsPanel");
+    const settingsOverlay = document.getElementById("settingsOverlay");
+    const settingsClose = document.getElementById("settingsClose");
 
     function applyTheme(themeName) {
       root.setAttribute("data-theme", themeName);
@@ -864,6 +980,21 @@
       themeButtons.forEach((button) => {
         button.classList.toggle("active", button.dataset.theme === themeName);
       });
+    }
+
+    function openSettings() {
+      settingsPanel.classList.add("open");
+      settingsOverlay.classList.add("open");
+    }
+
+    function closeSettings() {
+      settingsPanel.classList.remove("open");
+      settingsOverlay.classList.remove("open");
+    }
+
+    function toggleSettings() {
+      settingsPanel.classList.toggle("open");
+      settingsOverlay.classList.toggle("open");
     }
 
     function copyDiscordName() {
@@ -887,6 +1018,24 @@
       button.addEventListener("click", () => {
         applyTheme(button.dataset.theme);
       });
+    });
+
+    if (settingsToggle) {
+      settingsToggle.addEventListener("click", toggleSettings);
+    }
+
+    if (settingsClose) {
+      settingsClose.addEventListener("click", closeSettings);
+    }
+
+    if (settingsOverlay) {
+      settingsOverlay.addEventListener("click", closeSettings);
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeSettings();
+      }
     });
 
     if (copyBtnTop) {
