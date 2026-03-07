@@ -1,65 +1,74 @@
 <!DOCTYPE html>
-<html lang="vi" data-theme="vietnam">
+<html lang="vi" data-theme="royal-red">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shop Làng Việt</title>
   <meta
     name="description"
-    content="Shop Làng Việt - Dịch vụ Blox Fruit với giao diện đẹp, gọn gàng và có bảng setting theme bật ra khi bấm nút."
+    content="Shop Làng Việt - Shop dịch vụ Roblox tổng hợp, cày thuê nhiều game Roblox, giao diện hiện đại và có setting theme."
   />
   <style>
     :root {
-      --bg: linear-gradient(135deg, #4b0d0d 0%, #7b1515 45%, #140b0b 100%);
-      --bg-soft: rgba(255, 255, 255, 0.08);
-      --panel: rgba(255, 255, 255, 0.08);
+      --bg: linear-gradient(180deg, #180707 0%, #2a0808 30%, #120404 100%);
+      --header-bg: rgba(10, 6, 6, 0.9);
+      --panel: #8f2424;
+      --panel-soft: rgba(255, 255, 255, 0.08);
       --panel-strong: rgba(255, 255, 255, 0.12);
-      --text: #fff9ef;
-      --text-soft: #f6e9c8;
-      --title: #f2c94c;
-      --accent: #d4af37;
-      --accent-2: #f6d96e;
-      --border: rgba(244, 217, 125, 0.24);
-      --btn-text: #111111;
-      --shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
-      --nav-bg: rgba(20, 11, 11, 0.78);
-      --grid: rgba(255, 255, 255, 0.05);
-      --overlay: rgba(0, 0, 0, 0.45);
+      --card: rgba(255, 255, 255, 0.08);
+      --card-2: rgba(255, 255, 255, 0.12);
+      --text: #fff8ef;
+      --text-soft: #f5dfbf;
+      --title: #f1c24f;
+      --accent: #f1c24f;
+      --accent-2: #ffde7c;
+      --line: rgba(255, 214, 102, 0.18);
+      --shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+      --button-text: #151515;
+      --badge-bg: rgba(255, 214, 102, 0.12);
+      --grid-line: rgba(255, 255, 255, 0.05);
+      --overlay: rgba(0, 0, 0, 0.5);
     }
 
-    html[data-theme="dark"] {
-      --bg: linear-gradient(135deg, #050505 0%, #101010 50%, #1c1c1c 100%);
-      --bg-soft: rgba(255, 255, 255, 0.05);
-      --panel: rgba(255, 255, 255, 0.05);
+    html[data-theme="black"] {
+      --bg: linear-gradient(180deg, #050505 0%, #101010 40%, #0a0a0a 100%);
+      --header-bg: rgba(0, 0, 0, 0.92);
+      --panel: #171717;
+      --panel-soft: rgba(255, 255, 255, 0.05);
       --panel-strong: rgba(255, 255, 255, 0.08);
-      --text: #f7f7f7;
-      --text-soft: #d8d8d8;
+      --card: rgba(255, 255, 255, 0.06);
+      --card-2: rgba(255, 255, 255, 0.09);
+      --text: #f8f8f8;
+      --text-soft: #d7d7d7;
       --title: #ffffff;
       --accent: #ffffff;
-      --accent-2: #bebebe;
-      --border: rgba(255, 255, 255, 0.12);
-      --btn-text: #111111;
-      --shadow: 0 18px 50px rgba(0, 0, 0, 0.38);
-      --nav-bg: rgba(0, 0, 0, 0.76);
-      --grid: rgba(255, 255, 255, 0.05);
-      --overlay: rgba(0, 0, 0, 0.55);
+      --accent-2: #cfcfcf;
+      --line: rgba(255, 255, 255, 0.12);
+      --shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+      --button-text: #111111;
+      --badge-bg: rgba(255, 255, 255, 0.08);
+      --grid-line: rgba(255, 255, 255, 0.04);
+      --overlay: rgba(0, 0, 0, 0.6);
     }
 
     html[data-theme="light"] {
-      --bg: linear-gradient(135deg, #ffffff 0%, #f4f4f4 50%, #ededed 100%);
-      --bg-soft: rgba(255, 255, 255, 0.75);
-      --panel: rgba(255, 255, 255, 0.76);
-      --panel-strong: rgba(255, 255, 255, 0.92);
-      --text: #1a1a1a;
-      --text-soft: #4f4f4f;
+      --bg: linear-gradient(180deg, #ffffff 0%, #f5f5f5 45%, #ededed 100%);
+      --header-bg: rgba(255, 255, 255, 0.92);
+      --panel: #ffffff;
+      --panel-soft: rgba(255, 255, 255, 0.78);
+      --panel-strong: rgba(255, 255, 255, 0.95);
+      --card: rgba(255, 255, 255, 0.78);
+      --card-2: rgba(255, 255, 255, 0.94);
+      --text: #171717;
+      --text-soft: #505050;
       --title: #8b1e1e;
       --accent: #8b1e1e;
       --accent-2: #d4af37;
-      --border: rgba(139, 30, 30, 0.14);
-      --btn-text: #ffffff;
-      --shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
-      --nav-bg: rgba(255, 255, 255, 0.82);
-      --grid: rgba(0, 0, 0, 0.05);
+      --line: rgba(139, 30, 30, 0.14);
+      --shadow: 0 18px 42px rgba(0, 0, 0, 0.12);
+      --button-text: #ffffff;
+      --badge-bg: rgba(139, 30, 30, 0.08);
+      --grid-line: rgba(0, 0, 0, 0.05);
       --overlay: rgba(0, 0, 0, 0.18);
     }
 
@@ -87,9 +96,9 @@
       position: fixed;
       inset: 0;
       background-image:
-        linear-gradient(to right, var(--grid) 1px, transparent 1px),
-        linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
-      background-size: 32px 32px;
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 34px 34px;
       z-index: -3;
       pointer-events: none;
     }
@@ -97,25 +106,25 @@
     .orb {
       position: fixed;
       border-radius: 999px;
-      filter: blur(80px);
+      filter: blur(85px);
       z-index: -2;
       pointer-events: none;
       opacity: 0.8;
     }
 
     .orb-1 {
-      width: 300px;
-      height: 300px;
-      top: -70px;
-      left: -50px;
-      background: rgba(244, 217, 125, 0.16);
+      width: 340px;
+      height: 340px;
+      top: -80px;
+      left: -60px;
+      background: rgba(255, 214, 102, 0.14);
     }
 
     .orb-2 {
-      width: 360px;
-      height: 360px;
+      width: 380px;
+      height: 380px;
       right: -100px;
-      bottom: -80px;
+      top: 220px;
       background: rgba(255, 255, 255, 0.08);
     }
 
@@ -129,21 +138,21 @@
     }
 
     .container {
-      width: min(1180px, calc(100% - 32px));
+      width: min(1360px, calc(100% - 32px));
       margin: 0 auto;
     }
 
     .header {
       position: sticky;
       top: 0;
-      z-index: 90;
+      z-index: 100;
+      background: var(--header-bg);
       backdrop-filter: blur(12px);
-      background: var(--nav-bg);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--line);
     }
 
     .nav {
-      min-height: 78px;
+      min-height: 76px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -162,9 +171,9 @@
       border-radius: 16px;
       display: grid;
       place-items: center;
-      font-weight: 900;
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
       color: #111;
+      font-weight: 900;
       box-shadow: var(--shadow);
       flex-shrink: 0;
     }
@@ -172,26 +181,25 @@
     .brand-title {
       font-size: 28px;
       font-weight: 800;
-      line-height: 1.1;
       color: var(--title);
+      line-height: 1.05;
     }
 
     .brand-sub {
       margin-top: 4px;
-      font-size: 13px;
       color: var(--text-soft);
+      font-size: 13px;
     }
 
     .menu {
       display: flex;
+      gap: 28px;
       align-items: center;
-      gap: 20px;
       flex-wrap: wrap;
     }
 
     .menu a {
-      font-weight: 700;
-      opacity: 0.94;
+      font-weight: 800;
       transition: 0.2s ease;
     }
 
@@ -200,55 +208,101 @@
       transform: translateY(-1px);
     }
 
-    .hero {
-      padding: 74px 0 36px;
+    .top-action {
+      padding: 12px 18px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      font-weight: 800;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-wrap {
+      padding: 28px 0 20px;
     }
 
     .hero-grid {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 28px;
-      align-items: center;
+      grid-template-columns: 2.1fr 0.7fr;
+      gap: 18px;
+      align-items: stretch;
     }
 
-    .tag {
-      display: inline-block;
+    .banner {
+      position: relative;
+      overflow: hidden;
+      min-height: 380px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.16), transparent 28%),
+        radial-gradient(circle at 80% 25%, rgba(255,214,102,0.28), transparent 24%),
+        radial-gradient(circle at 50% 80%, rgba(255,255,255,0.12), transparent 28%),
+        linear-gradient(135deg, #0b1f44 0%, #102d68 30%, #0e4e88 65%, #1bc8e2 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .banner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.18)),
+        linear-gradient(90deg, rgba(0,0,0,0.42), rgba(0,0,0,0.08));
+      pointer-events: none;
+    }
+
+    .banner-content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      padding: 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+    }
+
+    .banner-tag {
+      display: inline-flex;
       padding: 10px 14px;
       border-radius: 999px;
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
-      color: var(--title);
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.16);
+      color: #fff;
       font-size: 13px;
       font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      backdrop-filter: blur(8px);
     }
 
-    h1 {
+    .banner h1 {
       margin: 18px 0 0;
-      font-size: clamp(42px, 7vw, 76px);
-      line-height: 1.04;
-      color: var(--title);
+      font-size: clamp(40px, 5vw, 66px);
+      line-height: 1.03;
+      color: #ffffff;
+      text-shadow: 0 6px 20px rgba(0,0,0,0.35);
     }
 
-    .subtitle {
-      margin: 18px 0 0;
-      max-width: 720px;
+    .banner p {
+      max-width: 700px;
+      margin: 14px 0 0;
       font-size: 18px;
-      line-height: 1.75;
-      color: var(--text-soft);
+      line-height: 1.72;
+      color: rgba(255,255,255,0.94);
     }
 
-    .hero-actions {
-      margin-top: 28px;
+    .banner-actions {
+      margin-top: 22px;
       display: flex;
-      gap: 14px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     .btn {
-      min-height: 52px;
-      padding: 0 22px;
+      min-height: 50px;
+      padding: 0 20px;
       border: none;
       border-radius: 14px;
       display: inline-flex;
@@ -256,7 +310,7 @@
       justify-content: center;
       font-weight: 800;
       cursor: pointer;
-      transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+      transition: transform 0.18s ease, opacity 0.18s ease;
       box-shadow: var(--shadow);
     }
 
@@ -267,235 +321,304 @@
 
     .btn-primary {
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: var(--btn-text);
+      color: var(--button-text);
     }
 
     .btn-secondary {
-      background: var(--panel);
-      color: var(--text);
-      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.14);
+      backdrop-filter: blur(8px);
     }
 
-    .hero-stats {
-      margin-top: 28px;
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-
-    .stat {
-      min-width: 145px;
-      padding: 16px 18px;
-      border-radius: 18px;
-      background: var(--panel);
-      border: 1px solid var(--border);
+    .sidebar-card {
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(10, 18, 66, 0.82);
       box-shadow: var(--shadow);
+      overflow: hidden;
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
     }
 
-    .stat-number {
-      display: block;
+    html[data-theme="light"] .sidebar-card {
+      background: linear-gradient(180deg, #ffffff, #f6f6f6);
+    }
+
+    html[data-theme="black"] .sidebar-card {
+      background: linear-gradient(180deg, #131313, #0d0d0d);
+    }
+
+    .sidebar-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 18px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .sidebar-top h3 {
+      margin: 0;
+      color: #fff;
       font-size: 28px;
-      font-weight: 900;
+    }
+
+    html[data-theme="light"] .sidebar-top h3,
+    html[data-theme="black"] .sidebar-top h3 {
       color: var(--title);
     }
 
-    .stat-text {
-      display: block;
-      margin-top: 6px;
-      color: var(--text-soft);
+    .sidebar-top p {
+      margin: 6px 0 0;
+      color: rgba(255,255,255,0.8);
       font-size: 14px;
     }
 
-    .glass {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow);
+    html[data-theme="light"] .sidebar-top p,
+    html[data-theme="black"] .sidebar-top p {
+      color: var(--text-soft);
     }
 
-    .hero-card {
-      border-radius: 24px;
-      padding: 26px;
+    .sidebar-badge {
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      font-weight: 800;
+      font-size: 13px;
     }
 
-    .hero-card h3 {
-      margin: 0 0 16px;
-      font-size: 30px;
+    .rank-list {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .rank-item {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .rank-no {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #111;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    }
+
+    .rank-name {
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .rank-value {
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #3047dd;
+      color: #fff;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    html[data-theme="light"] .rank-name,
+    html[data-theme="black"] .rank-name {
+      color: var(--text);
+    }
+
+    .sidebar-cta {
+      margin-top: auto;
+      padding: 0 18px 18px;
+    }
+
+    .sidebar-cta .btn {
+      width: 100%;
+    }
+
+    section {
+      padding: 22px 0 10px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .section-kicker {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--badge-bg);
+      border: 1px solid var(--line);
+      color: var(--title);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin: 12px 0 0;
+      font-size: 36px;
       color: var(--title);
     }
 
-    .info {
-      display: grid;
-      gap: 14px;
-    }
-
-    .info-item {
-      padding: 14px 16px;
-      border-radius: 16px;
-      background: var(--panel-strong);
-    }
-
-    .info-label {
-      display: block;
-      font-size: 13px;
+    .section-desc {
+      margin: 10px 0 0;
+      max-width: 760px;
+      line-height: 1.7;
       color: var(--text-soft);
-      margin-bottom: 6px;
     }
 
-    .info-value {
-      font-weight: 700;
-      word-break: break-word;
-    }
-
-    .badges {
-      margin-top: 18px;
+    .mini-toolbar {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
     }
 
-    .badges span {
-      padding: 9px 12px;
+    .mini-chip {
+      padding: 10px 14px;
       border-radius: 999px;
-      background: var(--panel-strong);
-      border: 1px solid var(--border);
-      font-size: 13px;
+      background: var(--card);
+      border: 1px solid var(--line);
       font-weight: 700;
+      color: var(--text);
     }
 
-    section {
-      padding: 24px 0 58px;
-    }
-
-    .section-kicker {
-      display: block;
-      margin-bottom: 10px;
-      text-align: center;
-      color: var(--title);
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-size: 13px;
-    }
-
-    .section-title {
-      margin: 0;
-      text-align: center;
-      font-size: 38px;
-      color: var(--title);
-    }
-
-    .section-title.left {
-      text-align: left;
-    }
-
-    .section-desc {
-      margin: 12px auto 0;
-      max-width: 760px;
-      text-align: center;
-      line-height: 1.75;
-      color: var(--text-soft);
-    }
-
-    .section-desc.left {
-      text-align: left;
-      margin-left: 0;
-      margin-right: 0;
-    }
-
-    .services-grid {
-      margin-top: 28px;
+    .game-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 22px;
     }
 
+    .game-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+      padding: 14px 10px 18px;
+      border-radius: 20px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .game-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+    }
+
+    .game-thumb {
+      width: 112px;
+      height: 112px;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      font-size: 40px;
+      color: #fff;
+      font-weight: 900;
+      box-shadow: var(--shadow);
+    }
+
+    .thumb-1 { background: linear-gradient(135deg, #f97316, #a21caf); }
+    .thumb-2 { background: linear-gradient(135deg, #22c55e, #06b6d4); }
+    .thumb-3 { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
+    .thumb-4 { background: linear-gradient(135deg, #0ea5e9, #14b8a6); }
+    .thumb-5 { background: linear-gradient(135deg, #f43f5e, #fb923c); }
+    .thumb-6 { background: linear-gradient(135deg, #111827, #4b5563); }
+    .thumb-7 { background: linear-gradient(135deg, #84cc16, #22c55e); }
+    .thumb-8 { background: linear-gradient(135deg, #ef4444, #f59e0b); }
+    .thumb-9 { background: linear-gradient(135deg, #7c3aed, #ec4899); }
+    .thumb-10 { background: linear-gradient(135deg, #9333ea, #3b82f6); }
+    .thumb-11 { background: linear-gradient(135deg, #6366f1, #06b6d4); }
+    .thumb-12 { background: linear-gradient(135deg, #10b981, #0ea5e9); }
+
+    .game-card h3 {
+      margin: 0;
+      font-size: 18px;
+      color: var(--text);
+    }
+
+    .game-card p {
+      margin: 0;
+      color: var(--text-soft);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
     .service-card {
-      padding: 26px 22px;
+      padding: 22px;
       border-radius: 22px;
-      transition: transform 0.22s ease, border-color 0.22s ease;
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
 
     .service-card:hover {
-      transform: translateY(-6px);
-      border-color: var(--title);
+      transform: translateY(-5px);
+      border-color: var(--accent);
     }
 
     .service-icon {
-      width: 58px;
-      height: 58px;
+      width: 56px;
+      height: 56px;
       border-radius: 18px;
       display: grid;
       place-items: center;
       font-size: 26px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
       color: #111;
-      margin-bottom: 18px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
       box-shadow: var(--shadow);
+      margin-bottom: 16px;
     }
 
     .service-card h3 {
-      margin: 0 0 12px;
-      font-size: 24px;
+      margin: 0 0 10px;
       color: var(--title);
+      font-size: 22px;
     }
 
     .service-card p {
       margin: 0;
-      line-height: 1.75;
       color: var(--text-soft);
+      line-height: 1.65;
     }
 
-    .highlight-box,
     .contact-box {
+      margin-top: 8px;
+      padding: 26px;
       border-radius: 24px;
-      padding: 28px;
-    }
-
-    .highlight-grid {
-      display: grid;
-      grid-template-columns: 1fr 0.95fr;
-      gap: 26px;
-      align-items: center;
-    }
-
-    .features {
-      display: grid;
-      gap: 14px;
-    }
-
-    .feature {
-      padding: 16px 18px;
-      border-radius: 18px;
-      display: flex;
-      gap: 14px;
-      align-items: center;
-      background: var(--panel-strong);
-    }
-
-    .feature-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 16px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #111;
-      font-size: 22px;
-      flex-shrink: 0;
-    }
-
-    .feature p {
-      margin: 0;
-      font-weight: 700;
-    }
-
-    .contact-box {
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
       text-align: center;
     }
 
     .contact-actions {
-      margin-top: 24px;
+      margin-top: 20px;
       display: flex;
       justify-content: center;
       gap: 14px;
@@ -503,12 +626,13 @@
     }
 
     .footer {
-      border-top: 1px solid var(--border);
-      background: rgba(0, 0, 0, 0.14);
+      margin-top: 36px;
+      border-top: 1px solid var(--line);
+      background: rgba(0, 0, 0, 0.12);
     }
 
     .footer-inner {
-      min-height: 76px;
+      min-height: 74px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -530,7 +654,7 @@
       font-weight: 900;
       cursor: pointer;
       box-shadow: var(--shadow);
-      z-index: 130;
+      z-index: 140;
       transition: transform 0.2s ease;
     }
 
@@ -545,7 +669,7 @@
       opacity: 0;
       visibility: hidden;
       transition: 0.22s ease;
-      z-index: 131;
+      z-index: 141;
     }
 
     .settings-overlay.open {
@@ -560,7 +684,10 @@
       width: min(380px, calc(100vw - 24px));
       padding: 20px;
       border-radius: 24px;
-      z-index: 132;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      z-index: 142;
       opacity: 0;
       visibility: hidden;
       transform: translateY(16px) scale(0.96);
@@ -591,8 +718,8 @@
       width: 40px;
       height: 40px;
       border-radius: 12px;
-      border: 1px solid var(--border);
-      background: var(--panel-strong);
+      border: 1px solid var(--line);
+      background: var(--card);
       color: var(--text);
       cursor: pointer;
       font-weight: 800;
@@ -612,8 +739,8 @@
 
     .theme-btn {
       width: 100%;
-      border: 1px solid var(--border);
-      background: var(--panel-strong);
+      border: 1px solid var(--line);
+      background: var(--card);
       color: var(--text);
       border-radius: 18px;
       padding: 14px 16px;
@@ -628,7 +755,7 @@
     .theme-btn:hover,
     .theme-btn.active {
       transform: translateY(-2px);
-      border-color: var(--title);
+      border-color: var(--accent);
       box-shadow: var(--shadow);
     }
 
@@ -642,7 +769,7 @@
       width: 16px;
       height: 16px;
       border-radius: 999px;
-      border: 1px solid rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(0,0,0,0.08);
     }
 
     .red { background: #8b1e1e; }
@@ -652,15 +779,17 @@
     .gray { background: #666666; }
     .soft { background: #ececec; }
 
-    @media (max-width: 980px) {
-      .hero-grid,
-      .highlight-grid,
-      .services-grid {
-        grid-template-columns: 1fr;
+    @media (max-width: 1180px) {
+      .game-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
       }
 
-      .hero-right {
-        order: -1;
+      .service-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -675,39 +804,50 @@
         justify-content: center;
       }
 
-      .section-title {
-        font-size: 30px;
+      .hero-wrap {
+        padding-top: 18px;
+      }
+
+      .game-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
     @media (max-width: 560px) {
+      .container {
+        width: min(100%, calc(100% - 20px));
+      }
+
+      .banner-content,
+      .contact-box,
+      .service-card,
+      .settings-panel {
+        padding: 20px 16px;
+      }
+
+      .service-grid {
+        grid-template-columns: 1fr;
+      }
+
       .btn {
         width: 100%;
       }
 
-      .hero {
-        padding-top: 52px;
-      }
-
-      .hero-card,
-      .highlight-box,
-      .contact-box,
-      .settings-panel {
-        padding: 22px 18px;
+      .top-action {
+        display: none;
       }
 
       .settings-fab {
-        right: 16px;
-        bottom: 16px;
+        right: 14px;
+        bottom: 14px;
         width: 56px;
         height: 56px;
-        border-radius: 16px;
       }
 
       .settings-panel {
-        right: 12px;
-        left: 12px;
-        bottom: 82px;
+        right: 10px;
+        left: 10px;
+        bottom: 80px;
         width: auto;
       }
     }
@@ -723,167 +863,244 @@
         <div class="brand-badge">LV</div>
         <div>
           <div class="brand-title">Shop Làng Việt</div>
-          <div class="brand-sub">Blox Fruit Service</div>
+          <div class="brand-sub">Shop dịch vụ Roblox tổng hợp</div>
         </div>
       </a>
 
       <nav class="menu">
-        <a href="#gioi-thieu">Giới thiệu</a>
-        <a href="#dich-vu">Dịch vụ</a>
-        <a href="#lien-he">Liên hệ</a>
+        <a href="#top">Trang chủ</a>
+        <a href="#games">Game Roblox</a>
+        <a href="#services">Dịch vụ</a>
+        <a href="#contact">Liên hệ hỗ trợ</a>
       </nav>
+
+      <div class="top-action">Discord: ngai_hamster</div>
     </div>
   </header>
 
   <main id="top">
-    <section class="hero" id="gioi-thieu">
+    <div class="hero-wrap">
       <div class="container hero-grid">
-        <div class="hero-left">
-          <span class="tag">SHOP BLOX FRUIT</span>
-          <h1>Shop Làng Việt</h1>
-          <p class="subtitle">
-            Giao diện đẹp hơn, gọn hơn, sinh động hơn. Phần chỉnh theme không còn hiện sẵn trên trang,
-            mà được đưa vào nút setting để khi bấm mới bung ra bảng cài đặt.
-          </p>
+        <section class="banner">
+          <div class="banner-content">
+            <span class="banner-tag">Shop Roblox tổng hợp</span>
+            <h1>Shop Làng Việt</h1>
+            <p>
+              Chuyên cày thuê, hỗ trợ dịch vụ và nhận đơn cho nhiều game Roblox,
+              không chỉ riêng Blox Fruits. Giao diện làm theo phong cách shop tổng hợp giống mẫu bạn gửi.
+            </p>
 
-          <div class="hero-actions">
+            <div class="banner-actions">
+              <a
+                class="btn btn-primary"
+                href="https://discord.gg/RdZpev84xK"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Vào Discord Server
+              </a>
+
+              <button class="btn btn-secondary" id="copyDiscordBtn" type="button">
+                Copy Discord Profile
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="sidebar-card">
+          <div class="sidebar-top">
+            <div>
+              <h3>Top nạp</h3>
+              <p>Danh sách ví dụ để làm nổi shop</p>
+            </div>
+            <div class="sidebar-badge">HOT</div>
+          </div>
+
+          <div class="rank-list">
+            <div class="rank-item">
+              <div class="rank-no">1</div>
+              <div class="rank-name">Đỗ Phú</div>
+              <div class="rank-value">6.300.000đ</div>
+            </div>
+            <div class="rank-item">
+              <div class="rank-no">2</div>
+              <div class="rank-name">Tú Born</div>
+              <div class="rank-value">6.300.000đ</div>
+            </div>
+            <div class="rank-item">
+              <div class="rank-no">3</div>
+              <div class="rank-name">Trần Minh Thư</div>
+              <div class="rank-value">6.220.000đ</div>
+            </div>
+            <div class="rank-item">
+              <div class="rank-no">4</div>
+              <div class="rank-name">huhuhahahaha</div>
+              <div class="rank-value">6.000.000đ</div>
+            </div>
+            <div class="rank-item">
+              <div class="rank-no">5</div>
+              <div class="rank-name">Xmanning961</div>
+              <div class="rank-value">3.500.000đ</div>
+            </div>
+          </div>
+
+          <div class="sidebar-cta">
             <a
               class="btn btn-primary"
               href="https://discord.gg/RdZpev84xK"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Vào Discord Server
+              Liên hệ ngay
             </a>
+          </div>
+        </aside>
+      </div>
+    </div>
 
-            <button class="btn btn-secondary" id="copyDiscordBtn" type="button">
-              Copy Discord Profile
-            </button>
+    <section id="games">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Game Roblox</span>
+            <h2 class="section-title">Nhận đơn nhiều game Roblox</h2>
+            <p class="section-desc">
+              Không chỉ Blox Fruits. Shop có thể nhận cày thuê, hỗ trợ hoặc dịch vụ cho nhiều game Roblox khác nhau.
+            </p>
           </div>
 
-          <div class="hero-stats">
-            <div class="stat">
-              <span class="stat-number">3</span>
-              <span class="stat-text">Theme đổi màu</span>
-            </div>
-            <div class="stat">
-              <span class="stat-number">24/7</span>
-              <span class="stat-text">Dễ liên hệ</span>
-            </div>
-            <div class="stat">
-              <span class="stat-number">VIP</span>
-              <span class="stat-text">Phong cách riêng</span>
-            </div>
+          <div class="mini-toolbar">
+            <span class="mini-chip">Blox Fruits</span>
+            <span class="mini-chip">Fisch</span>
+            <span class="mini-chip">Grow a Garden</span>
+            <span class="mini-chip">Anime</span>
           </div>
         </div>
 
-        <div class="hero-right">
-          <div class="hero-card glass">
-            <h3>Thông tin nhanh</h3>
+        <div class="game-grid">
+          <article class="game-card">
+            <div class="game-thumb thumb-1">BF</div>
+            <h3>Blox Fruits</h3>
+            <p>Cày level, raid, mastery, beli, hỗ trợ combo dịch vụ.</p>
+          </article>
 
-            <div class="info">
-              <div class="info-item">
-                <span class="info-label">Tên shop</span>
-                <span class="info-value">Shop Làng Việt</span>
-              </div>
+          <article class="game-card">
+            <div class="game-thumb thumb-2">GG</div>
+            <h3>Grow a Garden</h3>
+            <p>Hỗ trợ nhiệm vụ, farm tài nguyên, tăng tiến độ nhanh.</p>
+          </article>
 
-              <div class="info-item">
-                <span class="info-label">Discord profile</span>
-                <span class="info-value" id="discordName">ngai_hamster</span>
-              </div>
+          <article class="game-card">
+            <div class="game-thumb thumb-3">AB</div>
+            <h3>Anime Adventures</h3>
+            <p>Hỗ trợ account, nhiệm vụ, tài nguyên và nhiều yêu cầu khác.</p>
+          </article>
 
-              <div class="info-item">
-                <span class="info-label">Discord server</span>
-                <a
-                  class="info-value"
-                  href="https://discord.gg/RdZpev84xK"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  discord.gg/RdZpev84xK
-                </a>
-              </div>
-            </div>
+          <article class="game-card">
+            <div class="game-thumb thumb-4">FI</div>
+            <h3>Fisch</h3>
+            <p>Nhận hỗ trợ farm vật phẩm, tài nguyên và các mục tiêu riêng.</p>
+          </article>
 
-            <div class="badges">
-              <span>Uy tín</span>
-              <span>Dễ liên hệ</span>
-              <span>Gọn & đẹp</span>
-            </div>
-          </div>
+          <article class="game-card">
+            <div class="game-thumb thumb-5">SB</div>
+            <h3>Steal a Brainrot</h3>
+            <p>Shop có thể làm dịch vụ cơ bản, hỗ trợ nhanh qua Discord.</p>
+          </article>
+
+          <article class="game-card">
+            <div class="game-thumb thumb-6">99</div>
+            <h3>99 Nights</h3>
+            <p>Hỗ trợ mục tiêu game, account và nhiệm vụ theo yêu cầu.</p>
+          </article>
+
+          <article class="game-card">
+            <div class="game-thumb thumb-7">PG</div>
+            <h3>Pets Go</h3>
+            <p>Farm, hỗ trợ tài nguyên, tối ưu tài khoản theo nhu cầu.</p>
+          </article>
+
+          <article class="game-card">
+            <div class="game-thumb thumb-8">PS</div>
+            <h3>Pet Simulator 99</h3>
+            <p>Nhận hỗ trợ tiến độ, nhiệm vụ, và các yêu cầu riêng của khách.</p>
+          </article>
+
+          <article class="game-card">
+            <div class="game-thumb thumb-9">AD</div>
+            <h3>Anime Defenders</h3>
+            <p>Dịch vụ tài nguyên, cày thuê và hỗ trợ nhiều mục tiêu khác.</p>
+          </article>
+
+          <article class="game-card">
+            <div class="game-thumb thumb-10">DO</div>
+            <h3>Doors</h3>
+            <p>Nhận hỗ trợ account và các dịch vụ đi kèm nếu bạn muốn mở rộng.</p>
+          </article>
+
+          <article class="game-card">
+            <div class="game-thumb thumb-11">BB</div>
+            <h3>Blade Ball</h3>
+            <p>Shop nhận thêm game mới rất dễ, chỉ cần đổi tên và nội dung thẻ.</p>
+          </article>
+
+          <article class="game-card">
+            <div class="game-thumb thumb-12">RB</div>
+            <h3>Dịch vụ Roblox hot</h3>
+            <p>Mục dành cho game mới, game hot hoặc các đơn dịch vụ đặc biệt.</p>
+          </article>
         </div>
       </div>
     </section>
 
-    <section id="dich-vu">
+    <section id="services">
       <div class="container">
-        <span class="section-kicker">Dịch vụ</span>
-        <h2 class="section-title">Dịch vụ cơ bản</h2>
-        <p class="section-desc">
-          Bố cục gọn gàng, card nổi rõ hơn, nhìn sáng và đỡ rối hơn nhiều.
-        </p>
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Dịch vụ</span>
+            <h2 class="section-title">Các mảng shop có thể làm</h2>
+            <p class="section-desc">
+              Bạn có thể sửa lại nội dung cho đúng dịch vụ thật của shop sau này.
+            </p>
+          </div>
+        </div>
 
-        <div class="services-grid">
-          <article class="service-card glass">
+        <div class="service-grid">
+          <article class="service-card">
             <div class="service-icon">⚔️</div>
-            <h3>Cày level</h3>
-            <p>Hỗ trợ cày level nhanh, phù hợp cho người mới hoặc người muốn đẩy tiến độ.</p>
+            <h3>Cày thuê game</h3>
+            <p>Nhận cày thuê nhiều game Roblox theo mục tiêu cụ thể của khách.</p>
           </article>
 
-          <article class="service-card glass">
-            <div class="service-icon">💰</div>
-            <h3>Farm beli</h3>
-            <p>Farm beli theo mục tiêu, dễ trao đổi trực tiếp qua Discord để chốt đơn nhanh hơn.</p>
+          <article class="service-card">
+            <div class="service-icon">💎</div>
+            <h3>Farm tài nguyên</h3>
+            <p>Farm beli, gem, item, tài nguyên hoặc nhiệm vụ theo yêu cầu.</p>
           </article>
 
-          <article class="service-card glass">
+          <article class="service-card">
+            <div class="service-icon">🧾</div>
+            <h3>Dịch vụ theo đơn</h3>
+            <p>Nhận đơn riêng, báo giá riêng, xử lý theo game và độ khó khác nhau.</p>
+          </article>
+
+          <article class="service-card">
             <div class="service-icon">🔥</div>
-            <h3>Raid / Thức tỉnh</h3>
-            <p>Nhận hỗ trợ các mục tiêu cơ bản trong game với cách trình bày rõ ràng, đẹp mắt.</p>
+            <h3>Game hot cập nhật</h3>
+            <p>Dễ mở rộng thêm game mới, game hot hoặc game đang trend trong Roblox.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <section>
+    <section id="contact">
       <div class="container">
-        <div class="highlight-box glass">
-          <div class="highlight-grid">
-            <div>
-              <span class="section-kicker" style="text-align:left;">Phong cách</span>
-              <h2 class="section-title left">Đơn giản nhưng vẫn nổi bật</h2>
-              <p class="section-desc left">
-                Màu đỏ thẫm và vàng tạo cảm giác sang hơn, theme đen mạnh mẽ hơn,
-                còn theme trắng thì sáng và sạch hơn.
-              </p>
-            </div>
-
-            <div class="features">
-              <div class="feature">
-                <div class="feature-icon">✨</div>
-                <p>UI sáng hơn, dễ nhìn hơn</p>
-              </div>
-              <div class="feature">
-                <div class="feature-icon">🎨</div>
-                <p>Đổi theme bằng bảng setting bật ra</p>
-              </div>
-              <div class="feature">
-                <div class="feature-icon">📱</div>
-                <p>Responsive trên điện thoại</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="lien-he">
-      <div class="container">
-        <div class="contact-box glass">
+        <div class="contact-box">
           <span class="section-kicker">Liên hệ</span>
           <h2 class="section-title">Kết nối với Shop Làng Việt</h2>
           <p class="section-desc">
-            Bạn có thể vào server hoặc copy Discord profile để liên hệ nhanh.
+            Discord profile: <strong>ngai_hamster</strong> · Server:
+            <strong>discord.gg/RdZpev84xK</strong>
           </p>
 
           <div class="contact-actions">
@@ -896,7 +1113,7 @@
               Tham gia Discord Server
             </a>
 
-            <button class="btn btn-secondary" id="copyDiscordBtnBottom" type="button">
+            <button class="btn" id="copyDiscordBtnBottom" type="button" style="background: var(--card); color: var(--text); border: 1px solid var(--line);">
               Copy: ngai_hamster
             </button>
           </div>
@@ -917,7 +1134,7 @@
 
   <div class="settings-overlay" id="settingsOverlay"></div>
 
-  <div class="settings-panel glass" id="settingsPanel">
+  <div class="settings-panel" id="settingsPanel">
     <div class="settings-header">
       <h3>Cài đặt giao diện</h3>
       <button class="settings-close" id="settingsClose" type="button" aria-label="Đóng">
@@ -925,12 +1142,10 @@
       </button>
     </div>
 
-    <p class="settings-text">
-      Chọn màu theme cho shop của bạn:
-    </p>
+    <p class="settings-text">Chọn màu theme cho shop của bạn:</p>
 
     <div class="theme-switcher">
-      <button class="theme-btn active" data-theme="vietnam" type="button">
+      <button class="theme-btn active" data-theme="royal-red" type="button">
         <span class="dots">
           <span class="dot red"></span>
           <span class="dot gold"></span>
@@ -939,7 +1154,7 @@
         Đỏ thẫm / Vàng sang
       </button>
 
-      <button class="theme-btn" data-theme="dark" type="button">
+      <button class="theme-btn" data-theme="black" type="button">
         <span class="dots">
           <span class="dot black"></span>
           <span class="dot gray"></span>
@@ -962,16 +1177,14 @@
   <script>
     const discordName = "ngai_hamster";
     const root = document.documentElement;
-
     const themeButtons = document.querySelectorAll(".theme-btn");
-    const copyBtnTop = document.getElementById("copyDiscordBtn");
-    const copyBtnBottom = document.getElementById("copyDiscordBtnBottom");
-    const year = document.getElementById("year");
-
     const settingsToggle = document.getElementById("settingsToggle");
     const settingsPanel = document.getElementById("settingsPanel");
     const settingsOverlay = document.getElementById("settingsOverlay");
     const settingsClose = document.getElementById("settingsClose");
+    const copyBtnTop = document.getElementById("copyDiscordBtn");
+    const copyBtnBottom = document.getElementById("copyDiscordBtnBottom");
+    const year = document.getElementById("year");
 
     function applyTheme(themeName) {
       root.setAttribute("data-theme", themeName);
@@ -1011,7 +1224,7 @@
     if (savedTheme) {
       applyTheme(savedTheme);
     } else {
-      applyTheme("vietnam");
+      applyTheme("royal-red");
     }
 
     themeButtons.forEach((button) => {
@@ -1032,12 +1245,6 @@
       settingsOverlay.addEventListener("click", closeSettings);
     }
 
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        closeSettings();
-      }
-    });
-
     if (copyBtnTop) {
       copyBtnTop.addEventListener("click", copyDiscordName);
     }
@@ -1045,6 +1252,12 @@
     if (copyBtnBottom) {
       copyBtnBottom.addEventListener("click", copyDiscordName);
     }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeSettings();
+      }
+    });
 
     if (year) {
       year.textContent = new Date().getFullYear();
