@@ -1,51 +1,51 @@
-const body = document.body;
+const discordName = "ngai_hamster";
+const root = document.documentElement;
 const themeButtons = document.querySelectorAll(".theme-btn");
-const settingsPanel = document.getElementById("settingsPanel");
-const settingsToggle = document.getElementById("settingsToggle");
-const openThemeBtn = document.getElementById("openThemeBtn");
-const closeSettings = document.getElementById("closeSettings");
-const overlay = document.getElementById("overlay");
-const yearEl = document.getElementById("year");
+const copyBtnTop = document.getElementById("copyDiscordBtn");
+const copyBtnBottom = document.getElementById("copyDiscordBtnBottom");
+const year = document.getElementById("year");
 
-const THEME_KEY = "shoplangviet-theme";
+function applyTheme(themeName) {
+  root.setAttribute("data-theme", themeName);
+  localStorage.setItem("shopTheme", themeName);
 
-function setTheme(theme) {
-  body.setAttribute("data-theme", theme);
-  localStorage.setItem(THEME_KEY, theme);
-
-  themeButtons.forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.theme === theme);
+  themeButtons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.theme === themeName);
   });
 }
 
-function openSettings() {
-  settingsPanel.classList.add("show");
-  overlay.classList.add("show");
+function copyDiscordName() {
+  navigator.clipboard
+    .writeText(discordName)
+    .then(() => {
+      alert("Đã copy Discord profile: " + discordName);
+    })
+    .catch(() => {
+      alert("Không copy tự động được. Discord của bạn là: " + discordName);
+    });
 }
 
-function closePanel() {
-  settingsPanel.classList.remove("show");
-  overlay.classList.remove("show");
+const savedTheme = localStorage.getItem("shopTheme");
+if (savedTheme) {
+  applyTheme(savedTheme);
+} else {
+  applyTheme("vietnam");
 }
 
-const savedTheme = localStorage.getItem(THEME_KEY) || "langviet";
-setTheme(savedTheme);
-
-themeButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    setTheme(btn.dataset.theme);
+themeButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    applyTheme(button.dataset.theme);
   });
 });
 
-settingsToggle.addEventListener("click", openSettings);
-openThemeBtn.addEventListener("click", openSettings);
-closeSettings.addEventListener("click", closePanel);
-overlay.addEventListener("click", closePanel);
+if (copyBtnTop) {
+  copyBtnTop.addEventListener("click", copyDiscordName);
+}
 
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
-    closePanel();
-  }
-});
+if (copyBtnBottom) {
+  copyBtnBottom.addEventListener("click", copyDiscordName);
+}
 
-yearEl.textContent = new Date().getFullYear();
+if (year) {
+  year.textContent = new Date().getFullYear();
+}
