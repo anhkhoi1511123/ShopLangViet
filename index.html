@@ -1,333 +1,250 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" data-theme="vietnam">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shop Làng Việt</title>
   <meta
     name="description"
-    content="Shop Làng Việt - Shop game bán đồ, cày thuê, hỗ trợ nhanh qua Discord."
+    content="Shop Làng Việt - Dịch vụ Blox Fruit với giao diện đẹp, dễ nhìn và có thể đổi theme."
   />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
-  />
-
   <link rel="stylesheet" href="style.css" />
-  <script src="script.js" defer></script>
 </head>
-<body data-theme="langviet">
-  <div class="page-glow glow-1"></div>
-  <div class="page-glow glow-2"></div>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-grid"></div>
 
-  <header class="header">
+  <header class="site-header">
     <div class="container nav">
-      <a href="#home" class="brand">
-        <div class="brand-logo">LV</div>
-        <div class="brand-text">
-          <span class="brand-sub">Shop game Việt</span>
-          <strong>Shop Làng Việt</strong>
+      <a href="#top" class="logo-wrap">
+        <div class="logo-badge">LV</div>
+        <div>
+          <div class="logo">Shop Làng Việt</div>
+          <div class="logo-sub">Blox Fruit Service</div>
         </div>
       </a>
 
       <nav class="menu">
+        <a href="#gioi-thieu">Giới thiệu</a>
         <a href="#dich-vu">Dịch vụ</a>
-        <a href="#cam-ket">Cam kết</a>
         <a href="#lien-he">Liên hệ</a>
       </nav>
-
-      <a
-        class="btn btn-primary nav-cta"
-        href="https://discord.gg/RdZpev84xK"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Vào Discord
-      </a>
     </div>
   </header>
 
-  <main>
-    <section class="hero container" id="home">
-      <div class="hero-left">
-        <span class="pill">Bán đồ • Cày thuê • Hỗ trợ nhanh</span>
+  <main id="top">
+    <section class="hero" id="gioi-thieu">
+      <div class="container hero-layout">
+        <div class="hero-left">
+          <p class="tag">SHOP BLOX FRUIT</p>
+          <h1>Shop Làng Việt</h1>
+          <p class="subtitle">
+            Giao diện đơn giản nhưng bắt mắt, dễ nhìn, dễ liên hệ và có thể đổi theme theo phong cách bạn thích.
+          </p>
 
-        <h1>
-          Chào mừng đến với
-          <span>Shop Làng Việt</span>
-        </h1>
+          <div class="hero-buttons">
+            <a
+              class="btn btn-primary"
+              href="https://discord.gg/RdZpev84xK"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Vào Discord Server
+            </a>
 
-        <p class="hero-desc">
-          Giao diện hiện đại, dễ nhìn, nổi bật phong cách Việt Nam với 3 theme:
-          <strong>đỏ thẫm - vàng sang trọng</strong>,
-          <strong>đen</strong> và <strong>trắng</strong>.
-          Shop phù hợp để giới thiệu dịch vụ game, bán vật phẩm và nhận cày thuê.
+            <button class="btn btn-secondary" id="copyDiscordBtn" type="button">
+              Copy Discord Profile
+            </button>
+          </div>
+
+          <div class="hero-stats">
+            <div class="mini-card">
+              <span class="mini-number">3</span>
+              <span class="mini-text">Theme đổi màu</span>
+            </div>
+            <div class="mini-card">
+              <span class="mini-number">24/7</span>
+              <span class="mini-text">Dễ liên hệ</span>
+            </div>
+            <div class="mini-card">
+              <span class="mini-number">VIP</span>
+              <span class="mini-text">Phong cách riêng</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="hero-panel glass">
+            <h3>Thông tin nhanh</h3>
+            <div class="info-list">
+              <div class="info-item">
+                <span class="info-label">Tên shop</span>
+                <span class="info-value">Shop Làng Việt</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Discord profile</span>
+                <span class="info-value" id="discordName">ngai_hamster</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Discord server</span>
+                <a
+                  class="info-link"
+                  href="https://discord.gg/RdZpev84xK"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  discord.gg/RdZpev84xK
+                </a>
+              </div>
+            </div>
+
+            <div class="feature-badges">
+              <span>Uy tín</span>
+              <span>Dễ liên hệ</span>
+              <span>Giao diện đẹp</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="theme-section">
+      <div class="container">
+        <div class="theme-card glass">
+          <div>
+            <p class="section-kicker">Theme setting</p>
+            <h2 class="section-title left">Chỉnh màu shop</h2>
+            <p class="section-desc">
+              Chọn kiểu màu bạn thích. Theme sẽ được lưu lại trên trình duyệt của bạn.
+            </p>
+          </div>
+
+          <div class="theme-switcher">
+            <button class="theme-btn active" data-theme="vietnam" type="button">
+              <span class="theme-dots">
+                <span class="dot red"></span>
+                <span class="dot gold"></span>
+                <span class="dot black"></span>
+              </span>
+              Đỏ thẫm / Vàng
+            </button>
+
+            <button class="theme-btn" data-theme="dark" type="button">
+              <span class="theme-dots">
+                <span class="dot black"></span>
+                <span class="dot gray"></span>
+                <span class="dot white"></span>
+              </span>
+              Đen
+            </button>
+
+            <button class="theme-btn" data-theme="light" type="button">
+              <span class="theme-dots">
+                <span class="dot white"></span>
+                <span class="dot soft"></span>
+                <span class="dot darktext"></span>
+              </span>
+              Trắng
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="services" id="dich-vu">
+      <div class="container">
+        <p class="section-kicker center">DỊCH VỤ</p>
+        <h2 class="section-title">Dịch vụ cơ bản</h2>
+        <p class="section-desc center">
+          Bố cục gọn gàng, nổi bật, dễ nhìn trên cả điện thoại và máy tính.
         </p>
 
-        <div class="hero-actions">
-          <a
-            class="btn btn-primary"
-            href="https://discord.gg/RdZpev84xK"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Mua / Thuê ngay
-          </a>
+        <div class="service-grid">
+          <article class="card glass">
+            <div class="card-icon">⚔️</div>
+            <h3>Cày level</h3>
+            <p>Hỗ trợ cày level nhanh, phù hợp cho người mới hoặc người muốn đẩy tiến độ.</p>
+          </article>
 
-          <button class="btn btn-secondary" id="openThemeBtn" type="button">
-            Chỉnh màu theme
-          </button>
-        </div>
+          <article class="card glass">
+            <div class="card-icon">💰</div>
+            <h3>Farm beli</h3>
+            <p>Farm beli theo mục tiêu, dễ trao đổi trực tiếp qua Discord để chốt đơn nhanh.</p>
+          </article>
 
-        <div class="hero-stats">
-          <div class="stat-card">
-            <strong>24/7</strong>
-            <span>Hỗ trợ Discord</span>
-          </div>
-          <div class="stat-card">
-            <strong>Nhanh</strong>
-            <span>Nhận đơn linh hoạt</span>
-          </div>
-          <div class="stat-card">
-            <strong>Uy tín</strong>
-            <span>Phong cách chuyên nghiệp</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero-right">
-        <div class="info-card featured-card">
-          <div class="card-top">
-            <span class="tag">Thông tin shop</span>
-            <span class="dot-live">● Online</span>
-          </div>
-
-          <h3>Shop Làng Việt</h3>
-          <p>
-            Nơi nhận dịch vụ game với giao diện bắt mắt, dễ dùng và hỗ trợ khách
-            hàng nhanh chóng qua Discord.
-          </p>
-
-          <ul class="quick-info">
-            <li>
-              <span>Owner Discord</span>
-              <strong>ngai_hamster</strong>
-            </li>
-            <li>
-              <span>Server Discord</span>
-              <a
-                href="https://discord.gg/RdZpev84xK"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                discord.gg/RdZpev84xK
-              </a>
-            </li>
-            <li>
-              <span>Loại shop</span>
-              <strong>Bán đồ & cày thuê game</strong>
-            </li>
-          </ul>
+          <article class="card glass">
+            <div class="card-icon">🔥</div>
+            <h3>Raid / Thức tỉnh</h3>
+            <p>Nhận hỗ trợ các mục tiêu cơ bản, trình bày rõ ràng và dễ tùy chỉnh về sau.</p>
+          </article>
         </div>
       </div>
     </section>
 
-    <section class="section container" id="dich-vu">
-      <div class="section-head">
-        <span class="section-label">DỊCH VỤ NỔI BẬT</span>
-        <h2>Giao diện shop game rõ ràng, sinh động và dễ chốt đơn</h2>
-        <p>
-          Bạn có thể sửa tên game, bảng giá và nội dung từng mục sau này rất dễ.
-        </p>
-      </div>
+    <section class="highlight">
+      <div class="container">
+        <div class="highlight-box glass">
+          <div class="highlight-text">
+            <p class="section-kicker">PHONG CÁCH</p>
+            <h2 class="section-title left">Đơn giản nhưng vẫn nổi bật</h2>
+            <p class="section-desc left">
+              Tông màu đỏ thẫm, vàng sang, đen và trắng giúp shop nhìn vừa mạnh mẽ vừa sang trọng, đúng kiểu riêng của bạn.
+            </p>
+          </div>
 
-      <div class="service-grid">
-        <article class="service-card">
-          <div class="service-icon">🎮</div>
-          <h3>Cày thuê rank</h3>
-          <p>
-            Nhận cày rank, kéo điểm, leo bậc theo yêu cầu với thời gian linh hoạt.
-          </p>
-        </article>
-
-        <article class="service-card">
-          <div class="service-icon">🛡️</div>
-          <h3>Bán vật phẩm</h3>
-          <p>
-            Trưng bày vật phẩm, item, tài nguyên hoặc đồ game theo từng danh mục.
-          </p>
-        </article>
-
-        <article class="service-card">
-          <div class="service-icon">⚡</div>
-          <h3>Farm nhiệm vụ</h3>
-          <p>
-            Nhận làm sự kiện, nhiệm vụ ngày, nhiệm vụ tuần hoặc cày tài nguyên.
-          </p>
-        </article>
-
-        <article class="service-card">
-          <div class="service-icon">💎</div>
-          <h3>Nâng cấp tài khoản</h3>
-          <p>
-            Hỗ trợ phát triển tài khoản, tối ưu tiến độ theo mục tiêu của khách.
-          </p>
-        </article>
-
-        <article class="service-card">
-          <div class="service-icon">📦</div>
-          <h3>Gói dịch vụ riêng</h3>
-          <p>
-            Nhận báo giá tùy chỉnh theo game, theo thời gian và theo khối lượng công việc.
-          </p>
-        </article>
-
-        <article class="service-card">
-          <div class="service-icon">🤝</div>
-          <h3>Hỗ trợ tận tình</h3>
-          <p>
-            Tư vấn qua Discord, phản hồi nhanh và tiện cho việc trao đổi đơn hàng.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section container" id="cam-ket">
-      <div class="section-head">
-        <span class="section-label">LÝ DO CHỌN SHOP</span>
-        <h2>Thiết kế tối ưu để shop nhìn chuyên nghiệp hơn</h2>
-      </div>
-
-      <div class="feature-grid">
-        <div class="feature-box">
-          <h3>Theme đổi màu ngay lập tức</h3>
-          <p>
-            Website có sẵn 3 theme: đỏ thẫm - vàng Việt Nam, đen và trắng.
-            Theme được lưu lại kể cả khi tải lại trang.
-          </p>
-        </div>
-
-        <div class="feature-box">
-          <h3>Bố cục rõ ràng</h3>
-          <p>
-            Có sẵn khu vực giới thiệu, dịch vụ nổi bật, cam kết và liên hệ để khách dễ xem.
-          </p>
-        </div>
-
-        <div class="feature-box">
-          <h3>Responsive điện thoại</h3>
-          <p>
-            Tương thích màn hình điện thoại, tablet và máy tính để shop nhìn gọn gàng hơn.
-          </p>
-        </div>
-
-        <div class="feature-box">
-          <h3>Dễ chỉnh sửa về sau</h3>
-          <p>
-            Chỉ cần sửa nội dung trong HTML là có thể thay game, thêm giá, thêm ảnh hoặc thêm mục mới.
-          </p>
+          <div class="highlight-list">
+            <div class="highlight-item">
+              <span>✨</span>
+              <p>UI sáng sủa, bắt mắt</p>
+            </div>
+            <div class="highlight-item">
+              <span>🎨</span>
+              <p>Đổi theme chỉ với 1 nút</p>
+            </div>
+            <div class="highlight-item">
+              <span>📱</span>
+              <p>Responsive trên mobile</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section container" id="lien-he">
-      <div class="contact-box">
-        <div class="contact-content">
-          <span class="section-label">LIÊN HỆ</span>
-          <h2>Kết nối với Shop Làng Việt ngay trên Discord</h2>
-          <p>
-            Khách hàng có thể vào server để trao đổi dịch vụ, hỏi giá, gửi yêu cầu
-            cày thuê hoặc mua đồ game nhanh chóng.
+    <section class="contact" id="lien-he">
+      <div class="container">
+        <div class="contact-box glass">
+          <p class="section-kicker center">LIÊN HỆ</p>
+          <h2 class="section-title">Kết nối với Shop Làng Việt</h2>
+          <p class="section-desc center">
+            Bạn có thể vào server hoặc copy Discord profile để liên hệ nhanh.
           </p>
-        </div>
 
-        <div class="contact-actions">
-          <a
-            class="btn btn-primary"
-            href="https://discord.gg/RdZpev84xK"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vào Server Discord
-          </a>
+          <div class="contact-actions">
+            <a
+              class="btn btn-primary"
+              href="https://discord.gg/RdZpev84xK"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Tham gia Discord Server
+            </a>
 
-          <div class="owner-card">
-            <span>Owner Discord</span>
-            <strong>ngai_hamster</strong>
+            <button class="btn btn-secondary" id="copyDiscordBtnBottom" type="button">
+              Copy: ngai_hamster
+            </button>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="container footer-wrap">
+  <footer class="site-footer">
+    <div class="container footer-box">
       <p>© <span id="year"></span> Shop Làng Việt. All rights reserved.</p>
-      <p>
-        Owner: <strong>ngai_hamster</strong> •
-        <a
-          href="https://discord.gg/RdZpev84xK"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Discord Server
-        </a>
-      </p>
     </div>
   </footer>
 
-  <button
-    class="settings-toggle"
-    id="settingsToggle"
-    type="button"
-    aria-label="Mở cài đặt giao diện"
-  >
-    ⚙
-  </button>
-
-  <div class="settings-panel" id="settingsPanel">
-    <div class="settings-head">
-      <div>
-        <span class="section-label">SETTING</span>
-        <h3>Chỉnh màu theme</h3>
-      </div>
-      <button class="close-settings" id="closeSettings" type="button">✕</button>
-    </div>
-
-    <p class="settings-desc">
-      Chọn một giao diện phù hợp với phong cách shop của bạn.
-    </p>
-
-    <div class="theme-list">
-      <button class="theme-btn active" data-theme="langviet" type="button">
-        <span class="theme-preview preview-langviet"></span>
-        <span class="theme-text">
-          <strong>Đỏ thẫm & vàng Việt Nam</strong>
-          <small>Sang trọng, nổi bật, đậm chất Việt</small>
-        </span>
-      </button>
-
-      <button class="theme-btn" data-theme="black" type="button">
-        <span class="theme-preview preview-black"></span>
-        <span class="theme-text">
-          <strong>Đen</strong>
-          <small>Mạnh mẽ, hiện đại, gaming</small>
-        </span>
-      </button>
-
-      <button class="theme-btn" data-theme="white" type="button">
-        <span class="theme-preview preview-white"></span>
-        <span class="theme-text">
-          <strong>Trắng</strong>
-          <small>Sạch sẽ, sáng sủa, tối giản</small>
-        </span>
-      </button>
-    </div>
-  </div>
-
-  <div class="overlay" id="overlay"></div>
+  <script src="script.js"></script>
 </body>
 </html>
