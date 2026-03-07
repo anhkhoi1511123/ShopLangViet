@@ -1,1 +1,200 @@
-
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/style.css b/style.css
+index 8b137891791fe96927ad78e64b0aad7bded08bdc..8898a4327f7defb987c3688fdaaa6207b92486bc 100644
+--- a/style.css
++++ b/style.css
+@@ -1 +1,191 @@
++:root {
++  --bg: #4a0812;
++  --bg-soft: #6f1220;
++  --card: rgba(124, 23, 40, 0.78);
++  --text: #fff3cf;
++  --muted: #f4dca0;
++  --primary: #f4bf3a;
++  --border: rgba(255, 220, 132, 0.32);
++  --shadow: 0 20px 45px rgba(0, 0, 0, 0.28);
++}
+ 
++body[data-theme="black"] {
++  --bg: #090909;
++  --bg-soft: #191919;
++  --card: rgba(26, 26, 26, 0.84);
++  --text: #f6f6f6;
++  --muted: #c8c8c8;
++  --primary: #d4d4d4;
++  --border: rgba(255, 255, 255, 0.16);
++}
++
++body[data-theme="white"] {
++  --bg: #f3f3f3;
++  --bg-soft: #ffffff;
++  --card: rgba(255, 255, 255, 0.93);
++  --text: #222;
++  --muted: #555;
++  --primary: #b53232;
++  --border: rgba(0, 0, 0, 0.12);
++  --shadow: 0 20px 45px rgba(17, 17, 17, 0.15);
++}
++
++* {
++  box-sizing: border-box;
++}
++
++body {
++  margin: 0;
++  font-family: "Be Vietnam Pro", system-ui, sans-serif;
++  color: var(--text);
++  background: radial-gradient(circle at top right, var(--bg-soft), var(--bg));
++  min-height: 100vh;
++  position: relative;
++  transition: background 0.35s ease, color 0.35s ease;
++}
++
++.bg-glow {
++  position: fixed;
++  inset: 0;
++  pointer-events: none;
++  background: radial-gradient(circle at 8% 14%, rgba(255, 222, 153, 0.2), transparent 34%),
++    radial-gradient(circle at 95% 0%, rgba(255, 72, 72, 0.2), transparent 28%);
++}
++
++.container {
++  width: min(1100px, 92vw);
++  margin: 0 auto;
++}
++
++.hero {
++  padding: 3.6rem 0 1.6rem;
++  text-align: center;
++}
++
++.badge {
++  display: inline-block;
++  background: var(--card);
++  border: 1px solid var(--border);
++  padding: 0.5rem 0.95rem;
++  border-radius: 999px;
++  font-size: 0.9rem;
++  margin-bottom: 1rem;
++}
++
++h1 {
++  margin: 0;
++  font-size: clamp(2rem, 4vw, 3.3rem);
++  letter-spacing: 0.5px;
++}
++
++.subtitle {
++  color: var(--muted);
++  max-width: 700px;
++  margin: 1rem auto 0;
++}
++
++.grid {
++  display: grid;
++  grid-template-columns: 1.5fr 1fr;
++  gap: 1.1rem;
++  padding-bottom: 2.2rem;
++}
++
++.panel {
++  background: var(--card);
++  border: 1px solid var(--border);
++  border-radius: 18px;
++  padding: 1.25rem;
++  box-shadow: var(--shadow);
++  backdrop-filter: blur(4px);
++}
++
++.panel h2 {
++  margin-top: 0.1rem;
++}
++
++.product-list {
++  display: grid;
++  gap: 0.8rem;
++}
++
++.product {
++  border: 1px solid var(--border);
++  border-radius: 14px;
++  padding: 0.95rem;
++  background: rgba(255, 255, 255, 0.03);
++}
++
++.product h3 {
++  margin: 0;
++}
++
++.product p {
++  margin: 0.45rem 0 0.75rem;
++  color: var(--muted);
++}
++
++.tag {
++  font-size: 0.8rem;
++  background: var(--primary);
++  color: #111;
++  padding: 0.22rem 0.56rem;
++  border-radius: 999px;
++  font-weight: 700;
++}
++
++.theme-buttons {
++  display: grid;
++  gap: 0.55rem;
++  margin-top: 0.8rem;
++}
++
++.theme-btn {
++  border: 1px solid var(--border);
++  background: transparent;
++  color: var(--text);
++  border-radius: 10px;
++  padding: 0.67rem 0.8rem;
++  font-weight: 600;
++  cursor: pointer;
++  transition: transform 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
++}
++
++.theme-btn:hover,
++.theme-btn.active {
++  transform: translateY(-1px);
++  border-color: var(--primary);
++  background: rgba(255, 255, 255, 0.06);
++}
++
++.contact-card {
++  margin-top: 1.15rem;
++  border-top: 1px dashed var(--border);
++  padding-top: 1rem;
++}
++
++.contact-card ul {
++  list-style: none;
++  margin: 0;
++  padding: 0;
++  display: grid;
++  gap: 0.65rem;
++}
++
++.contact-card a {
++  color: var(--primary);
++  text-decoration: none;
++}
++
++.footer {
++  color: var(--muted);
++  text-align: center;
++  padding: 0.4rem 0 1.8rem;
++  font-size: 0.92rem;
++}
++
++@media (max-width: 860px) {
++  .grid {
++    grid-template-columns: 1fr;
++  }
++}
+ 
+EOF
+)
