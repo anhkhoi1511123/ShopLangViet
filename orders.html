@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="royal-red">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lịch sử đơn hàng - Shop Làng Việt</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js" defer></script>
+</head>
+<body data-page="orders">
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-logo">
+          <img src="assets/logo.webp" alt="Logo Shop Làng Việt" />
+        </div>
+        <div>
+          <div class="brand-title">Shop Làng Việt</div>
+          <div class="brand-sub">Shop dịch vụ Roblox tổng hợp</div>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html">Trang chủ</a>
+        <a href="games.html">Game Roblox</a>
+        <a href="services.html">Dịch vụ</a>
+        <a href="wallet.html">Ví tiền</a>
+        <a class="active" href="orders.html">Đơn hàng</a>
+        <a href="contact.html">Liên hệ</a>
+      </nav>
+
+      <div class="top-actions">
+        <div class="theme-pills">
+          <button type="button" data-theme-btn="royal-red">Đỏ</button>
+          <button type="button" data-theme-btn="black">Đen</button>
+          <button type="button" data-theme-btn="light">Trắng</button>
+        </div>
+        <a class="icon-link" href="cart.html">🛒 Giỏ <span data-cart-count>0</span></a>
+        <div id="userArea"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+      <section class="page-hero">
+        <span class="kicker">Lịch sử đơn hàng</span>
+        <h1 class="title-lg">Theo dõi các đơn đã đặt</h1>
+        <p class="text">
+          Đơn tạo bằng ví sẽ ở trạng thái <strong>Đã thanh toán</strong>. Đơn thủ công sẽ ở trạng thái
+          <strong>Chờ thanh toán</strong>.
+        </p>
+      </section>
+
+      <div id="ordersView"></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Shop Làng Việt. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
