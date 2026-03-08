@@ -1,1 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="royal-red">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Roblox - Shop Làng Việt</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js" defer></script>
+</head>
+<body data-page="games">
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-logo">
+          <img src="assets/logo.webp" alt="Logo Shop Làng Việt" />
+        </div>
+        <div>
+          <div class="brand-title">Shop Làng Việt</div>
+          <div class="brand-sub">Shop dịch vụ Roblox tổng hợp</div>
+        </div>
+      </a>
 
+      <nav class="nav-links">
+        <a href="index.html">Trang chủ</a>
+        <a class="active" href="games.html">Game Roblox</a>
+        <a href="services.html">Dịch vụ</a>
+        <a href="wallet.html">Ví tiền</a>
+        <a href="orders.html">Đơn hàng</a>
+        <a href="contact.html">Liên hệ</a>
+      </nav>
+
+      <div class="top-actions">
+        <div class="theme-pills">
+          <button type="button" data-theme-btn="royal-red">Đỏ</button>
+          <button type="button" data-theme-btn="black">Đen</button>
+          <button type="button" data-theme-btn="light">Trắng</button>
+        </div>
+        <a class="icon-link" href="cart.html">🛒 Giỏ <span data-cart-count>0</span></a>
+        <div id="userArea"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+      <section class="page-hero">
+        <span class="kicker">Danh sách game</span>
+        <h1 class="title-lg">Các game Roblox đang nhận đơn</h1>
+        <p class="text">
+          Mỗi game có một trang riêng để bạn xem gói dịch vụ và thêm trực tiếp vào giỏ hàng.
+        </p>
+      </section>
+
+      <section class="grid-3">
+        <a class="card game-card" href="blox-fruits.html">
+          <div class="game-badge">BF</div>
+          <h4>Blox Fruits</h4>
+          <p class="muted">Cày level, raid, mastery, fragment, beli và các gói nâng cấp tiến độ.</p>
+          <div class="service-actions">
+            <span class="btn btn-primary btn-sm">Xem dịch vụ</span>
+          </div>
+        </a>
+
+        <a class="card game-card" href="fisch.html">
+          <div class="game-badge">FI</div>
+          <h4>Fisch</h4>
+          <p class="muted">Farm tài nguyên, vật phẩm hiếm, hoàn thành nhiệm vụ và đơn theo yêu cầu.</p>
+          <div class="service-actions">
+            <span class="btn btn-primary btn-sm">Xem dịch vụ</span>
+          </div>
+        </a>
+
+        <a class="card game-card" href="grow-a-garden.html">
+          <div class="game-badge">GG</div>
+          <h4>Grow a Garden</h4>
+          <p class="muted">Tăng tiến độ nông trại, farm nguyên liệu, nhiệm vụ và combo premium.</p>
+          <div class="service-actions">
+            <span class="btn btn-primary btn-sm">Xem dịch vụ</span>
+          </div>
+        </a>
+      </section>
+
+      <section class="page-hero" style="margin-top:22px;">
+        <span class="kicker">Đặt đơn nhanh</span>
+        <h2 class="title-lg">Không thấy game bạn cần?</h2>
+        <p class="text">
+          Bạn có thể vào trang dịch vụ hoặc trang liên hệ để gửi yêu cầu riêng cho shop.
+        </p>
+        <div class="row" style="margin-top:18px;">
+          <a class="btn btn-primary" href="services.html">Xem tất cả dịch vụ</a>
+          <a class="btn btn-soft" href="contact.html">Liên hệ riêng</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Shop Làng Việt. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
