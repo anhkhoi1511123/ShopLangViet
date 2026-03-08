@@ -6,13 +6,13 @@
   <title>Shop Làng Việt</title>
   <meta
     name="description"
-    content="Shop Làng Việt - Shop dịch vụ Roblox tổng hợp, có đăng nhập tài khoản thường, đăng ký tài khoản và đổi theme."
+    content="Shop Làng Việt - Shop dịch vụ Roblox tổng hợp, có tài khoản, ví tiền, nạp tiền, giỏ hàng và lịch sử đơn hàng."
   />
   <style>
     :root {
       --bg: linear-gradient(180deg, #1a0505 0%, #2b0808 42%, #120404 100%);
       --header-bg: rgba(18, 8, 8, 0.9);
-      --card: rgba(141, 27, 27, 0.78);
+      --card: rgba(141, 27, 27, 0.8);
       --card-soft: rgba(255, 255, 255, 0.1);
       --card-strong: rgba(255, 255, 255, 0.15);
       --text: #fff8ef;
@@ -27,6 +27,7 @@
       --success: #22c55e;
       --danger: #ef4444;
       --blue: #3b82f6;
+      --warning: #f59e0b;
     }
 
     html[data-theme="black"] {
@@ -47,12 +48,13 @@
       --success: #22c55e;
       --danger: #ef4444;
       --blue: #2563eb;
+      --warning: #f59e0b;
     }
 
     html[data-theme="light"] {
       --bg: linear-gradient(180deg, #ffffff 0%, #f4f4f4 45%, #ececec 100%);
       --header-bg: rgba(255, 255, 255, 0.92);
-      --card: rgba(255, 255, 255, 0.88);
+      --card: rgba(255, 255, 255, 0.9);
       --card-soft: rgba(255, 255, 255, 0.92);
       --card-strong: rgba(255, 255, 255, 0.98);
       --text: #171717;
@@ -67,15 +69,11 @@
       --success: #16a34a;
       --danger: #dc2626;
       --blue: #2563eb;
+      --warning: #d97706;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
@@ -112,15 +110,8 @@
       z-index: -2;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
 
     .container {
       width: min(1360px, calc(100% - 32px));
@@ -172,9 +163,7 @@
       display: block;
     }
 
-    .brand-text {
-      min-width: 0;
-    }
+    .brand-text { min-width: 0; }
 
     .brand-title {
       margin: 0;
@@ -221,7 +210,11 @@
 
     .auth-btn,
     .icon-btn,
-    .logout-btn {
+    .logout-btn,
+    .quick-btn,
+    .mini-tab,
+    .qty-btn,
+    .remove-btn {
       border: 1px solid var(--line);
       background: var(--card-soft);
       color: var(--text);
@@ -233,7 +226,11 @@
 
     .auth-btn:hover,
     .icon-btn:hover,
-    .logout-btn:hover {
+    .logout-btn:hover,
+    .quick-btn:hover,
+    .mini-tab:hover,
+    .qty-btn:hover,
+    .remove-btn:hover {
       transform: translateY(-2px);
       opacity: 0.98;
     }
@@ -308,15 +305,34 @@
     .contact-card,
     .settings-panel,
     .auth-modal,
-    .toast {
+    .toast,
+    .profile-card,
+    .wallet-card,
+    .topup-card,
+    .cart-card,
+    .history-card,
+    .empty-card {
       box-shadow: var(--shadow);
     }
 
-    .banner-card {
+    .banner-card,
+    .side-card,
+    .service-card,
+    .game-card,
+    .contact-card,
+    .profile-card,
+    .wallet-card,
+    .topup-card,
+    .cart-card,
+    .history-card,
+    .empty-card {
       border-radius: 24px;
-      overflow: hidden;
       border: 1px solid var(--line);
       background: var(--card);
+    }
+
+    .banner-card {
+      overflow: hidden;
       position: relative;
       isolation: isolate;
     }
@@ -352,7 +368,8 @@
       z-index: 1;
     }
 
-    .banner-tag {
+    .banner-tag,
+    .section-kicker {
       display: inline-flex;
       padding: 8px 12px;
       border-radius: 999px;
@@ -373,20 +390,29 @@
       font-weight: 900;
     }
 
-    .banner-desc {
+    .banner-desc,
+    .section-desc {
       margin: 12px 0 0;
       max-width: 760px;
       line-height: 1.72;
       color: var(--text-soft);
-      font-size: 17px;
     }
 
-    .banner-actions {
-      margin-top: 18px;
+    .banner-actions,
+    .contact-actions,
+    .quick-actions,
+    .topup-actions,
+    .cart-actions {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
     }
+
+    .banner-actions { margin-top: 18px; }
+    .contact-actions { margin-top: 20px; justify-content: center; }
+    .quick-actions { margin-top: 16px; }
+    .topup-actions { margin-top: 14px; }
+    .cart-actions { margin-top: 16px; }
 
     .btn {
       min-height: 50px;
@@ -419,6 +445,11 @@
       border: 1px solid var(--line);
     }
 
+    .btn-danger {
+      background: linear-gradient(135deg, #ef4444, #f87171);
+      color: #fff;
+    }
+
     .stats-row {
       margin-top: 18px;
       display: flex;
@@ -426,7 +457,8 @@
       flex-wrap: wrap;
     }
 
-    .stat-box {
+    .stat-box,
+    .info-box {
       min-width: 145px;
       padding: 14px 16px;
       border-radius: 18px;
@@ -435,30 +467,29 @@
       transition: transform 0.18s ease;
     }
 
-    .stat-box:hover {
-      transform: translateY(-3px);
-    }
+    .stat-box:hover,
+    .info-box:hover { transform: translateY(-3px); }
 
-    .stat-box strong {
+    .stat-box strong,
+    .money-big,
+    .profile-name {
       display: block;
       font-size: 28px;
       color: var(--title);
       margin-bottom: 4px;
+      font-weight: 900;
     }
 
-    .stat-box span {
+    .stat-box span,
+    .muted,
+    .info-label,
+    .meta {
       color: var(--text-soft);
       font-size: 14px;
     }
 
-    .side-card {
-      border-radius: 24px;
-      border: 1px solid var(--line);
-      background: var(--card);
-      overflow: hidden;
-    }
-
-    .side-head {
+    .side-head,
+    .card-header {
       padding: 18px;
       display: flex;
       align-items: center;
@@ -467,19 +498,22 @@
       border-bottom: 1px solid var(--line);
     }
 
-    .side-head h3 {
+    .side-head h3,
+    .card-header h3 {
       margin: 0;
       font-size: 28px;
       color: var(--title);
     }
 
-    .side-head p {
+    .side-head p,
+    .card-header p {
       margin: 6px 0 0;
       color: var(--text-soft);
       font-size: 14px;
     }
 
-    .head-badge {
+    .head-badge,
+    .status-badge {
       padding: 10px 12px;
       border-radius: 12px;
       background: var(--card-strong);
@@ -488,15 +522,22 @@
       font-size: 13px;
     }
 
-    .rank-list {
+    .status-approved { background: rgba(34, 197, 94, 0.18); color: #d4ffe0; }
+    .status-paid { background: rgba(59, 130, 246, 0.18); color: #dbeafe; }
+
+    .rank-list,
+    .card-body {
       padding: 18px;
-      display: grid;
-      gap: 12px;
     }
 
-    .rank-item {
+    .rank-list { display: grid; gap: 12px; }
+
+    .rank-item,
+    .list-row,
+    .cart-item,
+    .history-item,
+    .topup-item {
       display: grid;
-      grid-template-columns: 44px 1fr auto;
       gap: 12px;
       align-items: center;
       padding: 12px;
@@ -506,11 +547,20 @@
       transition: transform 0.18s ease;
     }
 
-    .rank-item:hover {
-      transform: translateX(3px);
-    }
+    .rank-item { grid-template-columns: 44px 1fr auto; }
+    .cart-item { grid-template-columns: 1fr auto; }
+    .topup-item, .history-item { grid-template-columns: 1fr auto; }
 
-    .rank-no {
+    .rank-item:hover,
+    .cart-item:hover,
+    .history-item:hover,
+    .topup-item:hover,
+    .list-row:hover { transform: translateX(3px); }
+
+    .rank-no,
+    .service-icon,
+    .quick-icon,
+    .avatar-circle {
       width: 40px;
       height: 40px;
       border-radius: 14px;
@@ -519,28 +569,31 @@
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
       color: #111;
       font-weight: 900;
+      flex-shrink: 0;
     }
 
-    .rank-name {
+    .service-icon,
+    .quick-icon,
+    .avatar-circle { width: 56px; height: 56px; border-radius: 18px; font-size: 26px; }
+
+    .rank-name,
+    .item-title,
+    .service-card h3,
+    .game-card h3,
+    .profile-name {
       font-weight: 800;
       color: var(--text);
+      margin: 0;
     }
 
-    .rank-value {
+    .rank-value,
+    .price-tag {
       padding: 10px 12px;
       border-radius: 12px;
       background: var(--blue);
       color: #fff;
       font-weight: 900;
       white-space: nowrap;
-    }
-
-    .side-footer {
-      padding: 0 18px 18px;
-    }
-
-    section {
-      padding: 24px 0 4px;
     }
 
     .section-head {
@@ -552,19 +605,6 @@
       margin-bottom: 18px;
     }
 
-    .section-kicker {
-      display: inline-flex;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: var(--card-soft);
-      color: var(--title);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
     .section-title {
       margin: 12px 0 0;
       font-size: 36px;
@@ -573,26 +613,32 @@
       font-weight: 900;
     }
 
-    .section-desc {
-      margin: 10px 0 0;
-      max-width: 760px;
-      line-height: 1.72;
-      color: var(--text-soft);
-    }
-
-    .chips {
+    .chips,
+    .tabs,
+    .wallet-metrics,
+    .profile-grid,
+    .account-layout,
+    .history-layout {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
     }
 
-    .chip {
+    .chips { align-items: center; }
+
+    .chip,
+    .mini-tab {
       padding: 10px 14px;
       border-radius: 999px;
       background: var(--card-soft);
       border: 1px solid var(--line);
       font-weight: 800;
       color: var(--text);
+    }
+
+    .mini-tab.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: var(--button-text);
     }
 
     .game-grid {
@@ -603,9 +649,6 @@
 
     .game-card {
       padding: 16px 12px 18px;
-      border-radius: 22px;
-      background: var(--card);
-      border: 1px solid var(--line);
       text-align: center;
       transition: transform 0.2s ease, border-color 0.2s ease;
       position: relative;
@@ -622,7 +665,8 @@
       pointer-events: none;
     }
 
-    .game-card:hover {
+    .game-card:hover,
+    .service-card:hover {
       transform: translateY(-5px);
       border-color: var(--accent);
     }
@@ -653,18 +697,12 @@
     .thumb-11 { background: linear-gradient(135deg, #6366f1, #06b6d4); }
     .thumb-12 { background: linear-gradient(135deg, #10b981, #0ea5e9); }
 
-    .game-card h3 {
-      margin: 0;
-      font-size: 17px;
-      color: var(--text);
-    }
-
-    .game-card p {
-      margin: 8px 0 0;
-      color: var(--text-soft);
-      font-size: 14px;
-      line-height: 1.58;
-    }
+    .game-card p,
+    .service-card p,
+    .item-sub,
+    .cart-sub,
+    .history-sub,
+    .topup-sub { color: var(--text-soft); font-size: 14px; line-height: 1.58; margin: 8px 0 0; }
 
     .service-grid {
       display: grid;
@@ -674,47 +712,40 @@
 
     .service-card {
       padding: 22px;
-      border-radius: 22px;
-      background: var(--card);
-      border: 1px solid var(--line);
       transition: transform 0.2s ease, border-color 0.2s ease;
+      position: relative;
+      overflow: hidden;
     }
 
-    .service-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--accent);
+    .service-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      background: var(--card-strong);
+      border: 1px solid var(--line);
     }
 
-    .service-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 18px;
-      display: grid;
-      place-items: center;
-      font-size: 26px;
-      color: #111;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      margin-bottom: 16px;
-    }
-
-    .service-card h3 {
-      margin: 0 0 10px;
-      font-size: 22px;
+    .service-price {
+      margin-top: 12px;
       color: var(--title);
+      font-weight: 900;
+      font-size: 22px;
     }
 
-    .service-card p {
-      margin: 0;
-      color: var(--text-soft);
-      line-height: 1.65;
+    .service-actions {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .contact-card {
       margin-top: 10px;
       padding: 26px;
-      border-radius: 24px;
-      background: var(--card);
-      border: 1px solid var(--line);
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -731,12 +762,207 @@
       pointer-events: none;
     }
 
-    .contact-actions {
-      margin-top: 20px;
+    .account-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+    }
+
+    .profile-card,
+    .wallet-card,
+    .topup-card,
+    .cart-card,
+    .history-card,
+    .empty-card {
+      overflow: hidden;
+    }
+
+    .card-header h3 { font-size: 24px; }
+
+    .profile-layout,
+    .wallet-layout,
+    .topup-layout {
+      display: grid;
+      gap: 16px;
+    }
+
+    .profile-top {
       display: flex;
-      justify-content: center;
-      gap: 14px;
+      gap: 16px;
+      align-items: center;
       flex-wrap: wrap;
+    }
+
+    .avatar-circle {
+      font-size: 22px;
+    }
+
+    .profile-meta {
+      display: grid;
+      gap: 6px;
+    }
+
+    .wallet-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      width: 100%;
+    }
+
+    .money-box {
+      padding: 16px;
+      border-radius: 18px;
+      background: var(--card-soft);
+      border: 1px solid var(--line);
+    }
+
+    .money-big {
+      font-size: 30px;
+      margin: 0 0 6px;
+    }
+
+    .quick-btn {
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 14px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .topup-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .topup-form {
+      display: none;
+      gap: 12px;
+      flex-direction: column;
+    }
+
+    .topup-form.active {
+      display: flex;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-soft);
+    }
+
+    .field input,
+    .field select {
+      min-height: 48px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--card-soft);
+      color: var(--text);
+      padding: 0 14px;
+      outline: none;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--accent);
+    }
+
+    .topup-note {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.22);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .cart-layout,
+    .history-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .cart-list,
+    .history-list,
+    .topup-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .cart-main,
+    .topup-main,
+    .history-main {
+      display: grid;
+      gap: 6px;
+    }
+
+    .cart-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .qty-btn,
+    .remove-btn {
+      min-width: 38px;
+      min-height: 38px;
+      padding: 0 12px;
+      border-radius: 12px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .remove-btn {
+      color: #fff;
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+
+    .cart-summary {
+      padding: 16px;
+      border-radius: 18px;
+      background: var(--card-soft);
+      border: 1px solid var(--line);
+      display: grid;
+      gap: 10px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--text-soft);
+      font-weight: 700;
+    }
+
+    .summary-row.total {
+      color: var(--title);
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .empty-card {
+      padding: 20px;
+      text-align: center;
+      color: var(--text-soft);
     }
 
     .footer {
@@ -953,13 +1179,8 @@
       font-weight: 700;
     }
 
-    .auth-status.success {
-      color: var(--success);
-    }
-
-    .auth-status.error {
-      color: var(--danger);
-    }
+    .auth-status.success { color: var(--success); }
+    .auth-status.error { color: var(--danger); }
 
     .toast {
       position: fixed;
@@ -998,7 +1219,10 @@
         justify-content: center;
       }
 
-      .hero-grid {
+      .hero-grid,
+      .account-grid,
+      .cart-layout,
+      .history-layout {
         grid-template-columns: 1fr;
       }
 
@@ -1014,6 +1238,10 @@
     @media (max-width: 820px) {
       .game-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .wallet-metrics {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -1039,13 +1267,22 @@
       .contact-card,
       .service-card,
       .settings-panel,
-      .auth-modal {
+      .auth-modal,
+      .profile-card,
+      .wallet-card,
+      .topup-card,
+      .cart-card,
+      .history-card,
+      .empty-card {
         padding: 18px 16px;
       }
 
       .banner-actions,
       .contact-actions,
-      .top-actions {
+      .top-actions,
+      .topup-actions,
+      .cart-actions,
+      .quick-actions {
         width: 100%;
       }
 
@@ -1053,13 +1290,15 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .service-grid {
+      .service-grid,
+      .form-row {
         grid-template-columns: 1fr;
       }
 
       .btn,
       .auth-btn,
-      .logout-btn {
+      .logout-btn,
+      .quick-btn {
         width: 100%;
       }
 
@@ -1110,7 +1349,9 @@
         <a href="#top">Trang chủ</a>
         <a href="#games">Game Roblox</a>
         <a href="#services">Dịch vụ</a>
-        <a href="#contact">Liên hệ hỗ trợ</a>
+        <a href="#account">Tài khoản</a>
+        <a href="#topup">Nạp tiền</a>
+        <a href="#cart">Giỏ hàng</a>
       </nav>
 
       <div class="top-actions">
@@ -1134,7 +1375,7 @@
             <h1 class="banner-title">Shop Làng Việt</h1>
             <p class="banner-desc">
               Chuyên cày thuê, hỗ trợ tài khoản và nhận đơn cho nhiều game Roblox,
-              không chỉ riêng Blox Fruits. Có đăng nhập tài khoản thường, đăng ký và đổi theme.
+              không chỉ riêng Blox Fruits. Có hồ sơ tài khoản, ví tiền, nạp tiền, lịch sử đơn hàng và giỏ hàng.
             </p>
 
             <div class="banner-actions">
@@ -1201,9 +1442,7 @@
           </div>
 
           <div class="side-footer">
-            <a class="btn btn-primary" href="https://discord.gg/RdZpev84xK" target="_blank" rel="noopener noreferrer">
-              Liên hệ ngay
-            </a>
+            <a class="btn btn-primary" href="#topup">Nạp tiền ngay</a>
           </div>
         </aside>
       </div>
@@ -1234,67 +1473,56 @@
             <h3>Blox Fruits</h3>
             <p>Cày level, raid, mastery, beli, hỗ trợ combo dịch vụ.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-2">GG</div>
             <h3>Grow a Garden</h3>
             <p>Hỗ trợ nhiệm vụ, farm tài nguyên, tăng tiến độ nhanh.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-3">AA</div>
             <h3>Anime Adventures</h3>
             <p>Hỗ trợ account, nhiệm vụ, tài nguyên và nhiều yêu cầu khác.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-4">FI</div>
             <h3>Fisch</h3>
             <p>Nhận hỗ trợ farm vật phẩm, tài nguyên và các mục tiêu riêng.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-5">SB</div>
             <h3>Steal a Brainrot</h3>
             <p>Shop có thể làm dịch vụ cơ bản, hỗ trợ nhanh qua Discord.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-6">99</div>
             <h3>99 Nights</h3>
             <p>Hỗ trợ mục tiêu game, account và nhiệm vụ theo yêu cầu.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-7">PG</div>
             <h3>Pets Go</h3>
             <p>Farm, hỗ trợ tài nguyên, tối ưu tài khoản theo nhu cầu.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-8">PS</div>
             <h3>Pet Simulator 99</h3>
             <p>Nhận hỗ trợ tiến độ, nhiệm vụ và các yêu cầu riêng của khách.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-9">AD</div>
             <h3>Anime Defenders</h3>
             <p>Dịch vụ tài nguyên, cày thuê và hỗ trợ nhiều mục tiêu khác.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-10">DO</div>
             <h3>Doors</h3>
             <p>Nhận hỗ trợ account và các dịch vụ đi kèm nếu muốn mở rộng.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-11">BB</div>
             <h3>Blade Ball</h3>
             <p>Shop nhận thêm game mới rất dễ, chỉ cần đổi nội dung thẻ.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-12">RB</div>
             <h3>Dịch vụ Roblox hot</h3>
@@ -1309,38 +1537,62 @@
         <div class="section-head">
           <div>
             <span class="section-kicker">Dịch vụ</span>
-            <h2 class="section-title">Các mảng shop có thể làm</h2>
+            <h2 class="section-title">Đặt dịch vụ ngay trên shop</h2>
             <p class="section-desc">
-              Bạn có thể sửa lại nội dung cho đúng dịch vụ thật của shop sau này.
+              Chọn gói dịch vụ, thêm vào giỏ hàng rồi thanh toán bằng số dư ví của tài khoản.
             </p>
           </div>
         </div>
 
-        <div class="service-grid">
-          <article class="service-card">
-            <div class="service-icon">⚔️</div>
-            <h3>Cày thuê game</h3>
-            <p>Nhận cày thuê nhiều game Roblox theo mục tiêu cụ thể của khách.</p>
-          </article>
+        <div class="service-grid" id="serviceGrid"></div>
+      </div>
+    </section>
 
-          <article class="service-card">
-            <div class="service-icon">💎</div>
-            <h3>Farm tài nguyên</h3>
-            <p>Farm beli, gem, item, tài nguyên hoặc nhiệm vụ theo yêu cầu.</p>
-          </article>
-
-          <article class="service-card">
-            <div class="service-icon">🧾</div>
-            <h3>Dịch vụ theo đơn</h3>
-            <p>Nhận đơn riêng, báo giá riêng, xử lý theo game và độ khó khác nhau.</p>
-          </article>
-
-          <article class="service-card">
-            <div class="service-icon">🔥</div>
-            <h3>Game hot cập nhật</h3>
-            <p>Dễ mở rộng thêm game mới, game hot hoặc game đang trend trong Roblox.</p>
-          </article>
+    <section id="account">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Hồ sơ tài khoản</span>
+            <h2 class="section-title">Quản lý tài khoản và số dư ví</h2>
+            <p class="section-desc">
+              Xem tên tài khoản, số dư, tổng đơn hàng và lịch sử giao dịch của bạn.
+            </p>
+          </div>
         </div>
+
+        <div id="accountSection"></div>
+      </div>
+    </section>
+
+    <section id="topup">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Nạp tiền</span>
+            <h2 class="section-title">Nạp ví bằng MoMo hoặc thẻ cào</h2>
+            <p class="section-desc">
+              Đây là hệ thống nạp tiền demo cho web tĩnh. Khi gửi yêu cầu, ví sẽ được cộng tiền ngay để bạn test giao diện.
+            </p>
+          </div>
+        </div>
+
+        <div id="topupSection"></div>
+      </div>
+    </section>
+
+    <section id="cart">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Giỏ hàng & đơn hàng</span>
+            <h2 class="section-title">Đặt dịch vụ và xem lịch sử</h2>
+            <p class="section-desc">
+              Quản lý giỏ hàng, thanh toán bằng ví và theo dõi lịch sử đơn hàng của tài khoản.
+            </p>
+          </div>
+        </div>
+
+        <div id="cartHistorySection"></div>
       </div>
     </section>
 
@@ -1420,7 +1672,7 @@
     </div>
 
     <p class="auth-text">
-      Đăng nhập hoặc đăng ký tài khoản thường để dùng thử giao diện shop.
+      Đăng nhập hoặc đăng ký tài khoản thường để dùng ví, giỏ hàng, nạp tiền và lịch sử đơn hàng.
     </p>
 
     <div class="auth-tabs">
@@ -1467,6 +1719,15 @@
     const CURRENT_USER_KEY = "shopLangVietCurrentUser";
     const discordName = "ngai_hamster";
 
+    const SERVICES = [
+      { id: 1, name: "Cày level Blox Fruits", price: 99000, badge: "Hot", desc: "Lên cấp nhanh, nhận đơn theo mốc level mong muốn." },
+      { id: 2, name: "Farm beli / fragment", price: 79000, badge: "Phổ biến", desc: "Farm tài nguyên để nâng cấp nhân vật và kỹ năng." },
+      { id: 3, name: "Raid / thức tỉnh", price: 149000, badge: "VIP", desc: "Nhận làm raid, hỗ trợ thức tỉnh nhanh gọn." },
+      { id: 4, name: "Dịch vụ Fisch", price: 89000, badge: "Mới", desc: "Farm vật phẩm, nguyên liệu hoặc nhiệm vụ theo yêu cầu." },
+      { id: 5, name: "Grow a Garden", price: 69000, badge: "Hot", desc: "Hỗ trợ tăng tiến độ, farm vật phẩm và xử lý mục tiêu game." },
+      { id: 6, name: "Anime Defenders", price: 129000, badge: "Đơn riêng", desc: "Nhận cày tài nguyên, hỗ trợ account và nhiều mục tiêu khác." }
+    ];
+
     const root = document.documentElement;
     const year = document.getElementById("year");
     const toast = document.getElementById("toast");
@@ -1493,25 +1754,41 @@
     const copyBtnBottom = document.getElementById("copyDiscordBtnBottom");
     const userArea = document.getElementById("userArea");
 
+    const serviceGrid = document.getElementById("serviceGrid");
+    const accountSection = document.getElementById("accountSection");
+    const topupSection = document.getElementById("topupSection");
+    const cartHistorySection = document.getElementById("cartHistorySection");
+
     function showToast(message) {
       toast.textContent = message;
       toast.classList.add("show");
       clearTimeout(showToast.timer);
       showToast.timer = setTimeout(() => {
         toast.classList.remove("show");
-      }, 2200);
+      }, 2400);
+    }
+
+    function formatPrice(value) {
+      return new Intl.NumberFormat("vi-VN").format(value) + "đ";
+    }
+
+    function randomId(prefix) {
+      return prefix + "-" + Date.now() + "-" + Math.floor(Math.random() * 10000);
     }
 
     function applyTheme(themeName) {
       root.setAttribute("data-theme", themeName);
       localStorage.setItem(THEME_KEY, themeName);
-
       themeButtons.forEach((button) => {
         button.classList.toggle("active", button.dataset.theme === themeName);
       });
     }
 
-    function openSettings() {
+    function openSettings(event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
       settingsPanel.classList.add("open");
       settingsOverlay.classList.add("open");
     }
@@ -1521,28 +1798,11 @@
       settingsOverlay.classList.remove("open");
     }
 
-    function toggleSettings(event) {
-      if (event) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-
-      const isOpen = settingsPanel.classList.contains("open");
-
-      if (isOpen) {
-        closeSettings();
-      } else {
-        settingsPanel.classList.add("open");
-        settingsOverlay.classList.add("open");
-      }
-    }
-
     function openAuth(event) {
       if (event) {
         event.preventDefault();
         event.stopPropagation();
       }
-
       authModal.classList.add("open");
       authOverlay.classList.add("open");
     }
@@ -1579,7 +1839,19 @@
 
     function getAccounts() {
       const raw = localStorage.getItem(ACCOUNTS_KEY);
-      return raw ? JSON.parse(raw) : [];
+      const accounts = raw ? JSON.parse(raw) : [];
+      return accounts.map(normalizeAccount);
+    }
+
+    function normalizeAccount(account) {
+      return {
+        username: account.username,
+        password: account.password,
+        balance: Number(account.balance || 0),
+        orders: Array.isArray(account.orders) ? account.orders : [],
+        topups: Array.isArray(account.topups) ? account.topups : [],
+        cart: Array.isArray(account.cart) ? account.cart : []
+      };
     }
 
     function saveAccounts(accounts) {
@@ -1594,6 +1866,37 @@
       localStorage.setItem(CURRENT_USER_KEY, username);
     }
 
+    function getCurrentAccount() {
+      const username = getCurrentUser();
+      if (!username) return null;
+      const accounts = getAccounts();
+      return accounts.find((account) => account.username === username) || null;
+    }
+
+    function updateCurrentAccount(mutator) {
+      const username = getCurrentUser();
+      if (!username) return null;
+
+      const accounts = getAccounts();
+      const index = accounts.findIndex((account) => account.username === username);
+      if (index === -1) return null;
+
+      const account = normalizeAccount(accounts[index]);
+      mutator(account);
+      accounts[index] = normalizeAccount(account);
+      saveAccounts(accounts);
+      return accounts[index];
+    }
+
+    function requireLogin(message) {
+      if (!getCurrentUser()) {
+        showToast(message || "Bạn cần đăng nhập trước");
+        openAuth();
+        return false;
+      }
+      return true;
+    }
+
     function copyDiscordName() {
       navigator.clipboard.writeText(discordName)
         .then(() => showToast("Đã copy Discord: " + discordName))
@@ -1602,11 +1905,11 @@
 
     function logout() {
       localStorage.removeItem(CURRENT_USER_KEY);
-      updateUserUI();
+      renderAll();
       showToast("Đã đăng xuất");
     }
 
-    function updateUserUI() {
+    function renderUserUI() {
       const currentUser = getCurrentUser();
 
       if (currentUser) {
@@ -1630,6 +1933,572 @@
       }
     }
 
+    function renderServiceGrid() {
+      serviceGrid.innerHTML = SERVICES.map((service) => `
+        <article class="service-card">
+          <div class="service-badge">${service.badge}</div>
+          <div class="service-icon">🛒</div>
+          <h3>${service.name}</h3>
+          <p>${service.desc}</p>
+          <div class="service-price">${formatPrice(service.price)}</div>
+          <div class="service-actions">
+            <button class="btn btn-primary" type="button" data-add-service="${service.id}">Thêm vào giỏ</button>
+          </div>
+        </article>
+      `).join("");
+
+      serviceGrid.querySelectorAll("[data-add-service]").forEach((button) => {
+        button.addEventListener("click", () => addToCart(Number(button.dataset.addService)));
+      });
+    }
+
+    function renderAccountSection() {
+      const account = getCurrentAccount();
+
+      if (!account) {
+        accountSection.innerHTML = `
+          <div class="empty-card">
+            <h3>Chưa đăng nhập</h3>
+            <p>Đăng nhập để xem hồ sơ tài khoản, số dư ví, lịch sử nạp tiền và đơn hàng.</p>
+            <div class="quick-actions" style="justify-content:center;">
+              <button class="btn btn-primary" id="openAuthFromAccount" type="button">Đăng nhập ngay</button>
+            </div>
+          </div>
+        `;
+
+        const openBtn = document.getElementById("openAuthFromAccount");
+        if (openBtn) openBtn.addEventListener("click", openAuth);
+        return;
+      }
+
+      const totalTopup = account.topups.reduce((sum, item) => sum + Number(item.amount || 0), 0);
+      const totalSpent = account.orders.reduce((sum, item) => sum + Number(item.total || 0), 0);
+
+      accountSection.innerHTML = `
+        <div class="account-grid">
+          <div class="profile-card">
+            <div class="card-header">
+              <div>
+                <h3>Hồ sơ tài khoản</h3>
+                <p>Thông tin cơ bản của tài khoản đang đăng nhập</p>
+              </div>
+              <div class="status-badge">Đang hoạt động</div>
+            </div>
+            <div class="card-body profile-layout">
+              <div class="profile-top">
+                <div class="avatar-circle">👤</div>
+                <div class="profile-meta">
+                  <span class="profile-name">${account.username}</span>
+                  <span class="meta">Tài khoản nội bộ của Shop Làng Việt</span>
+                </div>
+              </div>
+              <div class="wallet-metrics">
+                <div class="money-box">
+                  <div class="money-big">${formatPrice(account.balance)}</div>
+                  <div class="muted">Số dư ví hiện tại</div>
+                </div>
+                <div class="money-box">
+                  <div class="money-big">${account.orders.length}</div>
+                  <div class="muted">Tổng đơn hàng</div>
+                </div>
+                <div class="money-box">
+                  <div class="money-big">${account.topups.length}</div>
+                  <div class="muted">Tổng lượt nạp</div>
+                </div>
+              </div>
+              <div class="quick-actions">
+                <a class="quick-btn" href="#topup">Nạp tiền</a>
+                <a class="quick-btn" href="#cart">Xem giỏ hàng</a>
+                <a class="quick-btn" href="#cart">Lịch sử đơn</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="wallet-card">
+            <div class="card-header">
+              <div>
+                <h3>Thống kê ví</h3>
+                <p>Tổng quan giao dịch của tài khoản</p>
+              </div>
+            </div>
+            <div class="card-body wallet-layout">
+              <div class="info-box">
+                <div class="money-big">${formatPrice(totalTopup)}</div>
+                <div class="muted">Tổng tiền đã nạp</div>
+              </div>
+              <div class="info-box">
+                <div class="money-big">${formatPrice(totalSpent)}</div>
+                <div class="muted">Tổng tiền đã chi</div>
+              </div>
+              <div class="info-box">
+                <div class="money-big">${formatPrice(Math.max(totalTopup - totalSpent, account.balance))}</div>
+                <div class="muted">Giá trị ví còn lại</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderTopupSection() {
+      const account = getCurrentAccount();
+
+      if (!account) {
+        topupSection.innerHTML = `
+          <div class="empty-card">
+            <h3>Bạn cần đăng nhập trước</h3>
+            <p>Đăng nhập để sử dụng hệ thống nạp tiền bằng MoMo hoặc thẻ cào.</p>
+            <div class="quick-actions" style="justify-content:center;">
+              <button class="btn btn-primary" id="openAuthFromTopup" type="button">Đăng nhập ngay</button>
+            </div>
+          </div>
+        `;
+        const openBtn = document.getElementById("openAuthFromTopup");
+        if (openBtn) openBtn.addEventListener("click", openAuth);
+        return;
+      }
+
+      topupSection.innerHTML = `
+        <div class="account-grid">
+          <div class="topup-card">
+            <div class="card-header">
+              <div>
+                <h3>Hệ thống nạp tiền</h3>
+                <p>Chọn phương thức nạp tiền cho ví tài khoản</p>
+              </div>
+            </div>
+            <div class="card-body topup-layout">
+              <div class="topup-tabs">
+                <button class="mini-tab active" data-topup-tab="momo" type="button">MoMo</button>
+                <button class="mini-tab" data-topup-tab="card" type="button">Thẻ cào</button>
+              </div>
+
+              <form class="topup-form active" id="momoTopupForm">
+                <div class="topup-note">
+                  <strong>Demo:</strong> Chuyển khoản MoMo nội bộ giả lập.<br />
+                  Số MoMo mẫu: <strong>0988 888 888</strong><br />
+                  Chủ tài khoản: <strong>SHOP LANG VIET</strong>
+                </div>
+                <div class="form-row">
+                  <label class="field">
+                    Số tiền nạp
+                    <input type="number" id="momoAmount" min="1000" step="1000" placeholder="Ví dụ: 50000" required />
+                  </label>
+                  <label class="field">
+                    Nội dung chuyển khoản
+                    <input type="text" id="momoNote" placeholder="Ví dụ: NAP ${account.username}" required />
+                  </label>
+                </div>
+                <div class="topup-actions">
+                  <button class="btn btn-primary" type="submit">Xác nhận nạp MoMo</button>
+                </div>
+              </form>
+
+              <form class="topup-form" id="cardTopupForm">
+                <div class="topup-note">
+                  <strong>Demo:</strong> Nạp thẻ cào giả lập. Hệ thống sẽ cộng tiền ngay sau khi gửi thẻ để bạn test giao diện.
+                </div>
+                <div class="form-row">
+                  <label class="field">
+                    Loại thẻ
+                    <select id="cardProvider">
+                      <option value="Viettel">Viettel</option>
+                      <option value="Mobifone">Mobifone</option>
+                      <option value="Vinaphone">Vinaphone</option>
+                    </select>
+                  </label>
+                  <label class="field">
+                    Mệnh giá
+                    <select id="cardAmount">
+                      <option value="20000">20.000đ</option>
+                      <option value="50000">50.000đ</option>
+                      <option value="100000">100.000đ</option>
+                      <option value="200000">200.000đ</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="form-row">
+                  <label class="field">
+                    Seri thẻ
+                    <input type="text" id="cardSerial" placeholder="Nhập seri thẻ" required />
+                  </label>
+                  <label class="field">
+                    Mã thẻ
+                    <input type="text" id="cardPin" placeholder="Nhập mã thẻ" required />
+                  </label>
+                </div>
+                <div class="topup-actions">
+                  <button class="btn btn-primary" type="submit">Gửi thẻ cào</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="history-card">
+            <div class="card-header">
+              <div>
+                <h3>Lịch sử nạp tiền</h3>
+                <p>Các lượt nạp gần đây của tài khoản</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="topup-list" id="topupList"></div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.querySelectorAll("[data-topup-tab]").forEach((button) => {
+        button.addEventListener("click", () => switchTopupTab(button.dataset.topupTab));
+      });
+
+      const momoForm = document.getElementById("momoTopupForm");
+      const cardForm = document.getElementById("cardTopupForm");
+      if (momoForm) momoForm.addEventListener("submit", submitMomoTopup);
+      if (cardForm) cardForm.addEventListener("submit", submitCardTopup);
+
+      renderTopupList();
+    }
+
+    function renderTopupList() {
+      const account = getCurrentAccount();
+      const topupList = document.getElementById("topupList");
+      if (!topupList || !account) return;
+
+      if (!account.topups.length) {
+        topupList.innerHTML = `
+          <div class="empty-card">
+            <p>Chưa có giao dịch nạp tiền nào.</p>
+          </div>
+        `;
+        return;
+      }
+
+      topupList.innerHTML = account.topups.slice().reverse().map((item) => `
+        <div class="topup-item">
+          <div class="topup-main">
+            <div class="item-title">${item.method}</div>
+            <div class="topup-sub">${item.detail} · ${item.date}</div>
+          </div>
+          <div>
+            <div class="price-tag">${formatPrice(item.amount)}</div>
+            <div class="status-badge status-approved" style="margin-top:8px;text-align:center;">${item.status}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderCartAndHistory() {
+      const account = getCurrentAccount();
+
+      if (!account) {
+        cartHistorySection.innerHTML = `
+          <div class="empty-card">
+            <h3>Chưa đăng nhập</h3>
+            <p>Đăng nhập để dùng giỏ hàng, thanh toán bằng ví và xem lịch sử đơn hàng.</p>
+            <div class="quick-actions" style="justify-content:center;">
+              <button class="btn btn-primary" id="openAuthFromCart" type="button">Đăng nhập ngay</button>
+            </div>
+          </div>
+        `;
+        const openBtn = document.getElementById("openAuthFromCart");
+        if (openBtn) openBtn.addEventListener("click", openAuth);
+        return;
+      }
+
+      const total = account.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      cartHistorySection.innerHTML = `
+        <div class="cart-layout">
+          <div class="cart-card">
+            <div class="card-header">
+              <div>
+                <h3>Giỏ hàng</h3>
+                <p>Thêm dịch vụ và thanh toán bằng số dư ví</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="cart-list" id="cartList"></div>
+              <div class="cart-summary">
+                <div class="summary-row">
+                  <span>Số dư ví</span>
+                  <strong>${formatPrice(account.balance)}</strong>
+                </div>
+                <div class="summary-row total">
+                  <span>Tổng thanh toán</span>
+                  <strong>${formatPrice(total)}</strong>
+                </div>
+                <div class="cart-actions">
+                  <button class="btn btn-primary" id="checkoutBtn" type="button">Thanh toán đơn hàng</button>
+                  <button class="btn btn-soft" id="clearCartBtn" type="button">Xóa giỏ hàng</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="history-card">
+            <div class="card-header">
+              <div>
+                <h3>Lịch sử đơn hàng</h3>
+                <p>Các đơn đã tạo và thanh toán gần đây</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="history-list" id="orderList"></div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      renderCartList();
+      renderOrderList();
+
+      const checkoutBtn = document.getElementById("checkoutBtn");
+      const clearCartBtn = document.getElementById("clearCartBtn");
+      if (checkoutBtn) checkoutBtn.addEventListener("click", checkoutCart);
+      if (clearCartBtn) clearCartBtn.addEventListener("click", clearCart);
+    }
+
+    function renderCartList() {
+      const account = getCurrentAccount();
+      const cartList = document.getElementById("cartList");
+      if (!cartList || !account) return;
+
+      if (!account.cart.length) {
+        cartList.innerHTML = `
+          <div class="empty-card">
+            <p>Giỏ hàng đang trống. Hãy thêm vài dịch vụ để tạo đơn hàng.</p>
+          </div>
+        `;
+        return;
+      }
+
+      cartList.innerHTML = account.cart.map((item) => `
+        <div class="cart-item">
+          <div class="cart-main">
+            <div class="item-title">${item.name}</div>
+            <div class="cart-sub">${formatPrice(item.price)} / gói · Số lượng: ${item.quantity}</div>
+          </div>
+          <div class="cart-controls">
+            <button class="qty-btn" type="button" data-qty="decrease" data-id="${item.id}">−</button>
+            <button class="qty-btn" type="button" data-qty="increase" data-id="${item.id}">+</button>
+            <button class="remove-btn" type="button" data-remove-item="${item.id}">Xóa</button>
+          </div>
+        </div>
+      `).join("");
+
+      cartList.querySelectorAll("[data-qty]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const id = Number(button.dataset.id);
+          const action = button.dataset.qty;
+          updateCartQuantity(id, action === "increase" ? 1 : -1);
+        });
+      });
+
+      cartList.querySelectorAll("[data-remove-item]").forEach((button) => {
+        button.addEventListener("click", () => removeFromCart(Number(button.dataset.removeItem)));
+      });
+    }
+
+    function renderOrderList() {
+      const account = getCurrentAccount();
+      const orderList = document.getElementById("orderList");
+      if (!orderList || !account) return;
+
+      if (!account.orders.length) {
+        orderList.innerHTML = `
+          <div class="empty-card">
+            <p>Chưa có đơn hàng nào được tạo.</p>
+          </div>
+        `;
+        return;
+      }
+
+      orderList.innerHTML = account.orders.slice().reverse().map((order) => `
+        <div class="history-item">
+          <div class="history-main">
+            <div class="item-title">${order.code}</div>
+            <div class="history-sub">${order.items.map((item) => `${item.name} x${item.quantity}`).join(" • ")}</div>
+            <div class="history-sub">${order.date}</div>
+          </div>
+          <div>
+            <div class="price-tag">${formatPrice(order.total)}</div>
+            <div class="status-badge status-paid" style="margin-top:8px;text-align:center;">${order.status}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function switchTopupTab(tab) {
+      document.querySelectorAll("[data-topup-tab]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.topupTab === tab);
+      });
+
+      const momoForm = document.getElementById("momoTopupForm");
+      const cardForm = document.getElementById("cardTopupForm");
+      if (momoForm) momoForm.classList.toggle("active", tab === "momo");
+      if (cardForm) cardForm.classList.toggle("active", tab === "card");
+    }
+
+    function submitMomoTopup(event) {
+      event.preventDefault();
+      if (!requireLogin("Bạn cần đăng nhập để nạp tiền")) return;
+
+      const amount = Number(document.getElementById("momoAmount").value);
+      const note = document.getElementById("momoNote").value.trim();
+
+      if (!amount || amount < 1000) {
+        showToast("Số tiền nạp chưa hợp lệ");
+        return;
+      }
+
+      updateCurrentAccount((account) => {
+        account.balance += amount;
+        account.topups.push({
+          id: randomId("TP"),
+          method: "MoMo",
+          amount,
+          status: "Đã duyệt",
+          detail: note || "Nạp tiền MoMo",
+          date: new Date().toLocaleString("vi-VN")
+        });
+      });
+
+      event.target.reset();
+      renderAll();
+      showToast("Nạp tiền MoMo thành công");
+    }
+
+    function submitCardTopup(event) {
+      event.preventDefault();
+      if (!requireLogin("Bạn cần đăng nhập để nạp tiền")) return;
+
+      const provider = document.getElementById("cardProvider").value;
+      const amount = Number(document.getElementById("cardAmount").value);
+      const serial = document.getElementById("cardSerial").value.trim();
+      const pin = document.getElementById("cardPin").value.trim();
+
+      if (!serial || !pin) {
+        showToast("Vui lòng nhập seri và mã thẻ");
+        return;
+      }
+
+      updateCurrentAccount((account) => {
+        account.balance += amount;
+        account.topups.push({
+          id: randomId("TP"),
+          method: "Thẻ cào",
+          amount,
+          status: "Đã duyệt",
+          detail: `${provider} · Seri ${serial.slice(0, 4)}****`,
+          date: new Date().toLocaleString("vi-VN")
+        });
+      });
+
+      event.target.reset();
+      renderAll();
+      showToast("Nạp thẻ cào thành công");
+    }
+
+    function addToCart(serviceId) {
+      if (!requireLogin("Bạn cần đăng nhập để thêm vào giỏ hàng")) return;
+
+      const service = SERVICES.find((item) => item.id === serviceId);
+      if (!service) return;
+
+      updateCurrentAccount((account) => {
+        const found = account.cart.find((item) => item.id === serviceId);
+        if (found) {
+          found.quantity += 1;
+        } else {
+          account.cart.push({
+            id: service.id,
+            name: service.name,
+            price: service.price,
+            quantity: 1
+          });
+        }
+      });
+
+      renderAll();
+      showToast("Đã thêm vào giỏ hàng");
+    }
+
+    function updateCartQuantity(serviceId, delta) {
+      updateCurrentAccount((account) => {
+        const item = account.cart.find((cartItem) => cartItem.id === serviceId);
+        if (!item) return;
+        item.quantity += delta;
+        if (item.quantity <= 0) {
+          account.cart = account.cart.filter((cartItem) => cartItem.id !== serviceId);
+        }
+      });
+
+      renderAll();
+    }
+
+    function removeFromCart(serviceId) {
+      updateCurrentAccount((account) => {
+        account.cart = account.cart.filter((item) => item.id !== serviceId);
+      });
+
+      renderAll();
+      showToast("Đã xóa dịch vụ khỏi giỏ hàng");
+    }
+
+    function clearCart() {
+      updateCurrentAccount((account) => {
+        account.cart = [];
+      });
+      renderAll();
+      showToast("Đã xóa toàn bộ giỏ hàng");
+    }
+
+    function checkoutCart() {
+      const account = getCurrentAccount();
+      if (!account) {
+        openAuth();
+        return;
+      }
+
+      if (!account.cart.length) {
+        showToast("Giỏ hàng đang trống");
+        return;
+      }
+
+      const total = account.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      if (account.balance < total) {
+        showToast("Số dư không đủ, hãy nạp thêm tiền");
+        location.hash = "#topup";
+        return;
+      }
+
+      updateCurrentAccount((current) => {
+        const cartItems = current.cart.map((item) => ({ ...item }));
+        current.balance -= total;
+        current.orders.push({
+          id: randomId("OD"),
+          code: "DH-" + Math.floor(100000 + Math.random() * 900000),
+          items: cartItems,
+          total,
+          status: "Đã thanh toán",
+          date: new Date().toLocaleString("vi-VN")
+        });
+        current.cart = [];
+      });
+
+      renderAll();
+      showToast("Thanh toán đơn hàng thành công");
+    }
+
+    function renderAll() {
+      renderUserUI();
+      renderServiceGrid();
+      renderAccountSection();
+      renderTopupSection();
+      renderCartAndHistory();
+    }
+
     loginForm.addEventListener("submit", (event) => {
       event.preventDefault();
 
@@ -1647,7 +2516,7 @@
       }
 
       setCurrentUser(username);
-      updateUserUI();
+      renderAll();
       setStatus(loginStatus, "Đăng nhập thành công!", "success");
       showToast("Xin chào, " + username);
 
@@ -1687,7 +2556,14 @@
         return;
       }
 
-      accounts.push({ username, password });
+      accounts.push({
+        username,
+        password,
+        balance: 0,
+        orders: [],
+        topups: [],
+        cart: []
+      });
       saveAccounts(accounts);
 
       setStatus(registerStatus, "Đăng ký thành công. Bạn có thể đăng nhập ngay.", "success");
@@ -1712,7 +2588,7 @@
     });
 
     if (settingsTopBtn) {
-      settingsTopBtn.addEventListener("click", toggleSettings);
+      settingsTopBtn.addEventListener("click", openSettings);
     }
 
     if (settingsClose) {
@@ -1756,7 +2632,7 @@
 
     const savedTheme = localStorage.getItem(THEME_KEY);
     applyTheme(savedTheme || "royal-red");
-    updateUserUI();
+    renderAll();
   </script>
 </body>
 </html>
