@@ -6,15 +6,15 @@
   <title>Shop Làng Việt</title>
   <meta
     name="description"
-    content="Shop Làng Việt - Shop dịch vụ Roblox tổng hợp, có đăng nhập tài khoản, đổi theme và giao diện hiện đại."
+    content="Shop Làng Việt - Shop dịch vụ Roblox tổng hợp, có đăng nhập Google, Discord, email/password và đổi theme."
   />
   <style>
     :root {
-      --bg: linear-gradient(180deg, #1a0505 0%, #2b0808 40%, #120404 100%);
-      --header-bg: rgba(18, 8, 8, 0.9);
-      --card: rgba(141, 27, 27, 0.72);
-      --card-soft: rgba(255, 255, 255, 0.09);
-      --card-strong: rgba(255, 255, 255, 0.14);
+      --bg: linear-gradient(180deg, #1a0505 0%, #2b0808 42%, #120404 100%);
+      --header-bg: rgba(18, 8, 8, 0.90);
+      --card: rgba(141, 27, 27, 0.78);
+      --card-soft: rgba(255, 255, 255, 0.10);
+      --card-strong: rgba(255, 255, 255, 0.15);
       --text: #fff8ef;
       --text-soft: #f4e1c4;
       --title: #f1c24f;
@@ -26,14 +26,15 @@
       --overlay: rgba(0, 0, 0, 0.54);
       --success: #22c55e;
       --danger: #ef4444;
+      --blue: #3b82f6;
     }
 
     html[data-theme="black"] {
       --bg: linear-gradient(180deg, #040404 0%, #101010 45%, #090909 100%);
-      --header-bg: rgba(0, 0, 0, 0.9);
-      --card: rgba(20, 20, 20, 0.82);
+      --header-bg: rgba(0, 0, 0, 0.90);
+      --card: rgba(20, 20, 20, 0.84);
       --card-soft: rgba(255, 255, 255, 0.06);
-      --card-strong: rgba(255, 255, 255, 0.1);
+      --card-strong: rgba(255, 255, 255, 0.10);
       --text: #f7f7f7;
       --text-soft: #d8d8d8;
       --title: #ffffff;
@@ -45,6 +46,7 @@
       --overlay: rgba(0, 0, 0, 0.62);
       --success: #22c55e;
       --danger: #ef4444;
+      --blue: #2563eb;
     }
 
     html[data-theme="light"] {
@@ -64,15 +66,11 @@
       --overlay: rgba(0, 0, 0, 0.16);
       --success: #16a34a;
       --danger: #dc2626;
+      --blue: #2563eb;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
@@ -92,7 +90,7 @@
       background:
         linear-gradient(var(--overlay), var(--overlay)),
         url("assets/background.jfif") center/cover no-repeat;
-      opacity: 0.45;
+      opacity: 0.46;
       pointer-events: none;
       z-index: -3;
     }
@@ -109,15 +107,8 @@
       z-index: -2;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
 
     .container {
       width: min(1360px, calc(100% - 32px));
@@ -135,11 +126,10 @@
 
     .topbar-inner {
       min-height: 78px;
-      display: flex;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
       align-items: center;
-      justify-content: space-between;
       gap: 18px;
-      flex-wrap: wrap;
       padding: 10px 0;
     }
 
@@ -168,9 +158,7 @@
       display: block;
     }
 
-    .brand-text {
-      min-width: 0;
-    }
+    .brand-text { min-width: 0; }
 
     .brand-title {
       margin: 0;
@@ -190,9 +178,9 @@
     .nav-links {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 22px;
       flex-wrap: wrap;
-      justify-content: center;
     }
 
     .nav-links a {
@@ -208,28 +196,50 @@
     .top-actions {
       display: flex;
       align-items: center;
+      justify-content: flex-end;
       gap: 10px;
       flex-wrap: wrap;
-      justify-content: flex-end;
+      min-width: 0;
     }
 
-    .pill-btn,
-    .mini-btn {
+    .action-btn,
+    .icon-btn,
+    .logout-btn,
+    .auth-cta {
       border: 1px solid var(--line);
       background: var(--card-soft);
       color: var(--text);
       box-shadow: var(--shadow);
       cursor: pointer;
+      transition: transform 0.18s ease, opacity 0.18s ease;
     }
 
-    .pill-btn {
+    .action-btn:hover,
+    .icon-btn:hover,
+    .logout-btn:hover,
+    .auth-cta:hover {
+      transform: translateY(-2px);
+      opacity: 0.98;
+    }
+
+    .action-btn,
+    .logout-btn,
+    .auth-cta {
       min-height: 46px;
       padding: 0 16px;
       border-radius: 14px;
       font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
     }
 
-    .mini-btn {
+    .auth-cta {
+      min-width: 126px;
+    }
+
+    .icon-btn {
       width: 46px;
       height: 46px;
       border-radius: 14px;
@@ -237,10 +247,11 @@
       place-items: center;
       font-size: 20px;
       font-weight: 900;
+      flex-shrink: 0;
     }
 
     .user-pill {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 10px;
       min-height: 46px;
@@ -250,6 +261,13 @@
       background: var(--card-soft);
       box-shadow: var(--shadow);
       font-weight: 800;
+      max-width: 240px;
+    }
+
+    .user-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .user-dot {
@@ -276,8 +294,8 @@
     .service-card,
     .game-card,
     .contact-card,
-    .modal-card,
     .settings-panel,
+    .auth-modal,
     .toast {
       box-shadow: var(--shadow);
     }
@@ -287,11 +305,24 @@
       overflow: hidden;
       border: 1px solid var(--line);
       background: var(--card);
+      position: relative;
+      isolation: isolate;
+    }
+
+    .banner-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(255,255,255,0.12), transparent 34%);
+      z-index: 0;
+      pointer-events: none;
     }
 
     .banner-image-wrap {
       width: 100%;
       padding: 16px 16px 0;
+      position: relative;
+      z-index: 1;
     }
 
     .banner-image {
@@ -305,6 +336,8 @@
 
     .banner-body {
       padding: 20px 20px 22px;
+      position: relative;
+      z-index: 1;
     }
 
     .banner-tag {
@@ -355,6 +388,7 @@
       cursor: pointer;
       transition: transform 0.18s ease, opacity 0.18s ease;
       box-shadow: var(--shadow);
+      white-space: nowrap;
     }
 
     .btn:hover {
@@ -386,7 +420,10 @@
       border-radius: 18px;
       background: var(--card-soft);
       border: 1px solid var(--line);
+      transition: transform 0.18s ease;
     }
+
+    .stat-box:hover { transform: translateY(-3px); }
 
     .stat-box strong {
       display: block;
@@ -452,7 +489,10 @@
       border-radius: 16px;
       background: var(--card-soft);
       border: 1px solid rgba(255,255,255,0.04);
+      transition: transform 0.18s ease;
     }
+
+    .rank-item:hover { transform: translateX(3px); }
 
     .rank-no {
       width: 40px;
@@ -473,7 +513,7 @@
     .rank-value {
       padding: 10px 12px;
       border-radius: 12px;
-      background: #3047dd;
+      background: var(--blue);
       color: #fff;
       font-weight: 900;
       white-space: nowrap;
@@ -552,6 +592,18 @@
       border: 1px solid var(--line);
       text-align: center;
       transition: transform 0.2s ease, border-color 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -30% 70% auto;
+      width: 90px;
+      height: 90px;
+      background: radial-gradient(circle, rgba(255,255,255,0.16), transparent 68%);
+      pointer-events: none;
     }
 
     .game-card:hover {
@@ -648,6 +700,19 @@
       background: var(--card);
       border: 1px solid var(--line);
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-card::after {
+      content: "";
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      right: -50px;
+      top: -70px;
+      background: radial-gradient(circle, rgba(255,255,255,0.14), transparent 70%);
+      pointer-events: none;
     }
 
     .contact-actions {
@@ -673,28 +738,6 @@
       text-align: center;
     }
 
-    .settings-fab {
-      position: fixed;
-      right: 22px;
-      bottom: 22px;
-      width: 60px;
-      height: 60px;
-      border: none;
-      border-radius: 18px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #111;
-      font-size: 28px;
-      font-weight: 900;
-      cursor: pointer;
-      box-shadow: var(--shadow);
-      z-index: 140;
-      transition: transform 0.2s ease;
-    }
-
-    .settings-fab:hover {
-      transform: translateY(-3px) rotate(10deg);
-    }
-
     .settings-overlay,
     .auth-overlay {
       position: fixed;
@@ -715,9 +758,7 @@
     .settings-panel,
     .auth-modal {
       position: fixed;
-      right: 22px;
-      bottom: 94px;
-      width: min(390px, calc(100vw - 24px));
+      width: min(420px, calc(100vw - 24px));
       padding: 20px;
       border-radius: 24px;
       background: var(--card);
@@ -736,17 +777,21 @@
       transform: translateY(0) scale(1);
     }
 
+    .settings-panel {
+      right: 22px;
+      bottom: 94px;
+    }
+
     .auth-modal {
-      right: 50%;
-      bottom: auto;
+      left: 50%;
       top: 50%;
-      transform: translate(50%, -46%) scale(0.96);
-      width: min(460px, calc(100vw - 24px));
+      transform: translate(-50%, calc(-50% + 16px)) scale(0.96);
       z-index: 143;
+      width: min(520px, calc(100vw - 24px));
     }
 
     .auth-modal.open {
-      transform: translate(50%, -50%) scale(1);
+      transform: translate(-50%, -50%) scale(1);
     }
 
     .panel-header,
@@ -831,6 +876,62 @@
     .gray { background: #666666; }
     .soft { background: #ececec; }
 
+    .auth-provider-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .provider-btn {
+      min-height: 50px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--card-soft);
+      color: var(--text);
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.18s ease, opacity 0.18s ease;
+    }
+
+    .provider-btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.98;
+    }
+
+    .provider-btn.google {
+      background: linear-gradient(135deg, #ffffff, #f3f4f6);
+      color: #111827;
+    }
+
+    .provider-btn.discord {
+      background: linear-gradient(135deg, #5865F2, #4752c4);
+      color: #ffffff;
+      border-color: rgba(255,255,255,0.1);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 12px 0 16px;
+      color: var(--text-soft);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
     .auth-tabs {
       display: flex;
       gap: 10px;
@@ -892,12 +993,40 @@
       font-weight: 700;
     }
 
-    .auth-status.success {
-      color: var(--success);
+    .auth-status.success { color: var(--success); }
+    .auth-status.error { color: var(--danger); }
+
+    .config-box {
+      margin-bottom: 14px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.22);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.55;
     }
 
-    .auth-status.error {
-      color: var(--danger);
+    .settings-fab {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      width: 60px;
+      height: 60px;
+      border: none;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #111;
+      font-size: 28px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      z-index: 140;
+      transition: transform 0.2s ease;
+    }
+
+    .settings-fab:hover {
+      transform: translateY(-3px) rotate(10deg);
     }
 
     .toast {
@@ -927,6 +1056,16 @@
     }
 
     @media (max-width: 1180px) {
+      .topbar-inner {
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+
+      .nav-links,
+      .top-actions {
+        justify-content: center;
+      }
+
       .hero-grid {
         grid-template-columns: 1fr;
       }
@@ -941,15 +1080,6 @@
     }
 
     @media (max-width: 820px) {
-      .topbar-inner {
-        justify-content: center;
-      }
-
-      .nav-links,
-      .top-actions {
-        justify-content: center;
-      }
-
       .game-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
@@ -960,9 +1090,14 @@
         width: min(100%, calc(100% - 20px));
       }
 
-      .brand-title {
-        font-size: 24px;
+      .brand {
+        width: 100%;
+        justify-content: center;
       }
+
+      .brand-title { font-size: 24px; }
+
+      .nav-links { gap: 14px; }
 
       .banner-body,
       .contact-card,
@@ -970,6 +1105,12 @@
       .settings-panel,
       .auth-modal {
         padding: 18px 16px;
+      }
+
+      .banner-actions,
+      .contact-actions,
+      .top-actions {
+        width: 100%;
       }
 
       .game-grid {
@@ -981,12 +1122,21 @@
       }
 
       .btn,
-      .pill-btn {
+      .auth-cta,
+      .logout-btn,
+      .action-btn,
+      .provider-btn {
         width: 100%;
       }
 
       .top-actions {
+        justify-content: stretch;
+      }
+
+      .user-pill {
+        max-width: none;
         width: 100%;
+        justify-content: center;
       }
 
       .settings-fab {
@@ -1007,11 +1157,15 @@
         left: 10px;
         right: 10px;
         width: auto;
-        transform: translateY(-46%) scale(0.96);
+        transform: translateY(calc(-50% + 16px)) scale(0.96);
       }
 
       .auth-modal.open {
         transform: translateY(-50%) scale(1);
+      }
+
+      .auth-provider-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -1038,8 +1192,8 @@
 
       <div class="top-actions">
         <div id="userArea"></div>
-        <button class="pill-btn" id="authOpenBtn" type="button">Đăng nhập</button>
-        <button class="mini-btn" id="settingsTopBtn" type="button" aria-label="Theme">⚙</button>
+        <button class="auth-cta" id="authOpenBtn" type="button">Đăng nhập</button>
+        <button class="icon-btn" id="settingsTopBtn" type="button" aria-label="Theme">⚙</button>
       </div>
     </div>
   </header>
@@ -1057,7 +1211,7 @@
             <h1 class="banner-title">Shop Làng Việt</h1>
             <p class="banner-desc">
               Chuyên cày thuê, hỗ trợ tài khoản và nhận đơn cho nhiều game Roblox,
-              không chỉ riêng Blox Fruits. Có đăng nhập demo, đổi theme và bố cục kiểu shop tổng hợp.
+              không chỉ riêng Blox Fruits. Có đăng nhập Google, Discord, email/password và đổi theme.
             </p>
 
             <div class="banner-actions">
@@ -1157,67 +1311,56 @@
             <h3>Blox Fruits</h3>
             <p>Cày level, raid, mastery, beli, hỗ trợ combo dịch vụ.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-2">GG</div>
             <h3>Grow a Garden</h3>
             <p>Hỗ trợ nhiệm vụ, farm tài nguyên, tăng tiến độ nhanh.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-3">AA</div>
             <h3>Anime Adventures</h3>
             <p>Hỗ trợ account, nhiệm vụ, tài nguyên và nhiều yêu cầu khác.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-4">FI</div>
             <h3>Fisch</h3>
             <p>Nhận hỗ trợ farm vật phẩm, tài nguyên và các mục tiêu riêng.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-5">SB</div>
             <h3>Steal a Brainrot</h3>
             <p>Shop có thể làm dịch vụ cơ bản, hỗ trợ nhanh qua Discord.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-6">99</div>
             <h3>99 Nights</h3>
             <p>Hỗ trợ mục tiêu game, account và nhiệm vụ theo yêu cầu.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-7">PG</div>
             <h3>Pets Go</h3>
             <p>Farm, hỗ trợ tài nguyên, tối ưu tài khoản theo nhu cầu.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-8">PS</div>
             <h3>Pet Simulator 99</h3>
             <p>Nhận hỗ trợ tiến độ, nhiệm vụ và các yêu cầu riêng của khách.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-9">AD</div>
             <h3>Anime Defenders</h3>
             <p>Dịch vụ tài nguyên, cày thuê và hỗ trợ nhiều mục tiêu khác.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-10">DO</div>
             <h3>Doors</h3>
             <p>Nhận hỗ trợ account và các dịch vụ đi kèm nếu muốn mở rộng.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-11">BB</div>
             <h3>Blade Ball</h3>
             <p>Shop nhận thêm game mới rất dễ, chỉ cần đổi nội dung thẻ.</p>
           </article>
-
           <article class="game-card">
             <div class="game-thumb thumb-12">RB</div>
             <h3>Dịch vụ Roblox hot</h3>
@@ -1340,15 +1483,32 @@
   </div>
 
   <div class="auth-overlay" id="authOverlay"></div>
-  <div class="auth-modal modal-card" id="authModal">
+  <div class="auth-modal" id="authModal">
     <div class="auth-header">
-      <h3>Tài khoản</h3>
+      <h3>Đăng nhập tài khoản</h3>
       <button class="close-btn" id="authCloseBtn" type="button">✕</button>
     </div>
 
+    <div class="config-box" id="configNotice">
+      Để Google / Discord / email-password hoạt động thật, bạn cần dán Supabase URL và Publishable Key vào code.
+    </div>
+
     <p class="auth-text">
-      Đây là bản đăng nhập demo chạy ngay trên trình duyệt. Có thể đăng ký và đăng nhập thử ngay.
+      Đăng nhập bằng Google, Discord hoặc email/password.
     </p>
+
+    <div class="auth-provider-grid">
+      <button class="provider-btn google" id="googleLoginBtn" type="button">
+        <span>G</span>
+        <span>Đăng nhập Google</span>
+      </button>
+      <button class="provider-btn discord" id="discordLoginBtn" type="button">
+        <span>◎</span>
+        <span>Đăng nhập Discord</span>
+      </button>
+    </div>
+
+    <div class="divider">hoặc dùng email</div>
 
     <div class="auth-tabs">
       <button class="auth-tab active" data-auth-tab="login" type="button">Đăng nhập</button>
@@ -1357,39 +1517,51 @@
 
     <form class="auth-form active" id="loginForm">
       <label>
-        Tên đăng nhập
-        <input type="text" id="loginUsername" placeholder="Nhập tên đăng nhập" required />
+        Email
+        <input type="email" id="loginEmail" placeholder="Nhập email" required />
       </label>
       <label>
         Mật khẩu
         <input type="password" id="loginPassword" placeholder="Nhập mật khẩu" required />
       </label>
       <div class="auth-status" id="loginStatus"></div>
-      <button class="btn btn-primary" type="submit">Đăng nhập</button>
+      <button class="btn btn-primary" type="submit">Đăng nhập bằng email</button>
     </form>
 
     <form class="auth-form" id="registerForm">
       <label>
-        Tên đăng nhập
-        <input type="text" id="registerUsername" placeholder="Tạo tên đăng nhập" required />
+        Tên hiển thị
+        <input type="text" id="registerName" placeholder="Ví dụ: An Khôi" />
+      </label>
+      <label>
+        Email
+        <input type="email" id="registerEmail" placeholder="Nhập email" required />
       </label>
       <label>
         Mật khẩu
         <input type="password" id="registerPassword" placeholder="Tạo mật khẩu" required />
       </label>
-      <label>
-        Nhập lại mật khẩu
-        <input type="password" id="registerPassword2" placeholder="Nhập lại mật khẩu" required />
-      </label>
       <div class="auth-status" id="registerStatus"></div>
-      <button class="btn btn-primary" type="submit">Đăng ký tài khoản</button>
+      <button class="btn btn-primary" type="submit">Tạo tài khoản</button>
     </form>
   </div>
 
   <div class="toast" id="toast"></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    // =========================
+    // 1) DÁN THÔNG TIN SUPABASE Ở ĐÂY
+    // =========================
+    const SUPABASE_URL = "YOUR_SUPABASE_URL";
+    const SUPABASE_PUBLISHABLE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";
+
+    // =========================
+    // 2) APP CONFIG
+    // =========================
+    const THEME_KEY = "shopLangVietTheme";
     const discordName = "ngai_hamster";
+    const redirectTo = window.location.origin + window.location.pathname;
 
     const root = document.documentElement;
     const year = document.getElementById("year");
@@ -1408,19 +1580,33 @@
     const authCloseBtn = document.getElementById("authCloseBtn");
     const authTabs = document.querySelectorAll(".auth-tab");
     const authForms = document.querySelectorAll(".auth-form");
-
     const loginForm = document.getElementById("loginForm");
     const registerForm = document.getElementById("registerForm");
     const loginStatus = document.getElementById("loginStatus");
     const registerStatus = document.getElementById("registerStatus");
+    const googleLoginBtn = document.getElementById("googleLoginBtn");
+    const discordLoginBtn = document.getElementById("discordLoginBtn");
+    const configNotice = document.getElementById("configNotice");
 
     const copyBtnTop = document.getElementById("copyDiscordBtn");
     const copyBtnBottom = document.getElementById("copyDiscordBtnBottom");
     const userArea = document.getElementById("userArea");
 
-    const ACCOUNTS_KEY = "shopLangVietAccounts";
-    const CURRENT_USER_KEY = "shopLangVietCurrentUser";
-    const THEME_KEY = "shopLangVietTheme";
+    const hasSupabaseConfig =
+      SUPABASE_URL &&
+      SUPABASE_PUBLISHABLE_KEY &&
+      !SUPABASE_URL.includes("YOUR_SUPABASE_URL") &&
+      !SUPABASE_PUBLISHABLE_KEY.includes("YOUR_SUPABASE_PUBLISHABLE_KEY");
+
+    const supabase = hasSupabaseConfig
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        })
+      : null;
 
     function showToast(message) {
       toast.textContent = message;
@@ -1490,44 +1676,48 @@
       registerStatus.className = "auth-status";
     }
 
-    function getAccounts() {
-      const raw = localStorage.getItem(ACCOUNTS_KEY);
-      return raw ? JSON.parse(raw) : [];
+    function copyDiscordName() {
+      navigator.clipboard.writeText(discordName)
+        .then(() => showToast("Đã copy Discord: " + discordName))
+        .catch(() => alert("Không copy tự động được. Discord của bạn là: " + discordName));
     }
 
-    function saveAccounts(accounts) {
-      localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
+    function getDisplayName(user) {
+      return (
+        user?.user_metadata?.full_name ||
+        user?.user_metadata?.name ||
+        user?.user_metadata?.display_name ||
+        user?.email ||
+        "Người dùng"
+      );
     }
 
-    function getCurrentUser() {
-      return localStorage.getItem(CURRENT_USER_KEY);
-    }
+    async function updateUserUI() {
+      if (!supabase) {
+        userArea.innerHTML = "";
+        authOpenBtn.style.display = "inline-flex";
+        return;
+      }
 
-    function setCurrentUser(username) {
-      localStorage.setItem(CURRENT_USER_KEY, username);
-    }
+      const { data } = await supabase.auth.getSession();
+      const session = data.session;
 
-    function logout() {
-      localStorage.removeItem(CURRENT_USER_KEY);
-      updateUserUI();
-      showToast("Đã đăng xuất");
-    }
-
-    function updateUserUI() {
-      const currentUser = getCurrentUser();
-
-      if (currentUser) {
+      if (session?.user) {
+        const name = getDisplayName(session.user);
         userArea.innerHTML = `
           <div class="user-pill">
             <span class="user-dot"></span>
-            <span>Xin chào, ${currentUser}</span>
+            <span class="user-name">${name}</span>
           </div>
-          <button class="pill-btn" id="logoutBtn" type="button">Đăng xuất</button>
+          <button class="logout-btn" id="logoutBtn" type="button">Đăng xuất</button>
         `;
 
         const logoutBtn = document.getElementById("logoutBtn");
         if (logoutBtn) {
-          logoutBtn.addEventListener("click", logout);
+          logoutBtn.addEventListener("click", async () => {
+            await supabase.auth.signOut();
+            showToast("Đã đăng xuất");
+          });
         }
 
         authOpenBtn.style.display = "none";
@@ -1537,20 +1727,98 @@
       }
     }
 
-    function copyDiscordName() {
-      navigator.clipboard.writeText(discordName)
-        .then(() => {
-          showToast("Đã copy Discord: " + discordName);
-        })
-        .catch(() => {
-          alert("Không copy tự động được. Discord của bạn là: " + discordName);
-        });
+    async function signInWithGoogle() {
+      if (!supabase) {
+        showToast("Bạn chưa cấu hình Supabase");
+        return;
+      }
+      await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo }
+      });
     }
 
-    themeButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        applyTheme(button.dataset.theme);
+    async function signInWithDiscord() {
+      if (!supabase) {
+        showToast("Bạn chưa cấu hình Supabase");
+        return;
+      }
+      await supabase.auth.signInWithOAuth({
+        provider: "discord",
+        options: { redirectTo }
       });
+    }
+
+    async function signInWithEmail(event) {
+      event.preventDefault();
+      if (!supabase) {
+        setStatus(loginStatus, "Bạn chưa cấu hình Supabase.", "error");
+        return;
+      }
+
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) {
+        setStatus(loginStatus, error.message, "error");
+        return;
+      }
+
+      setStatus(loginStatus, "Đăng nhập thành công!", "success");
+      showToast("Đăng nhập thành công");
+      setTimeout(closeAuth, 500);
+    }
+
+    async function signUpWithEmail(event) {
+      event.preventDefault();
+      if (!supabase) {
+        setStatus(registerStatus, "Bạn chưa cấu hình Supabase.", "error");
+        return;
+      }
+
+      const fullName = document.getElementById("registerName").value.trim();
+      const email = document.getElementById("registerEmail").value.trim();
+      const password = document.getElementById("registerPassword").value;
+
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectTo,
+          data: {
+            full_name: fullName
+          }
+        }
+      });
+
+      if (error) {
+        setStatus(registerStatus, error.message, "error");
+        return;
+      }
+
+      setStatus(
+        registerStatus,
+        "Đăng ký xong. Kiểm tra email xác nhận nếu dự án đang bật confirm email.",
+        "success"
+      );
+      showToast("Tạo tài khoản thành công");
+      registerForm.reset();
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeSettings();
+        closeAuth();
+      }
+    });
+
+    themeButtons.forEach((button) => {
+      button.addEventListener("click", () => applyTheme(button.dataset.theme));
     });
 
     if (settingsFab) settingsFab.addEventListener("click", toggleSettings);
@@ -1563,95 +1831,32 @@
     if (authOverlay) authOverlay.addEventListener("click", closeAuth);
 
     authTabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        switchAuthTab(tab.dataset.authTab);
-      });
+      tab.addEventListener("click", () => switchAuthTab(tab.dataset.authTab));
     });
 
-    loginForm.addEventListener("submit", (event) => {
-      event.preventDefault();
+    if (googleLoginBtn) googleLoginBtn.addEventListener("click", signInWithGoogle);
+    if (discordLoginBtn) discordLoginBtn.addEventListener("click", signInWithDiscord);
 
-      const username = document.getElementById("loginUsername").value.trim();
-      const password = document.getElementById("loginPassword").value;
-
-      const accounts = getAccounts();
-      const found = accounts.find(
-        (account) => account.username === username && account.password === password
-      );
-
-      if (!found) {
-        setStatus(loginStatus, "Sai tên đăng nhập hoặc mật khẩu.", "error");
-        return;
-      }
-
-      setCurrentUser(username);
-      updateUserUI();
-      setStatus(loginStatus, "Đăng nhập thành công!", "success");
-      showToast("Xin chào, " + username);
-
-      setTimeout(() => {
-        closeAuth();
-        loginForm.reset();
-      }, 700);
-    });
-
-    registerForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-
-      const username = document.getElementById("registerUsername").value.trim();
-      const password = document.getElementById("registerPassword").value;
-      const password2 = document.getElementById("registerPassword2").value;
-
-      if (username.length < 3) {
-        setStatus(registerStatus, "Tên đăng nhập phải từ 3 ký tự trở lên.", "error");
-        return;
-      }
-
-      if (password.length < 4) {
-        setStatus(registerStatus, "Mật khẩu phải từ 4 ký tự trở lên.", "error");
-        return;
-      }
-
-      if (password !== password2) {
-        setStatus(registerStatus, "Mật khẩu nhập lại không khớp.", "error");
-        return;
-      }
-
-      const accounts = getAccounts();
-      const exists = accounts.some((account) => account.username === username);
-
-      if (exists) {
-        setStatus(registerStatus, "Tên đăng nhập này đã tồn tại.", "error");
-        return;
-      }
-
-      accounts.push({ username, password });
-      saveAccounts(accounts);
-      setStatus(registerStatus, "Đăng ký thành công. Bạn có thể đăng nhập ngay.", "success");
-      showToast("Đăng ký tài khoản thành công");
-      registerForm.reset();
-
-      setTimeout(() => {
-        switchAuthTab("login");
-      }, 700);
-    });
+    if (loginForm) loginForm.addEventListener("submit", signInWithEmail);
+    if (registerForm) registerForm.addEventListener("submit", signUpWithEmail);
 
     if (copyBtnTop) copyBtnTop.addEventListener("click", copyDiscordName);
     if (copyBtnBottom) copyBtnBottom.addEventListener("click", copyDiscordName);
 
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        closeSettings();
-        closeAuth();
-      }
-    });
-
-    if (year) {
-      year.textContent = new Date().getFullYear();
-    }
+    if (year) year.textContent = new Date().getFullYear();
 
     const savedTheme = localStorage.getItem(THEME_KEY);
     applyTheme(savedTheme || "royal-red");
+
+    if (!hasSupabaseConfig) {
+      configNotice.style.display = "block";
+    } else {
+      configNotice.style.display = "none";
+      supabase.auth.onAuthStateChange(() => {
+        updateUserUI();
+      });
+    }
+
     updateUserUI();
   </script>
 </body>
