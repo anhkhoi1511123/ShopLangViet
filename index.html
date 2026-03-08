@@ -1,180 +1,142 @@
-<!DOCTYPE html>
-<html lang="vi" data-theme="royal-red">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shop Làng Việt</title>
-  <meta
-    name="description"
-    content="Shop Làng Việt - web shop Roblox nhiều trang có giỏ hàng, ví tiền, lịch sử đơn hàng và hồ sơ tài khoản."
-  />
-  <link rel="stylesheet" href="style.css" />
-  <script src="app.js" defer></script>
-</head>
-<body data-page="index">
-  <header class="topbar">
-    <div class="container topbar-inner">
-      <a href="index.html" class="brand">
-        <div class="brand-logo">
-          <img src="assets/logo.webp" alt="Logo Shop Làng Việt" />
-        </div>
-        <div>
-          <div class="brand-title">Shop Làng Việt</div>
-          <div class="brand-sub">Shop dịch vụ Roblox tổng hợp</div>
-        </div>
-      </a>
-
-      <nav class="nav-links">
-        <a class="active" href="index.html">Trang chủ</a>
-        <a href="games.html">Game Roblox</a>
-        <a href="services.html">Dịch vụ</a>
-        <a href="wallet.html">Ví tiền</a>
-        <a href="orders.html">Đơn hàng</a>
-        <a href="contact.html">Liên hệ</a>
-      </nav>
-
-      <div class="top-actions">
-        <div class="theme-pills">
-          <button type="button" data-theme-btn="royal-red">Đỏ</button>
-          <button type="button" data-theme-btn="black">Đen</button>
-          <button type="button" data-theme-btn="light">Trắng</button>
-        </div>
-        <a class="icon-link" href="cart.html">🛒 Giỏ <span data-cart-count>0</span></a>
-        <div id="userArea"></div>
-      </div>
-    </div>
-  </header>
-
-  <main class="main">
-    <div class="container hero-grid">
-      <section class="hero-panel">
-        <span class="kicker">Shop Roblox tổng hợp</span>
-        <h1 class="title-xl">Shop Làng Việt v2</h1>
-        <p class="text">
-          Bản web nhiều trang có sẵn giỏ hàng, thanh toán demo, ví tiền, lịch sử đơn hàng,
-          hồ sơ tài khoản, nạp tiền MoMo và nạp thẻ cào.
-        </p>
-
-        <div class="row" style="margin-top:18px;">
-          <a class="btn btn-primary" href="games.html">Xem các game</a>
-          <a class="btn btn-soft" href="services.html">Xem bảng dịch vụ</a>
-          <button class="btn btn-soft" type="button" data-copy-discord>Copy Discord</button>
-        </div>
-
-        <div class="stat-grid">
-          <div class="stat-card">
-            <strong>3</strong>
-            <span>Trang game chi tiết</span>
-          </div>
-          <div class="stat-card">
-            <strong>12+</strong>
-            <span>Gói dịch vụ mẫu</span>
-          </div>
-          <div class="stat-card">
-            <strong>3</strong>
-            <span>Theme đổi nhanh</span>
-          </div>
-          <div class="stat-card">
-            <strong>24/7</strong>
-            <span>Hỗ trợ qua Discord</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="hero-banner">
+<main class="main">
+  <div class="container home-shell">
+    <section class="home-hero">
+      <div class="home-banner">
         <img src="assets/banner.webp" alt="Banner Shop Làng Việt" />
-      </section>
-    </div>
+      </div>
 
-    <div class="container">
-      <section class="page-hero" style="margin-top:22px;">
-        <span class="kicker">Điểm nổi bật</span>
-        <h2 class="title-lg">Bản shop nâng cấp đầy đủ tính năng demo</h2>
-        <p class="text">
-          Có hồ sơ tài khoản, số dư ví, giỏ hàng, lịch sử đơn, thanh toán bằng số dư ví,
-          nạp tiền MoMo và thẻ cào theo kiểu demo front-end bằng localStorage.
-        </p>
-        <div class="notice" style="margin-top:14px;">
-          Tài khoản demo có sẵn: <strong>demo / 1234</strong>
-        </div>
-      </section>
+      <aside class="home-side-rank">
+        <div>
+          <div class="home-rank-head">
+            <h3>Top nạp</h3>
+            <div class="home-rank-badge">HOT</div>
+          </div>
 
-      <section style="margin-top:22px;">
-        <h2 class="section-title">Game đang hỗ trợ</h2>
-        <div class="grid-3">
-          <a class="card game-card" href="blox-fruits.html">
-            <div class="game-badge">BF</div>
-            <h4>Blox Fruits</h4>
-            <p class="muted">Cày level, raid, mastery, fragment, beli và gói hỗ trợ theo mục tiêu.</p>
-            <div class="service-actions">
-              <span class="btn btn-soft btn-sm">Xem trang</span>
+          <div class="home-rank-list">
+            <div class="home-rank-item">
+              <div class="home-rank-no">1</div>
+              <div class="home-rank-name">Đỗ Phú</div>
+              <div class="home-rank-value">6.300.000đ</div>
             </div>
-          </a>
 
-          <a class="card game-card" href="fisch.html">
-            <div class="game-badge">FI</div>
-            <h4>Fisch</h4>
-            <p class="muted">Farm item, farm nguyên liệu hiếm, làm nhiệm vụ và nhận đơn riêng.</p>
-            <div class="service-actions">
-              <span class="btn btn-soft btn-sm">Xem trang</span>
+            <div class="home-rank-item">
+              <div class="home-rank-no">2</div>
+              <div class="home-rank-name">Tú Born</div>
+              <div class="home-rank-value">6.300.000đ</div>
             </div>
-          </a>
 
-          <a class="card game-card" href="grow-a-garden.html">
-            <div class="game-badge">GG</div>
-            <h4>Grow a Garden</h4>
-            <p class="muted">Hỗ trợ farm nông trại, tài nguyên, event và gói premium.</p>
-            <div class="service-actions">
-              <span class="btn btn-soft btn-sm">Xem trang</span>
+            <div class="home-rank-item">
+              <div class="home-rank-no">3</div>
+              <div class="home-rank-name">Trần Thị Minh Thư</div>
+              <div class="home-rank-value">6.220.000đ</div>
             </div>
-          </a>
-        </div>
-      </section>
 
-      <section style="margin-top:22px;">
-        <h2 class="section-title">Những trang mới đã có</h2>
-        <div class="grid-4">
-          <article class="card info-card">
-            <h4>Giỏ hàng</h4>
-            <p class="muted">Thêm dịch vụ trực tiếp từ từng trang game và quản lý trong cart.</p>
-          </article>
-          <article class="card info-card">
-            <h4>Ví tiền</h4>
-            <p class="muted">Có số dư ví, nạp MoMo, nạp thẻ cào và lịch sử biến động.</p>
-          </article>
-          <article class="card info-card">
-            <h4>Đơn hàng</h4>
-            <p class="muted">Tạo đơn, thanh toán bằng ví hoặc tạo đơn chờ thanh toán thủ công.</p>
-          </article>
-          <article class="card info-card">
-            <h4>Hồ sơ tài khoản</h4>
-            <p class="muted">Xem thông tin thành viên, tổng đơn, tổng nạp và đổi tên hiển thị.</p>
-          </article>
-        </div>
-      </section>
+            <div class="home-rank-item">
+              <div class="home-rank-no">4</div>
+              <div class="home-rank-name">huhuhahahaha</div>
+              <div class="home-rank-value">6.000.000đ</div>
+            </div>
 
-      <section class="page-hero" style="margin-top:22px;">
-        <span class="kicker">Liên hệ nhanh</span>
-        <h2 class="title-lg">Kết nối với shop qua Discord</h2>
-        <p class="text">
-          Discord profile: <strong>ngai_hamster</strong> · Server:
-          <strong>discord.gg/RdZpev84xK</strong>
-        </p>
-        <div class="row" style="margin-top:18px;">
-          <a class="btn btn-primary" href="https://discord.gg/RdZpev84xK" target="_blank" rel="noopener noreferrer">
-            Vào Discord Server
-          </a>
-          <button class="btn btn-soft" type="button" data-copy-discord>Copy Discord Profile</button>
-          <a class="btn btn-soft" href="contact.html">Trang liên hệ</a>
+            <div class="home-rank-item">
+              <div class="home-rank-no">5</div>
+              <div class="home-rank-name">Xmanning961</div>
+              <div class="home-rank-value">3.500.000đ</div>
+            </div>
+          </div>
         </div>
-      </section>
-    </div>
-  </main>
 
-  <footer class="footer">
-    <div class="container footer-inner">
-      <p>© <span id="year"></span> Shop Làng Việt. All rights reserved.</p>
-    </div>
-  </footer>
-</body>
-</html>
+        <div class="home-rank-footer">
+          <a class="lux-button" href="wallet.html">Nạp tiền ngay</a>
+        </div>
+      </aside>
+    </section>
+
+    <section class="home-games home-mini-section">
+      <div class="home-games-grid">
+        <a class="home-game-tile" href="blox-fruits.html">
+          <div class="home-game-thumb">
+            <img src="assets/games/blox-fruits.webp" alt="Blox Fruits" />
+          </div>
+          <div class="home-game-title">Blox Fruits</div>
+        </a>
+
+        <a class="home-game-tile" href="games.html">
+          <div class="home-game-thumb">
+            <img src="assets/games/escape-tsunami.webp" alt="Escape Tsunami" />
+          </div>
+          <div class="home-game-title">Escape Tsunami</div>
+        </a>
+
+        <a class="home-game-tile" href="games.html">
+          <div class="home-game-thumb">
+            <img src="assets/games/break-lucky-block.webp" alt="Break A Lucky Block" />
+          </div>
+          <div class="home-game-title">Break A Lucky Block</div>
+        </a>
+
+        <a class="home-game-tile" href="fisch.html">
+          <div class="home-game-thumb">
+            <img src="assets/games/fisch.webp" alt="Fisch" />
+          </div>
+          <div class="home-game-title">Fisch</div>
+        </a>
+
+        <a class="home-game-tile" href="games.html">
+          <div class="home-game-thumb">
+            <img src="assets/games/steal-brainrot.webp" alt="Steal A Brainrot" />
+          </div>
+          <div class="home-game-title">Steal A Brainrot</div>
+        </a>
+
+        <a class="home-game-tile" href="games.html">
+          <div class="home-game-thumb">
+            <img src="assets/games/99-nights.webp" alt="99 Nights" />
+          </div>
+          <div class="home-game-title">99 Nights</div>
+        </a>
+
+        <a class="home-game-tile" href="grow-a-garden.html">
+          <div class="home-game-thumb">
+            <img src="assets/games/grow-a-garden.webp" alt="Grow A Garden" />
+          </div>
+          <div class="home-game-title">Grow A Garden</div>
+        </a>
+
+        <a class="home-game-tile" href="games.html">
+          <div class="home-game-thumb">
+            <img src="assets/games/plants-brainrots.webp" alt="Plants Vs Brainrots" />
+          </div>
+          <div class="home-game-title">Plants Vs Brainrots</div>
+        </a>
+
+        <a class="home-game-tile" href="games.html">
+          <div class="home-game-thumb">
+            <img src="assets/games/the-forge.webp" alt="The Forge" />
+          </div>
+          <div class="home-game-title">The Forge</div>
+        </a>
+
+        <a class="home-game-tile" href="services.html">
+          <div class="home-game-thumb">
+            <img src="assets/games/roblox-hot.webp" alt="Dịch vụ Roblox Hot" />
+          </div>
+          <div class="home-game-title">Dịch vụ Roblox Hot</div>
+        </a>
+
+        <a class="home-game-tile" href="services.html">
+          <div class="home-game-thumb">
+            <img src="assets/games/robux.webp" alt="Robux" />
+          </div>
+          <div class="home-game-title">Robux siêu rẻ</div>
+        </a>
+
+        <a class="home-game-tile" href="games.html">
+          <div class="home-game-thumb">
+            <img src="assets/games/free-fire.webp" alt="Free Fire" />
+          </div>
+          <div class="home-game-title">Free Fire</div>
+        </a>
+      </div>
+    </section>
+  </div>
+</main>
