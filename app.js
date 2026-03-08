@@ -8,31 +8,7 @@ const STORAGE_KEYS = {
 };
 
 const DISCORD_NAME = "ngai_hamster";
-const DISCORD_SERVER = "https://discord.gg/RdZpev84xK";
-
-const GAMES = [
-  {
-    slug: "blox-fruits",
-    name: "Blox Fruits",
-    badge: "BF",
-    page: "blox-fruits.html",
-    description: "Cày level, raid, mastery, fragment, beli và các gói theo mục tiêu."
-  },
-  {
-    slug: "fisch",
-    name: "Fisch",
-    badge: "FI",
-    page: "fisch.html",
-    description: "Farm vật phẩm, tài nguyên hiếm và các mốc tiến độ theo yêu cầu."
-  },
-  {
-    slug: "grow-a-garden",
-    name: "Grow a Garden",
-    badge: "GG",
-    page: "grow-a-garden.html",
-    description: "Hỗ trợ nông trại, farm tài nguyên, nhiệm vụ và tối ưu tiến độ."
-  }
-];
+const LOCKED_THEME = "royal-red";
 
 const SERVICES = [
   {
@@ -75,7 +51,6 @@ const SERVICES = [
     eta: "8 - 18 giờ",
     description: "Cày mastery theo loại vũ khí, melee hoặc trái ác quỷ."
   },
-
   {
     id: "fisch-basic",
     slug: "fisch",
@@ -116,7 +91,6 @@ const SERVICES = [
     eta: "Báo giá riêng",
     description: "Shop nhận đơn riêng theo mục tiêu khách muốn."
   },
-
   {
     id: "gg-starter",
     slug: "grow-a-garden",
@@ -224,6 +198,10 @@ function showToast(message) {
   clearTimeout(showToast.timer);
   showToast.timer = setTimeout(() => toast.classList.remove("show"), 2200);
 }
+
+/* =========================
+   DATA
+========================= */
 
 function getUsers() {
   return readJSON(STORAGE_KEYS.USERS, []);
@@ -361,21 +339,22 @@ function seedData() {
   }
 }
 
-function applyTheme(themeName) {
-  document.documentElement.setAttribute("data-theme", themeName);
-  localStorage.setItem(STORAGE_KEYS.THEME, themeName);
-  $$("[data-theme-btn]").forEach((button) => {
-    button.classList.toggle("active", button.dataset.themeBtn === themeName);
-  });
+/* =========================
+   THEME
+========================= */
+
+function applyTheme() {
+  document.documentElement.setAttribute("data-theme", LOCKED_THEME);
+  localStorage.setItem(STORAGE_KEYS.THEME, LOCKED_THEME);
 }
 
 function initTheme() {
-  const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME) || "royal-red";
-  applyTheme(savedTheme);
-  $$("[data-theme-btn]").forEach((button) => {
-    button.addEventListener("click", () => applyTheme(button.dataset.themeBtn));
-  });
+  applyTheme();
 }
+
+/* =========================
+   HEADER
+========================= */
 
 function renderUserArea() {
   const userArea = $("#userArea");
@@ -403,9 +382,10 @@ function renderUserArea() {
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
       logoutUser();
-      showToast("Đã đăng xuất");
       renderUserArea();
       updateCartBadges();
+      updateWalletBadges();
+      showToast("Đã đăng xuất");
       setTimeout(() => {
         window.location.href = "index.html";
       }, 500);
@@ -423,6 +403,19 @@ function updateCartBadges() {
     el.textContent = count;
   });
 }
+
+function updateWalletBadges() {
+  const user = getCurrentUser();
+  const balance = user ? user.balance : 0;
+
+  $$("[data-wallet-balance]").forEach((el) => {
+    el.textContent = formatCurrency(balance);
+  });
+}
+
+/* =========================
+   CART
+========================= */
 
 function getUserCartDetailed(username = getCurrentUsername()) {
   return getCart()
@@ -489,6 +482,7 @@ function updateCartQty(itemId, delta) {
   } else {
     saveCart(cart);
   }
+
   updateCartBadges();
 }
 
@@ -511,6 +505,10 @@ function calcCartSummary(items) {
     total: items.reduce((sum, item) => sum + item.subtotal, 0)
   };
 }
+
+/* =========================
+   AUTH
+========================= */
 
 function loginUser(username, password) {
   const user = getUsers().find(
@@ -579,6 +577,10 @@ function updateUserProfile({ displayName, newPassword }) {
   return { ok: true, message: "Đã cập nhật hồ sơ." };
 }
 
+/* =========================
+   SHARED UI
+========================= */
+
 function statusBadge(status) {
   let type = "neutral";
 
@@ -587,6 +589,19 @@ function statusBadge(status) {
   else if (/hủy|lỗi|thất bại/i.test(status)) type = "danger";
 
   return `<span class="badge ${type}">${escapeHtml(status)}</span>`;
+}
+
+function loginPromptCard(title = "Bạn cần đăng nhập để sử dụng tính năng này.") {
+  return `
+    <section class="card empty-state">
+      <h3>${escapeHtml(title)}</h3>
+      <p class="muted">Đăng nhập để xem ví, đơn hàng, giỏ hàng và hồ sơ tài khoản.</p>
+      <div class="row" style="justify-content:center;margin-top:14px;">
+        <a class="btn btn-primary" href="login.html">Đăng nhập ngay</a>
+        <a class="btn btn-soft" href="index.html">Về trang chủ</a>
+      </div>
+    </section>
+  `;
 }
 
 function renderServiceGrid(selector, slug) {
@@ -598,7 +613,7 @@ function renderServiceGrid(selector, slug) {
   target.innerHTML = list
     .map(
       (service) => `
-      <article class="card service-card">
+      <article class="card">
         <div class="price-tag">${formatCurrency(service.price)}</div>
         <div class="kicker">${escapeHtml(service.game)}</div>
         <h4>${escapeHtml(service.name)}</h4>
@@ -621,18 +636,9 @@ function renderServiceGrid(selector, slug) {
   bindAddToCartButtons(target);
 }
 
-function loginPromptCard(title = "Bạn cần đăng nhập để sử dụng tính năng này.") {
-  return `
-    <section class="card empty-state">
-      <h3>${escapeHtml(title)}</h3>
-      <p class="muted">Đăng nhập để xem ví, đơn hàng, giỏ hàng và hồ sơ tài khoản.</p>
-      <div class="row" style="justify-content:center;margin-top:14px;">
-        <a class="btn btn-primary" href="login.html">Đăng nhập ngay</a>
-        <a class="btn btn-soft" href="index.html">Về trang chủ</a>
-      </div>
-    </section>
-  `;
-}
+/* =========================
+   CART PAGE
+========================= */
 
 function renderCartPage() {
   const view = $("#cartView");
@@ -755,6 +761,10 @@ function renderCartPage() {
     });
   }
 }
+
+/* =========================
+   CHECKOUT
+========================= */
 
 function createOrderFromCart({ paymentMethod, gameNick, discord, note }) {
   const user = getCurrentUser();
@@ -930,6 +940,7 @@ function renderCheckoutPage() {
         return;
       }
 
+      updateWalletBadges();
       showToast(`Tạo đơn ${result.order.id} thành công`);
       setTimeout(() => {
         window.location.href = "orders.html";
@@ -937,6 +948,10 @@ function renderCheckoutPage() {
     });
   }
 }
+
+/* =========================
+   WALLET
+========================= */
 
 function addTopup({ method, amount, detail }) {
   const user = getCurrentUser();
@@ -1071,7 +1086,7 @@ function initWalletPage() {
       const result = addTopup({
         method: "MoMo",
         amount: $("#momoAmount").value,
-        detail: $("#momoRef").value.trim() || "MOMO-REF"
+        detail: ($("#momoRef")?.value || "").trim() || "MOMO-REF"
       });
 
       showToast(result.message);
@@ -1080,6 +1095,7 @@ function initWalletPage() {
         renderWalletStats();
         renderWalletHistory();
         renderUserArea();
+        updateWalletBadges();
       }
     });
   }
@@ -1089,8 +1105,8 @@ function initWalletPage() {
     cardForm.addEventListener("submit", (event) => {
       event.preventDefault();
       const telco = $("#cardTelco").value;
-      const code = $("#cardCode").value.trim();
-      const serial = $("#cardSerial").value.trim();
+      const code = ($("#cardCode")?.value || "").trim();
+      const serial = ($("#cardSerial")?.value || "").trim();
       const amount = $("#cardAmount").value;
 
       const result = addTopup({
@@ -1105,10 +1121,15 @@ function initWalletPage() {
         renderWalletStats();
         renderWalletHistory();
         renderUserArea();
+        updateWalletBadges();
       }
     });
   }
 }
+
+/* =========================
+   ORDERS
+========================= */
 
 function renderOrdersPage() {
   const view = $("#ordersView");
@@ -1182,6 +1203,10 @@ function renderOrdersPage() {
     </div>
   `;
 }
+
+/* =========================
+   PROFILE
+========================= */
 
 function renderProfilePage() {
   const view = $("#profileView");
@@ -1290,39 +1315,42 @@ function renderProfilePage() {
   }
 }
 
+/* =========================
+   LOGIN
+========================= */
+
 function initLoginPage() {
   const user = getCurrentUser();
 
-  if (user) {
-    const already = $("#alreadyLogged");
-    if (already) {
-      already.innerHTML = `
-        <section class="card">
-          <h3>Bạn đang đăng nhập</h3>
-          <p class="muted">Xin chào <strong>${escapeHtml(
-            user.displayName || user.username
-          )}</strong>. Bạn có thể vào hồ sơ hoặc đăng xuất.</p>
-          <div class="row" style="margin-top:14px;">
-            <a class="btn btn-primary" href="profile.html">Vào hồ sơ</a>
-            <button class="btn btn-soft" id="logoutFromLogin" type="button">Đăng xuất</button>
-          </div>
-        </section>
-      `;
+  const already = $("#alreadyLogged");
+  if (user && already) {
+    already.innerHTML = `
+      <section class="card">
+        <h3>Bạn đang đăng nhập</h3>
+        <p class="muted">Xin chào <strong>${escapeHtml(
+          user.displayName || user.username
+        )}</strong>.</p>
+        <div class="row" style="margin-top:14px;">
+          <a class="btn btn-primary" href="profile.html">Vào hồ sơ</a>
+          <button class="btn btn-soft" id="logoutFromLogin" type="button">Đăng xuất</button>
+        </div>
+      </section>
+    `;
 
-      const logoutFromLogin = $("#logoutFromLogin");
-      if (logoutFromLogin) {
-        logoutFromLogin.addEventListener("click", () => {
-          logoutUser();
-          renderUserArea();
-          updateCartBadges();
-          showToast("Đã đăng xuất");
-          setTimeout(() => window.location.reload(), 400);
-        });
-      }
+    const logoutFromLogin = $("#logoutFromLogin");
+    if (logoutFromLogin) {
+      logoutFromLogin.addEventListener("click", () => {
+        logoutUser();
+        renderUserArea();
+        updateCartBadges();
+        updateWalletBadges();
+        showToast("Đã đăng xuất");
+        setTimeout(() => window.location.reload(), 400);
+      });
     }
   }
 
-  const tabs = $$("[data-auth-tab]");
+  const tabs = $$(".auth-tab");
   const panes = $$(".auth-pane");
 
   tabs.forEach((tab) => {
@@ -1338,6 +1366,7 @@ function initLoginPage() {
   if (loginForm) {
     loginForm.addEventListener("submit", (event) => {
       event.preventDefault();
+
       const result = loginUser($("#loginUsername").value, $("#loginPassword").value);
       const status = $("#loginStatus");
 
@@ -1351,6 +1380,7 @@ function initLoginPage() {
       status.className = "form-status success";
       renderUserArea();
       updateCartBadges();
+      updateWalletBadges();
       showToast("Xin chào, " + (result.user.displayName || result.user.username));
 
       setTimeout(() => {
@@ -1397,6 +1427,10 @@ function initLoginPage() {
   }
 }
 
+/* =========================
+   DISCORD
+========================= */
+
 function copyDiscord() {
   navigator.clipboard
     .writeText(DISCORD_NAME)
@@ -1412,6 +1446,10 @@ function bindDiscordButtons() {
   });
 }
 
+/* =========================
+   PAGE INIT
+========================= */
+
 function initPageSpecific() {
   const page = document.body.dataset.page || "";
 
@@ -1419,8 +1457,6 @@ function initPageSpecific() {
   renderServiceGrid("#bloxFruitsGrid", "blox-fruits");
   renderServiceGrid("#fischGrid", "fisch");
   renderServiceGrid("#growGardenGrid", "grow-a-garden");
-
-  bindDiscordButtons();
 
   if (page === "cart") renderCartPage();
   if (page === "checkout") renderCheckoutPage();
@@ -1435,9 +1471,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   renderUserArea();
   updateCartBadges();
+  updateWalletBadges();
   bindAddToCartButtons(document);
-  initPageSpecific();
   bindDiscordButtons();
+  initPageSpecific();
 
   const year = $("#year");
   if (year) {
