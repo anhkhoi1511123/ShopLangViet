@@ -264,7 +264,7 @@ function seedData() {
         username: "demo",
         password: "1234",
         displayName: "Demo User",
-        balance: 650000,
+        balance: 300000,
         createdAt: "2026-03-01T09:00:00"
       }
     ]);
