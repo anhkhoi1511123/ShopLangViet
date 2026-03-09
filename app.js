@@ -10,8 +10,8 @@ const STORAGE_KEYS = {
 const DISCORD_NAME = "ngai_hamster";
 const LOCKED_THEME = "royal-red";
 
-/* ĐỔI LINK NÀY THÀNH LINK REPLIT THẬT CỦA BẠN */
-const ORDER_NOTIFY_API = "https://https://shop-lang-viet-bot--kanhkhoi32.app.replit.app/api/order-notify";
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1480583732330107091/q0izkFd7-vCnrp6rERRQVOWmtNVsmEen0M9T5slJQw3IMHpJOt_cjIXNjYboQJrqPJsM";
+const DISCORD_STAFF_ROLE_ID = "1467060755156308095"; // có role staff thì dán ID vào, không thì để trống
 
 const SERVICES = [
   {
