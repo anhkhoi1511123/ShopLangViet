@@ -138,6 +138,10 @@ const SERVICES = [
   }
 ];
 
+/* =========================
+   HELPERS
+========================= */
+
 function $(selector) {
   return document.querySelector(selector);
 }
@@ -594,38 +598,68 @@ function calcCartSummary(items) {
    DISCORD NOTIFY
 ========================= */
 
+function isNotifyApiConfigured() {
+  return ORDER_NOTIFY_API && !/TEN-REPL-CUA-BAN/i.test(ORDER_NOTIFY_API);
+}
+
 async function notifyDiscordOrder(order, extra = {}) {
+  if (!isNotifyApiConfigured()) {
+    throw new Error("Bạn chưa cấu hình ORDER_NOTIFY_API trong app.js");
+  }
+
   const currentUser = getCurrentUser();
   const firstItem = order.items?.[0] || null;
 
   const payload = {
     orderId: order.id,
+    username: order.user || currentUser?.username || "",
     customer: extra.customer || currentUser?.displayName || currentUser?.username || "Khách",
     discordContact: order.discord || "",
     game: firstItem?.game || "Không rõ",
     packageName: order.items?.map((item) => item.name).join(", ") || "Không rõ",
+    items: order.items || [],
     price: order.total,
     gameNick: order.gameNick || "",
     gamePassword: extra.gamePassword || "",
     note: order.note || "",
-    paymentStatus: order.status
+    paymentStatus: order.status || "",
+    paymentMethod: order.paymentMethod || "",
+    createdAt: order.createdAt || new Date().toISOString()
   };
 
-  const response = await fetch(ORDER_NOTIFY_API, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  });
+  let controller = null;
+  let timeoutId = null;
 
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.message || "Không gửi được đơn sang Discord.");
+  if (typeof AbortController !== "undefined") {
+    controller = new AbortController();
+    timeoutId = setTimeout(() => controller.abort(), 12000);
   }
 
-  return data;
+  try {
+    const response = await fetch(ORDER_NOTIFY_API, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload),
+      ...(controller ? { signal: controller.signal } : {})
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.message || "Không gửi được đơn sang Discord.");
+    }
+
+    return data;
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      throw new Error("Gửi đơn sang Discord bị quá thời gian chờ.");
+    }
+    throw error;
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId);
+  }
 }
 
 /* =========================
@@ -639,14 +673,26 @@ function createOrderFromCart({ paymentMethod, gameNick, discord, note }) {
   const items = getUserCartDetailed(user.username);
   if (!items.length) return { ok: false, message: "Giỏ hàng đang trống." };
 
+  const cleanGameNick = String(gameNick || "").trim();
+  const cleanDiscord = String(discord || "").trim();
+  const cleanNote = String(note || "").trim();
+
+  if (!cleanGameNick) {
+    return { ok: false, message: "Bạn cần nhập nick game / tài khoản cần làm." };
+  }
+
   const summary = calcCartSummary(items);
   const users = getUsers();
   const userIndex = users.findIndex((item) => item.username === user.username);
 
+  if (userIndex === -1) {
+    return { ok: false, message: "Không tìm thấy tài khoản người dùng." };
+  }
+
   let status = "Chờ thanh toán";
 
   if (paymentMethod === "wallet") {
-    if (users[userIndex].balance < summary.total) {
+    if (Number(users[userIndex].balance || 0) < summary.total) {
       return { ok: false, message: "Số dư ví không đủ. Hãy nạp thêm tiền." };
     }
 
@@ -662,9 +708,9 @@ function createOrderFromCart({ paymentMethod, gameNick, discord, note }) {
     paymentMethod: paymentMethod === "wallet" ? "Số dư ví" : "Thanh toán thủ công",
     total: summary.total,
     createdAt: new Date().toISOString(),
-    gameNick: gameNick.trim(),
-    discord: discord.trim(),
-    note: note.trim(),
+    gameNick: cleanGameNick,
+    discord: cleanDiscord,
+    note: cleanNote,
     items: items.map((item) => ({
       serviceId: item.serviceId,
       name: item.name,
@@ -697,6 +743,10 @@ function addTopup({ method, amount, detail }) {
 
   const users = getUsers();
   const index = users.findIndex((item) => item.username === user.username);
+
+  if (index === -1) {
+    return { ok: false, message: "Không tìm thấy tài khoản." };
+  }
 
   users[index].balance += cleanAmount;
   saveUsers(users);
@@ -1002,7 +1052,7 @@ function renderCheckoutPage() {
             Mật khẩu sẽ hiển thị ở Discord dưới dạng ẩn <strong>||mật khẩu||</strong>.
           </div>
 
-          <button class="btn btn-primary btn-block" type="submit">Đặt dịch vụ ngay</button>
+          <button class="btn btn-primary btn-block" type="submit" id="checkoutSubmitBtn">Đặt dịch vụ ngay</button>
           <a class="btn btn-soft btn-block" href="cart.html">Quay lại giỏ hàng</a>
         </form>
       </section>
@@ -1014,14 +1064,20 @@ function renderCheckoutPage() {
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
+      const submitBtn = $("#checkoutSubmitBtn");
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Đang xử lý...";
+      }
+
       const gamePassword = $("#checkoutGamePassword")?.value || "";
-      const discordValue = $("#checkoutDiscord").value;
+      const discordValue = $("#checkoutDiscord")?.value || "";
 
       const result = createOrderFromCart({
-        paymentMethod: $("#checkoutPayment").value,
-        gameNick: $("#checkoutGameNick").value,
+        paymentMethod: $("#checkoutPayment")?.value || "manual",
+        gameNick: $("#checkoutGameNick")?.value || "",
         discord: discordValue,
-        note: $("#checkoutNote").value
+        note: $("#checkoutNote")?.value || ""
       });
 
       if (!result.ok) {
@@ -1031,6 +1087,11 @@ function renderCheckoutPage() {
           setTimeout(() => {
             window.location.href = "wallet.html";
           }, 800);
+        }
+
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Đặt dịch vụ ngay";
         }
         return;
       }
@@ -1042,7 +1103,7 @@ function renderCheckoutPage() {
         });
       } catch (error) {
         console.error(error);
-        showToast("Đã tạo đơn nhưng gửi Discord thất bại.");
+        showToast(`Đã tạo đơn nhưng gửi Discord thất bại: ${error.message || "Lỗi không xác định"}`);
       }
 
       updateWalletBadges();
@@ -1050,7 +1111,7 @@ function renderCheckoutPage() {
 
       setTimeout(() => {
         window.location.href = "orders.html";
-      }, 700);
+      }, 800);
     });
   }
 }
@@ -1159,7 +1220,7 @@ function initWalletPage() {
 
       const result = addTopup({
         method: "MoMo",
-        amount: $("#momoAmount").value,
+        amount: $("#momoAmount")?.value || "",
         detail: ($("#momoRef")?.value || "").trim() || "MOMO-REF"
       });
 
@@ -1180,10 +1241,10 @@ function initWalletPage() {
     cardForm.addEventListener("submit", (event) => {
       event.preventDefault();
 
-      const telco = $("#cardTelco").value;
+      const telco = $("#cardTelco")?.value || "";
       const code = ($("#cardCode")?.value || "").trim();
       const serial = ($("#cardSerial")?.value || "").trim();
-      const amount = $("#cardAmount").value;
+      const amount = $("#cardAmount")?.value || "";
 
       const result = addTopup({
         method: "Thẻ cào",
@@ -1365,16 +1426,18 @@ function renderProfilePage() {
       event.preventDefault();
 
       const result = updateUserProfile({
-        displayName: $("#profileDisplayName").value,
-        newPassword: $("#profileNewPassword").value
+        displayName: $("#profileDisplayName")?.value || "",
+        newPassword: $("#profileNewPassword")?.value || ""
       });
 
       const status = $("#profileStatus");
-      status.textContent = result.message;
-      status.className = `form-status ${result.ok ? "success" : "error"}`;
+      if (status) {
+        status.textContent = result.message;
+        status.className = `form-status ${result.ok ? "success" : "error"}`;
+      }
 
       if (result.ok) {
-        $("#profileNewPassword").value = "";
+        if ($("#profileNewPassword")) $("#profileNewPassword").value = "";
         renderUserArea();
         showToast("Cập nhật hồ sơ thành công");
       }
@@ -1432,17 +1495,21 @@ function initLoginPage() {
     loginForm.addEventListener("submit", (event) => {
       event.preventDefault();
 
-      const result = loginUser($("#loginUsername").value, $("#loginPassword").value);
+      const result = loginUser($("#loginUsername")?.value || "", $("#loginPassword")?.value || "");
       const status = $("#loginStatus");
 
       if (!result.ok) {
-        status.textContent = result.message;
-        status.className = "form-status error";
+        if (status) {
+          status.textContent = result.message;
+          status.className = "form-status error";
+        }
         return;
       }
 
-      status.textContent = "Đăng nhập thành công.";
-      status.className = "form-status success";
+      if (status) {
+        status.textContent = "Đăng nhập thành công.";
+        status.className = "form-status success";
+      }
 
       renderUserArea();
       updateCartBadges();
@@ -1461,24 +1528,28 @@ function initLoginPage() {
     registerForm.addEventListener("submit", (event) => {
       event.preventDefault();
 
-      const password = $("#registerPassword").value;
-      const password2 = $("#registerPassword2").value;
+      const password = $("#registerPassword")?.value || "";
+      const password2 = $("#registerPassword2")?.value || "";
       const status = $("#registerStatus");
 
       if (password !== password2) {
-        status.textContent = "Mật khẩu nhập lại không khớp.";
-        status.className = "form-status error";
+        if (status) {
+          status.textContent = "Mật khẩu nhập lại không khớp.";
+          status.className = "form-status error";
+        }
         return;
       }
 
       const result = registerUser(
-        $("#registerUsername").value,
+        $("#registerUsername")?.value || "",
         password,
-        $("#registerDisplayName").value
+        $("#registerDisplayName")?.value || ""
       );
 
-      status.textContent = result.message;
-      status.className = `form-status ${result.ok ? "success" : "error"}`;
+      if (status) {
+        status.textContent = result.message;
+        status.className = `form-status ${result.ok ? "success" : "error"}`;
+      }
 
       if (result.ok) {
         registerForm.reset();
@@ -1502,6 +1573,11 @@ function initLoginPage() {
 ========================= */
 
 function copyDiscord() {
+  if (!navigator.clipboard) {
+    showToast("Không copy tự động được. Discord: " + DISCORD_NAME);
+    return;
+  }
+
   navigator.clipboard
     .writeText(DISCORD_NAME)
     .then(() => showToast("Đã copy Discord: " + DISCORD_NAME))
