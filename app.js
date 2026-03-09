@@ -599,69 +599,121 @@ function calcCartSummary(items) {
 ========================= */
 
 function isNotifyApiConfigured() {
-  return ORDER_NOTIFY_API && !/TEN-REPL-CUA-BAN/i.test(ORDER_NOTIFY_API);
+  return DISCORD_WEBHOOK_URL && DISCORD_WEBHOOK_URL.startsWith("https://discord.com/api/webhooks/");
 }
 
 async function notifyDiscordOrder(order, extra = {}) {
   if (!isNotifyApiConfigured()) {
-    throw new Error("Bạn chưa cấu hình ORDER_NOTIFY_API trong app.js");
+    throw new Error("Bạn chưa cấu hình DISCORD_WEBHOOK_URL trong app.js");
   }
 
   const currentUser = getCurrentUser();
   const firstItem = order.items?.[0] || null;
 
+  const itemsText = (order.items || [])
+    .map((item, index) => {
+      const total = Number(item.price || 0) * Number(item.qty || 0);
+      return `${index + 1}. ${item.name} | SL: ${item.qty} | ${formatCurrency(total)}`;
+    })
+    .join("\n");
+
+  const passwordLine = extra.gamePassword
+    ? `Mật khẩu acc: ||${extra.gamePassword}||`
+    : "Mật khẩu acc: Không có";
+
+  const contentLines = [
+    DISCORD_STAFF_ROLE_ID ? `<@&${DISCORD_STAFF_ROLE_ID}> có đơn mới` : "Có đơn mới",
+    passwordLine
+  ];
+
   const payload = {
-    orderId: order.id,
-    username: order.user || currentUser?.username || "",
-    customer: extra.customer || currentUser?.displayName || currentUser?.username || "Khách",
-    discordContact: order.discord || "",
-    game: firstItem?.game || "Không rõ",
-    packageName: order.items?.map((item) => item.name).join(", ") || "Không rõ",
-    items: order.items || [],
-    price: order.total,
-    gameNick: order.gameNick || "",
-    gamePassword: extra.gamePassword || "",
-    note: order.note || "",
-    paymentStatus: order.status || "",
-    paymentMethod: order.paymentMethod || "",
-    createdAt: order.createdAt || new Date().toISOString()
+    username: "Shop Làng Việt",
+    content: contentLines.join("\n"),
+    allowed_mentions: DISCORD_STAFF_ROLE_ID
+      ? { parse: ["roles"] }
+      : { parse: [] },
+    embeds: [
+      {
+        title: "📦 ĐƠN CÀY THUÊ MỚI",
+        color: 11141120,
+        fields: [
+          {
+            name: "Mã đơn",
+            value: String(order.id || "Không rõ"),
+            inline: true
+          },
+          {
+            name: "Khách",
+            value: String(extra.customer || currentUser?.displayName || currentUser?.username || "Khách"),
+            inline: true
+          },
+          {
+            name: "Discord liên hệ",
+            value: String(order.discord || "Không có"),
+            inline: true
+          },
+          {
+            name: "Game",
+            value: String(firstItem?.game || "Không rõ"),
+            inline: true
+          },
+          {
+            name: "Nick game",
+            value: String(order.gameNick || "Không có"),
+            inline: true
+          },
+          {
+            name: "Thanh toán",
+            value: String(order.paymentMethod || "Không rõ"),
+            inline: true
+          },
+          {
+            name: "Trạng thái",
+            value: String(order.status || "Không rõ"),
+            inline: true
+          },
+          {
+            name: "Tổng tiền",
+            value: String(formatCurrency(order.total || 0)),
+            inline: true
+          },
+          {
+            name: "Thời gian",
+            value: String(formatDate(order.createdAt || new Date().toISOString())),
+            inline: true
+          },
+          {
+            name: "Dịch vụ",
+            value: itemsText || "Không có"
+          },
+          {
+            name: "Ghi chú",
+            value: String(order.note || "Không có")
+          }
+        ],
+        footer: {
+          text: "Shop Làng Việt"
+        },
+        timestamp: new Date(order.createdAt || Date.now()).toISOString()
+      }
+    ]
   };
 
-  let controller = null;
-  let timeoutId = null;
+  const response = await fetch(DISCORD_WEBHOOK_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
 
-  if (typeof AbortController !== "undefined") {
-    controller = new AbortController();
-    timeoutId = setTimeout(() => controller.abort(), 12000);
+  if (!response.ok) {
+    const text = await response.text().catch(() => "");
+    throw new Error(text || "Không gửi được webhook Discord.");
   }
 
-  try {
-    const response = await fetch(ORDER_NOTIFY_API, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload),
-      ...(controller ? { signal: controller.signal } : {})
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      throw new Error(data.message || "Không gửi được đơn sang Discord.");
-    }
-
-    return data;
-  } catch (error) {
-    if (error?.name === "AbortError") {
-      throw new Error("Gửi đơn sang Discord bị quá thời gian chờ.");
-    }
-    throw error;
-  } finally {
-    if (timeoutId) clearTimeout(timeoutId);
-  }
+  return { ok: true };
 }
-
 /* =========================
    ORDER / CHECKOUT
 ========================= */
