@@ -11,7 +11,7 @@ const DISCORD_NAME = "ngai_hamster";
 const LOCKED_THEME = "royal-red";
 
 /* ĐỔI LINK NÀY THÀNH LINK REPLIT THẬT CỦA BẠN */
-const ORDER_NOTIFY_API = "https://TEN-REPL-CUA-BAN.replit.app/api/order-notify";
+const ORDER_NOTIFY_API = "https://https://shop-lang-viet-bot--kanhkhoi32.app.replit.app/api/order-notify";
 
 const SERVICES = [
   {
