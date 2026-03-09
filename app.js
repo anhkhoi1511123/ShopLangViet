@@ -609,26 +609,34 @@ async function notifyDiscordOrder(order, extra = {}) {
 
   const currentUser = getCurrentUser();
   const firstItem = order.items?.[0] || null;
+  const timestamp = Math.floor(
+    new Date(order.createdAt || Date.now()).getTime() / 1000
+  );
 
-  const itemsText = (order.items || [])
-    .map((item, index) => {
-      const total = Number(item.price || 0) * Number(item.qty || 0);
-      return `${index + 1}. ${item.name} | SL: ${item.qty} | ${formatCurrency(total)}`;
-    })
-    .join("\n");
+  const customerName =
+    extra.customer ||
+    currentUser?.displayName ||
+    currentUser?.username ||
+    "Khách";
 
-  const passwordLine = extra.gamePassword
-    ? `Mật khẩu acc: ||${extra.gamePassword}||`
-    : "Mật khẩu acc: Không có";
+  const servicesText = (order.items || []).length
+    ? (order.items || [])
+        .map((item) => {
+          const total = Number(item.price || 0) * Number(item.qty || 0);
+          return `• ${item.name} | SL: ${item.qty} | ${formatCurrency(total)}`;
+        })
+        .join("\n")
+    : "Không có";
 
-  const contentLines = [
-    DISCORD_STAFF_ROLE_ID ? `<@&${DISCORD_STAFF_ROLE_ID}> có đơn mới` : "Có đơn mới",
-    passwordLine
-  ];
+  const passwordText = extra.gamePassword
+    ? `||${extra.gamePassword}||`
+    : "Không có";
 
   const payload = {
     username: "Shop Làng Việt",
-    content: contentLines.join("\n"),
+    content: DISCORD_STAFF_ROLE_ID
+      ? `<@&${DISCORD_STAFF_ROLE_ID}> 📦 Có đơn mới`
+      : "📦 Có đơn mới",
     allowed_mentions: DISCORD_STAFF_ROLE_ID
       ? { parse: ["roles"] }
       : { parse: [] },
@@ -636,61 +644,19 @@ async function notifyDiscordOrder(order, extra = {}) {
       {
         title: "📦 ĐƠN CÀY THUÊ MỚI",
         color: 11141120,
-        fields: [
-          {
-            name: "Mã đơn",
-            value: String(order.id || "Không rõ"),
-            inline: true
-          },
-          {
-            name: "Khách",
-            value: String(extra.customer || currentUser?.displayName || currentUser?.username || "Khách"),
-            inline: true
-          },
-          {
-            name: "Discord liên hệ",
-            value: String(order.discord || "Không có"),
-            inline: true
-          },
-          {
-            name: "Game",
-            value: String(firstItem?.game || "Không rõ"),
-            inline: true
-          },
-          {
-            name: "Nick game",
-            value: String(order.gameNick || "Không có"),
-            inline: true
-          },
-          {
-            name: "Thanh toán",
-            value: String(order.paymentMethod || "Không rõ"),
-            inline: true
-          },
-          {
-            name: "Trạng thái",
-            value: String(order.status || "Không rõ"),
-            inline: true
-          },
-          {
-            name: "Tổng tiền",
-            value: String(formatCurrency(order.total || 0)),
-            inline: true
-          },
-          {
-            name: "Thời gian",
-            value: String(formatDate(order.createdAt || new Date().toISOString())),
-            inline: true
-          },
-          {
-            name: "Dịch vụ",
-            value: itemsText || "Không có"
-          },
-          {
-            name: "Ghi chú",
-            value: String(order.note || "Không có")
-          }
-        ],
+        description: [
+          `🧾 **Mã đơn:** ${order.id || "Không rõ"}`,
+          `🎯 **Dịch vụ:**\n${servicesText}`,
+          `👤 **Khách:** ${customerName}`,
+          `🎮 **Game:** ${firstItem?.game || "Không rõ"}`,
+          `🕹️ **Nick game:** ${order.gameNick || "Không có"}`,
+          `🔐 **Mật khẩu:** ${passwordText}`,
+          `💳 **Thanh toán:** ${order.paymentMethod || "Không rõ"}`,
+          `📌 **Trạng thái:** ${order.status || "Không rõ"}`,
+          `💰 **Tổng tiền:** ${formatCurrency(order.total || 0)}`,
+          `⏰ **Thời gian:** <t:${timestamp}:F>`,
+          `📝 **Ghi chú:** ${order.note || "Không có"}`
+        ].join("\n\n"),
         footer: {
           text: "Shop Làng Việt"
         },
