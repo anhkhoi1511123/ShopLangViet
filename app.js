@@ -4,14 +4,33 @@ const STORAGE_KEYS = {
   CURRENT_USER: "shopLangVietCurrentUserV3",
   CART: "shopLangVietCartV3",
   ORDERS: "shopLangVietOrdersV3",
-  TOPUPS: "shopLangVietTopupsV3"
+  TOPUPS: "shopLangVietTopupsV3",
+  NOTIFICATIONS: "shopLangVietNotificationsV1",
+  ACCOUNT_LOGS: "shopLangVietAccountLogsV1",
+  DIRECT_CHECKOUT: "shopLangVietDirectCheckoutV1"
+};
+
+const ORDER_STATUS = {
+  PENDING_PAYMENT: "Chờ thanh toán",
+  PAID: "Đã thanh toán",
+  PROCESSING: "Đang xử lý",
+  WORKING: "Đang cày",
+  COMPLETED: "Hoàn thành",
+  CANCELED: "Hủy"
 };
 
 const DISCORD_NAME = "ngai_hamster";
 const LOCKED_THEME = "royal-red";
 
-const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1480583732330107091/q0izkFd7-vCnrp6rERRQVOWmtNVsmEen0M9T5slJQw3IMHpJOt_cjIXNjYboQJrqPJsM";
-const DISCORD_STAFF_ROLE_ID = "1467060755156308095"; // có role staff thì dán ID vào, không thì để trống
+/* DÁN WEBHOOK MỚI CỦA BẠN VÀO ĐÂY */
+const DISCORD_WEBHOOK_URL = "DAN_WEBHOOK_MOI_CUA_BAN_VAO_DAY";
+const DISCORD_STAFF_ROLE_ID = "";
+
+const GAME_META = {
+  "Blox Fruits": { avatar: "BF", emoji: "🍎" },
+  "Fisch": { avatar: "FI", emoji: "🐟" },
+  "Grow a Garden": { avatar: "GG", emoji: "🌱" }
+};
 
 const SERVICES = [
   {
@@ -176,6 +195,30 @@ function formatCurrency(amount) {
   return `${new Intl.NumberFormat("vi-VN").format(Number(amount) || 0)}đ`;
 }
 
+function formatHeaderCurrency(amount) {
+  const value = Number(amount) || 0;
+
+  if (value >= 1e12) {
+    return `${new Intl.NumberFormat("vi-VN", {
+      maximumFractionDigits: 1
+    }).format(value / 1e12)}Tđ`;
+  }
+
+  if (value >= 1e9) {
+    return `${new Intl.NumberFormat("vi-VN", {
+      maximumFractionDigits: 1
+    }).format(value / 1e9)}Bđ`;
+  }
+
+  if (value >= 1e6) {
+    return `${new Intl.NumberFormat("vi-VN", {
+      maximumFractionDigits: 1
+    }).format(value / 1e6)}Tr`;
+  }
+
+  return formatCurrency(value);
+}
+
 function formatDate(value) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "-";
@@ -208,6 +251,86 @@ function showToast(message) {
   showToast.timer = setTimeout(() => {
     toast.classList.remove("show");
   }, 2400);
+}
+
+function getGameMeta(game) {
+  return GAME_META[game] || { avatar: "GM", emoji: "🎮" };
+}
+
+function renderGameAvatar(game, small = false) {
+  const meta = getGameMeta(game);
+  return `
+    <span class="game-avatar ${small ? "small" : ""}">
+      ${escapeHtml(meta.avatar)}
+    </span>
+  `;
+}
+
+function isAdminUsername(username = "") {
+  return /^(demo|admin|ngai_hamster)$/i.test(String(username || "").trim());
+}
+
+function isAdminUser(user = getCurrentUser()) {
+  if (!user) return false;
+  return user.role === "admin" || isAdminUsername(user.username);
+}
+
+function buildStatusOptions(selected = "") {
+  return Object.values(ORDER_STATUS)
+    .map((status) => `
+      <option value="${escapeHtml(status)}" ${status === selected ? "selected" : ""}>
+        ${escapeHtml(status)}
+      </option>
+    `)
+    .join("");
+}
+
+function getStatusNotificationContent(status, orderId) {
+  if (status === ORDER_STATUS.PAID) {
+    return {
+      title: "Đơn đã thanh toán",
+      message: `Đơn ${orderId} của bạn đã được thanh toán thành công.`,
+      type: "success"
+    };
+  }
+
+  if (status === ORDER_STATUS.PROCESSING) {
+    return {
+      title: "Đơn đang xử lý",
+      message: `Đơn ${orderId} của bạn đã được shop tiếp nhận và đang xử lý.`,
+      type: "info"
+    };
+  }
+
+  if (status === ORDER_STATUS.WORKING) {
+    return {
+      title: "Đơn đang cày",
+      message: `Đơn ${orderId} hiện đang được nhân viên xử lý.`,
+      type: "info"
+    };
+  }
+
+  if (status === ORDER_STATUS.COMPLETED) {
+    return {
+      title: "Đơn hoàn thành",
+      message: `Đơn ${orderId} của bạn đã hoàn thành. Vui lòng kiểm tra lại tài khoản.`,
+      type: "success"
+    };
+  }
+
+  if (status === ORDER_STATUS.CANCELED) {
+    return {
+      title: "Đơn đã hủy",
+      message: `Đơn ${orderId} đã bị hủy. Vui lòng liên hệ shop nếu cần hỗ trợ thêm.`,
+      type: "danger"
+    };
+  }
+
+  return {
+    title: "Cập nhật đơn hàng",
+    message: `Đơn ${orderId} có trạng thái mới: ${status}.`,
+    type: "info"
+  };
 }
 
 /* =========================
@@ -246,6 +369,98 @@ function saveCart(cart) {
   writeJSON(STORAGE_KEYS.CART, cart);
 }
 
+function getNotifications() {
+  return readJSON(STORAGE_KEYS.NOTIFICATIONS, []);
+}
+
+function saveNotifications(list) {
+  writeJSON(STORAGE_KEYS.NOTIFICATIONS, list);
+}
+
+function getUserNotifications(username = getCurrentUsername()) {
+  return getNotifications().filter((item) => item.username === username);
+}
+
+function addNotification({ username, title, message, type = "info", orderId = "" }) {
+  if (!username) return;
+
+  const list = getNotifications();
+  list.unshift({
+    id: uid("NTF"),
+    username,
+    title,
+    message,
+    type,
+    orderId,
+    isRead: false,
+    createdAt: new Date().toISOString()
+  });
+  saveNotifications(list);
+}
+
+function markNotificationRead(notificationId) {
+  const list = getNotifications();
+  const item = list.find((row) => row.id === notificationId);
+  if (!item) return;
+
+  item.isRead = true;
+  saveNotifications(list);
+}
+
+function markAllNotificationsRead(username = getCurrentUsername()) {
+  const list = getNotifications();
+
+  list.forEach((item) => {
+    if (item.username === username) {
+      item.isRead = true;
+    }
+  });
+
+  saveNotifications(list);
+}
+
+function getUnreadNotificationCount(username = getCurrentUsername()) {
+  return getUserNotifications(username).filter((item) => !item.isRead).length;
+}
+
+function getAccountLogs() {
+  return readJSON(STORAGE_KEYS.ACCOUNT_LOGS, []);
+}
+
+function saveAccountLogs(list) {
+  writeJSON(STORAGE_KEYS.ACCOUNT_LOGS, list);
+}
+
+function addAccountLog({ username, action, detail = "" }) {
+  if (!username) return;
+
+  const list = getAccountLogs();
+  list.unshift({
+    id: uid("LOG"),
+    username,
+    action,
+    detail,
+    createdAt: new Date().toISOString()
+  });
+  saveAccountLogs(list);
+}
+
+function getUserAccountLogs(username = getCurrentUsername()) {
+  return getAccountLogs().filter((item) => item.username === username);
+}
+
+function getDirectCheckout() {
+  return readJSON(STORAGE_KEYS.DIRECT_CHECKOUT, null);
+}
+
+function saveDirectCheckout(data) {
+  if (!data) {
+    localStorage.removeItem(STORAGE_KEYS.DIRECT_CHECKOUT);
+    return;
+  }
+  writeJSON(STORAGE_KEYS.DIRECT_CHECKOUT, data);
+}
+
 function getCurrentUsername() {
   return localStorage.getItem(STORAGE_KEYS.CURRENT_USER) || "";
 }
@@ -255,6 +470,22 @@ function setCurrentUsername(username) {
 }
 
 function logoutUser() {
+  const username = getCurrentUsername();
+  if (username) {
+    addAccountLog({
+      username,
+      action: "Đăng xuất",
+      detail: "Bạn đã đăng xuất khỏi Shop Làng Việt."
+    });
+
+    addNotification({
+      username,
+      title: "Đăng xuất",
+      message: "Bạn vừa đăng xuất khỏi tài khoản Shop Làng Việt.",
+      type: "info"
+    });
+  }
+
   localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
 }
 
@@ -269,6 +500,7 @@ function getServiceById(serviceId) {
 
 function seedData() {
   const users = getUsers();
+
   if (!users.length) {
     saveUsers([
       {
@@ -276,9 +508,16 @@ function seedData() {
         password: "1234",
         displayName: "ngai_hamster",
         balance: 300000,
+        role: "admin",
         createdAt: "2026-03-01T09:00:00"
       }
     ]);
+  } else {
+    const migratedUsers = users.map((user) => ({
+      ...user,
+      role: user.role || (isAdminUsername(user.username) ? "admin" : "user")
+    }));
+    saveUsers(migratedUsers);
   }
 
   const orders = getOrders();
@@ -287,10 +526,12 @@ function seedData() {
       {
         id: "OD1001",
         user: "demo",
-        status: "Hoàn thành",
+        status: ORDER_STATUS.COMPLETED,
         paymentMethod: "Số dư ví",
         total: 210000,
         createdAt: "2026-03-02T14:25:00",
+        updatedAt: "2026-03-02T18:40:00",
+        completedAt: "2026-03-02T18:40:00",
         gameNick: "DemoBloxUser",
         discord: "ngai_hamster",
         note: "Đơn demo có sẵn để xem lịch sử.",
@@ -312,6 +553,27 @@ function seedData() {
         ]
       }
     ]);
+  } else {
+    const migratedOrders = orders.map((order) => {
+      let nextStatus = order.status || ORDER_STATUS.PENDING_PAYMENT;
+
+      if (/chờ thanh toán/i.test(nextStatus)) nextStatus = ORDER_STATUS.PENDING_PAYMENT;
+      else if (/đã thanh toán/i.test(nextStatus)) nextStatus = ORDER_STATUS.PAID;
+      else if (/đang xử lý/i.test(nextStatus)) nextStatus = ORDER_STATUS.PROCESSING;
+      else if (/đang cày/i.test(nextStatus)) nextStatus = ORDER_STATUS.WORKING;
+      else if (/hoàn thành/i.test(nextStatus)) nextStatus = ORDER_STATUS.COMPLETED;
+      else if (/hủy/i.test(nextStatus)) nextStatus = ORDER_STATUS.CANCELED;
+
+      return {
+        ...order,
+        status: nextStatus,
+        updatedAt: order.updatedAt || order.createdAt || new Date().toISOString(),
+        completedAt: order.completedAt || "",
+        items: Array.isArray(order.items) ? order.items : []
+      };
+    });
+
+    saveOrders(migratedOrders);
   }
 
   const topups = getTopups();
@@ -341,6 +603,14 @@ function seedData() {
   if (!Array.isArray(getCart())) {
     saveCart([]);
   }
+
+  if (!Array.isArray(getNotifications())) {
+    saveNotifications([]);
+  }
+
+  if (!Array.isArray(getAccountLogs())) {
+    saveAccountLogs([]);
+  }
 }
 
 /* =========================
@@ -357,8 +627,205 @@ function initTheme() {
 }
 
 /* =========================
+   RUNTIME UI STYLES
+========================= */
+
+function ensureRuntimeStyles() {
+  if ($("#runtimeShopStyles")) return;
+
+  const style = document.createElement("style");
+  style.id = "runtimeShopStyles";
+  style.textContent = `
+    .topbar-inner {
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      white-space: nowrap;
+    }
+
+    .top-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .bell-link,
+    .wallet-pill,
+    .icon-link {
+      position: relative;
+    }
+
+    .notify-count {
+      min-width: 20px;
+      height: 20px;
+      padding: 0 6px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      margin-left: 6px;
+      background: #f7d36a;
+      color: #4d1707;
+    }
+
+    .notify-count.zero {
+      opacity: .75;
+    }
+
+    .game-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      color: #5d1b09;
+      background: linear-gradient(135deg, #f6d779, #e0a93d);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.4);
+      flex-shrink: 0;
+    }
+
+    .game-avatar.small {
+      width: 32px;
+      height: 32px;
+      font-size: 11px;
+      border-radius: 10px;
+    }
+
+    .service-head {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .service-card-clickable {
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .service-card-clickable:hover {
+      transform: translateY(-3px);
+    }
+
+    .notification-card {
+      border-left: 4px solid rgba(247, 211, 106, .75);
+    }
+
+    .notification-card.unread {
+      box-shadow: 0 0 0 1px rgba(247, 211, 106, .28) inset;
+    }
+
+    .notification-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 13px;
+      opacity: .85;
+      margin-top: 10px;
+    }
+
+    .notification-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .admin-status-box {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+
+    .admin-status-select {
+      min-width: 180px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.05);
+      color: inherit;
+    }
+
+    .orders-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .orders-mode-tag {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(247, 211, 106, .14);
+      color: #f7d36a;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .account-log-card {
+      opacity: .96;
+    }
+
+    .theme-pills {
+      display: none !important;
+    }
+
+    @media (max-width: 980px) {
+      .top-actions {
+        width: 100%;
+        margin-left: 0;
+        justify-content: flex-start;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+/* =========================
    HEADER
 ========================= */
+
+function ensureBellLink() {
+  const topActions = $(".top-actions");
+  if (!topActions) return;
+
+  if (!topActions.querySelector(".bell-link")) {
+    const bell = document.createElement("a");
+    bell.className = "icon-link bell-link";
+    bell.href = "notifications.html";
+    bell.innerHTML = `🔔 <span class="notify-count zero" data-notification-count>0</span>`;
+    topActions.prepend(bell);
+  }
+}
+
+function normalizeTopbar() {
+  $$(".theme-pills").forEach((el) => el.remove());
+  ensureBellLink();
+}
 
 function renderUserArea() {
   const userArea = $("#userArea");
@@ -389,6 +856,7 @@ function renderUserArea() {
       renderUserArea();
       updateCartBadges();
       updateWalletBadges();
+      updateNotificationBadges();
       showToast("Đã đăng xuất");
       setTimeout(() => {
         window.location.href = "index.html";
@@ -413,7 +881,16 @@ function updateWalletBadges() {
   const balance = user ? user.balance : 0;
 
   $$("[data-wallet-balance]").forEach((el) => {
-    el.textContent = formatCurrency(balance);
+    el.textContent = formatHeaderCurrency(balance);
+  });
+}
+
+function updateNotificationBadges() {
+  const count = getUnreadNotificationCount();
+
+  $$("[data-notification-count]").forEach((el) => {
+    el.textContent = count;
+    el.classList.toggle("zero", count === 0);
   });
 }
 
@@ -435,6 +912,20 @@ function loginUser(username, password) {
   }
 
   setCurrentUsername(user.username);
+
+  addAccountLog({
+    username: user.username,
+    action: "Đăng nhập",
+    detail: "Bạn đã đăng nhập vào Shop Làng Việt."
+  });
+
+  addNotification({
+    username: user.username,
+    title: "Đăng nhập thành công",
+    message: "Bạn vừa đăng nhập vào tài khoản Shop Làng Việt.",
+    type: "success"
+  });
+
   return { ok: true, user };
 }
 
@@ -459,15 +950,31 @@ function registerUser(username, password, displayName) {
     return { ok: false, message: "Tên đăng nhập đã tồn tại." };
   }
 
-  users.push({
+  const newUser = {
     username: cleanUsername,
     password,
     displayName: cleanDisplayName || cleanUsername,
     balance: 0,
+    role: isAdminUsername(cleanUsername) ? "admin" : "user",
     createdAt: new Date().toISOString()
+  };
+
+  users.push(newUser);
+  saveUsers(users);
+
+  addAccountLog({
+    username: cleanUsername,
+    action: "Đăng ký",
+    detail: "Tài khoản Shop Làng Việt đã được tạo thành công."
   });
 
-  saveUsers(users);
+  addNotification({
+    username: cleanUsername,
+    title: "Chào mừng bạn",
+    message: "Tài khoản của bạn đã được tạo thành công tại Shop Làng Việt.",
+    type: "success"
+  });
+
   return { ok: true, message: "Đăng ký thành công." };
 }
 
@@ -494,11 +1001,25 @@ function updateUserProfile({ displayName, newPassword }) {
   }
 
   saveUsers(users);
+
+  addNotification({
+    username: currentUser.username,
+    title: "Cập nhật hồ sơ",
+    message: "Thông tin hồ sơ của bạn vừa được cập nhật thành công.",
+    type: "success"
+  });
+
+  addAccountLog({
+    username: currentUser.username,
+    action: "Cập nhật hồ sơ",
+    detail: "Tên hiển thị hoặc mật khẩu đã được thay đổi."
+  });
+
   return { ok: true, message: "Đã cập nhật hồ sơ." };
 }
 
 /* =========================
-   CART
+   CART / DIRECT CHECKOUT
 ========================= */
 
 function getUserCartDetailed(username = getCurrentUsername()) {
@@ -517,7 +1038,7 @@ function getUserCartDetailed(username = getCurrentUsername()) {
     .filter(Boolean);
 }
 
-function addToCart(serviceId) {
+function startDirectCheckout(serviceId) {
   const user = getCurrentUser();
   if (!user) {
     showToast("Bạn cần đăng nhập trước");
@@ -530,31 +1051,89 @@ function addToCart(serviceId) {
   const service = getServiceById(serviceId);
   if (!service) return;
 
-  const cart = getCart();
-  const found = cart.find((item) => item.user === user.username && item.serviceId === serviceId);
+  saveDirectCheckout({
+    user: user.username,
+    serviceId,
+    qty: 1,
+    createdAt: new Date().toISOString()
+  });
 
-  if (found) {
-    found.qty += 1;
-  } else {
-    cart.push({
-      id: uid("CART"),
-      user: user.username,
-      serviceId,
-      qty: 1
-    });
+  window.location.href = "checkout.html";
+}
+
+function getDirectCheckoutItems(username = getCurrentUsername()) {
+  const draft = getDirectCheckout();
+  if (!draft || draft.user !== username) return [];
+
+  const service = getServiceById(draft.serviceId);
+  if (!service) return [];
+
+  const qty = Number(draft.qty) || 1;
+
+  return [
+    {
+      id: `DIRECT_${service.id}`,
+      user: username,
+      serviceId: service.id,
+      qty,
+      ...service,
+      subtotal: qty * service.price,
+      isDirect: true
+    }
+  ];
+}
+
+function getCheckoutItems(username = getCurrentUsername()) {
+  const directItems = getDirectCheckoutItems(username);
+  return directItems.length ? directItems : getUserCartDetailed(username);
+}
+
+function clearCheckoutSource() {
+  const username = getCurrentUsername();
+  const direct = getDirectCheckout();
+
+  if (direct && direct.user === username) {
+    saveDirectCheckout(null);
+    return;
   }
 
-  saveCart(cart);
+  const nextCart = getCart().filter((row) => row.user !== username);
+  saveCart(nextCart);
   updateCartBadges();
-  showToast(`Đã thêm "${service.name}" vào giỏ`);
+}
+
+function addToCart(serviceId) {
+  startDirectCheckout(serviceId);
+}
+
+function bindBuyNowButtons(scope = document) {
+  scope.querySelectorAll("[data-buy-service]").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      startDirectCheckout(button.dataset.buyService);
+    });
+  });
+
+  scope.querySelectorAll("[data-add-service]").forEach((button) => {
+    button.textContent = "Mua ngay";
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      startDirectCheckout(button.dataset.addService);
+    });
+  });
+
+  scope.querySelectorAll("[data-buy-service-card]").forEach((card) => {
+    card.addEventListener("click", (event) => {
+      if (event.target.closest("a, button")) return;
+      startDirectCheckout(card.dataset.buyServiceCard);
+    });
+  });
 }
 
 function bindAddToCartButtons(scope = document) {
-  scope.querySelectorAll("[data-add-service]").forEach((button) => {
-    button.addEventListener("click", () => {
-      addToCart(button.dataset.addService);
-    });
-  });
+  bindBuyNowButtons(scope);
 }
 
 function updateCartQty(itemId, delta) {
@@ -680,6 +1259,7 @@ async function notifyDiscordOrder(order, extra = {}) {
 
   return { ok: true };
 }
+
 /* =========================
    ORDER / CHECKOUT
 ========================= */
@@ -688,8 +1268,8 @@ function createOrderFromCart({ paymentMethod, gameNick, discord, note }) {
   const user = getCurrentUser();
   if (!user) return { ok: false, message: "Bạn chưa đăng nhập." };
 
-  const items = getUserCartDetailed(user.username);
-  if (!items.length) return { ok: false, message: "Giỏ hàng đang trống." };
+  const items = getCheckoutItems(user.username);
+  if (!items.length) return { ok: false, message: "Không có gói nào để thanh toán." };
 
   const cleanGameNick = String(gameNick || "").trim();
   const cleanDiscord = String(discord || "").trim();
@@ -707,7 +1287,7 @@ function createOrderFromCart({ paymentMethod, gameNick, discord, note }) {
     return { ok: false, message: "Không tìm thấy tài khoản người dùng." };
   }
 
-  let status = "Chờ thanh toán";
+  let status = ORDER_STATUS.PENDING_PAYMENT;
 
   if (paymentMethod === "wallet") {
     if (Number(users[userIndex].balance || 0) < summary.total) {
@@ -716,7 +1296,7 @@ function createOrderFromCart({ paymentMethod, gameNick, discord, note }) {
 
     users[userIndex].balance -= summary.total;
     saveUsers(users);
-    status = "Đã thanh toán";
+    status = ORDER_STATUS.PAID;
   }
 
   const order = {
@@ -726,6 +1306,8 @@ function createOrderFromCart({ paymentMethod, gameNick, discord, note }) {
     paymentMethod: paymentMethod === "wallet" ? "Số dư ví" : "Thanh toán thủ công",
     total: summary.total,
     createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    completedAt: "",
     gameNick: cleanGameNick,
     discord: cleanDiscord,
     note: cleanNote,
@@ -741,9 +1323,53 @@ function createOrderFromCart({ paymentMethod, gameNick, discord, note }) {
   const orders = getOrders();
   orders.unshift(order);
   saveOrders(orders);
-  clearCurrentUserCart();
+  clearCheckoutSource();
+
+  addNotification({
+    username: user.username,
+    title: "Đã tạo đơn mới",
+    message: `Đơn ${order.id} của bạn đã được tạo thành công.`,
+    type: "success",
+    orderId: order.id
+  });
+
+  addAccountLog({
+    username: user.username,
+    action: "Tạo đơn hàng",
+    detail: `Đã tạo đơn ${order.id} với tổng tiền ${formatCurrency(order.total)}.`
+  });
 
   return { ok: true, order };
+}
+
+function updateOrderStatus(orderId, nextStatus) {
+  const orders = getOrders();
+  const index = orders.findIndex((item) => item.id === orderId);
+
+  if (index === -1) {
+    return { ok: false, message: "Không tìm thấy đơn hàng." };
+  }
+
+  orders[index].status = nextStatus;
+  orders[index].updatedAt = new Date().toISOString();
+
+  if (nextStatus === ORDER_STATUS.COMPLETED) {
+    orders[index].completedAt = new Date().toISOString();
+  }
+
+  saveOrders(orders);
+
+  const notify = getStatusNotificationContent(nextStatus, orderId);
+
+  addNotification({
+    username: orders[index].user,
+    title: notify.title,
+    message: notify.message,
+    type: notify.type,
+    orderId
+  });
+
+  return { ok: true, order: orders[index] };
 }
 
 /* =========================
@@ -782,6 +1408,19 @@ function addTopup({ method, amount, detail }) {
 
   saveTopups(topups);
 
+  addNotification({
+    username: user.username,
+    title: "Nạp tiền thành công",
+    message: `Ví của bạn vừa được cộng ${formatCurrency(cleanAmount)} qua ${method}.`,
+    type: "success"
+  });
+
+  addAccountLog({
+    username: user.username,
+    action: "Nạp tiền",
+    detail: `Nạp ${formatCurrency(cleanAmount)} bằng ${method}.`
+  });
+
   return { ok: true, message: "Nạp tiền thành công." };
 }
 
@@ -793,7 +1432,8 @@ function statusBadge(status) {
   let type = "neutral";
 
   if (/hoàn thành|thành công|đã thanh toán/i.test(status)) type = "success";
-  else if (/chờ/i.test(status)) type = "warning";
+  else if (/chờ thanh toán|chờ/i.test(status)) type = "warning";
+  else if (/đang xử lý|đang cày/i.test(status)) type = "warning";
   else if (/hủy|lỗi|thất bại/i.test(status)) type = "danger";
 
   return `<span class="badge ${type}">${escapeHtml(status)}</span>`;
@@ -803,7 +1443,7 @@ function loginPromptCard(title = "Bạn cần đăng nhập để sử dụng t�
   return `
     <section class="card empty-state">
       <h3>${escapeHtml(title)}</h3>
-      <p class="muted">Đăng nhập để xem ví, đơn hàng, giỏ hàng và hồ sơ tài khoản.</p>
+      <p class="muted">Đăng nhập để xem ví, đơn hàng, thông báo và hồ sơ tài khoản.</p>
       <div class="row" style="justify-content:center;margin-top:14px;">
         <a class="btn btn-primary" href="login.html">Đăng nhập ngay</a>
         <a class="btn btn-soft" href="index.html">Về trang chủ</a>
@@ -819,29 +1459,35 @@ function renderServiceGrid(selector, slug) {
   const list = slug === "all" ? SERVICES : SERVICES.filter((service) => service.slug === slug);
 
   target.innerHTML = list
-    .map(
-      (service) => `
-      <article class="card">
+    .map((service) => `
+      <article class="card service-card-clickable" data-buy-service-card="${service.id}">
+        <div class="service-head">
+          ${renderGameAvatar(service.game)}
+          <div>
+            <div class="kicker">${escapeHtml(service.game)}</div>
+            <h4 style="margin:6px 0 0;">${escapeHtml(service.name)}</h4>
+          </div>
+        </div>
+
         <div class="price-tag">${formatCurrency(service.price)}</div>
-        <div class="kicker">${escapeHtml(service.game)}</div>
-        <h4>${escapeHtml(service.name)}</h4>
         <p class="muted">${escapeHtml(service.description)}</p>
+
         <div class="service-meta">
           <span>${escapeHtml(service.eta)}</span>
           <span>${formatCurrency(service.price)}</span>
         </div>
+
         <div class="service-actions">
           <a class="btn btn-soft btn-sm" href="${service.page}">Xem chi tiết</a>
-          <button class="btn btn-primary btn-sm" type="button" data-add-service="${service.id}">
-            Thêm vào giỏ
+          <button class="btn btn-primary btn-sm" type="button" data-buy-service="${service.id}">
+            Mua ngay
           </button>
         </div>
       </article>
-    `
-    )
+    `)
     .join("");
 
-  bindAddToCartButtons(target);
+  bindBuyNowButtons(target);
 }
 
 /* =========================
@@ -863,8 +1509,8 @@ function renderCartPage() {
   if (!items.length) {
     view.innerHTML = `
       <section class="card empty-state">
-        <h3>Giỏ hàng đang trống</h3>
-        <p class="muted">Hãy vào trang game hoặc dịch vụ để thêm gói bạn muốn đặt.</p>
+        <h3>Giỏ hàng hiện không còn là bước bắt buộc</h3>
+        <p class="muted">Giờ bạn có thể bấm trực tiếp <strong>Mua ngay</strong> ở từng gói để sang thanh toán luôn.</p>
         <div class="row" style="justify-content:center;margin-top:14px;">
           <a class="btn btn-primary" href="services.html">Xem dịch vụ</a>
           <a class="btn btn-soft" href="index.html">Về trang chủ</a>
@@ -893,8 +1539,13 @@ function renderCartPage() {
             ${items.map((item) => `
               <tr>
                 <td>
-                  <strong>${escapeHtml(item.name)}</strong>
-                  <div class="muted" style="margin-top:6px;">${escapeHtml(item.description)}</div>
+                  <div style="display:flex;gap:10px;align-items:flex-start;">
+                    ${renderGameAvatar(item.game, true)}
+                    <div>
+                      <strong>${escapeHtml(item.name)}</strong>
+                      <div class="muted" style="margin-top:6px;">${escapeHtml(item.description)}</div>
+                    </div>
+                  </div>
                 </td>
                 <td>${escapeHtml(item.game)}</td>
                 <td>
@@ -981,16 +1632,16 @@ function renderCheckoutPage() {
     return;
   }
 
-  const items = getUserCartDetailed(user.username);
+  const items = getCheckoutItems(user.username);
 
   if (!items.length) {
     view.innerHTML = `
       <section class="card empty-state">
         <h3>Không có gì để thanh toán</h3>
-        <p class="muted">Giỏ hàng của bạn đang trống.</p>
+        <p class="muted">Hãy bấm <strong>Mua ngay</strong> tại gói dịch vụ bạn muốn.</p>
         <div class="row" style="justify-content:center;margin-top:14px;">
-          <a class="btn btn-primary" href="services.html">Thêm dịch vụ</a>
-          <a class="btn btn-soft" href="cart.html">Về giỏ hàng</a>
+          <a class="btn btn-primary" href="services.html">Xem dịch vụ</a>
+          <a class="btn btn-soft" href="index.html">Về trang chủ</a>
         </div>
       </section>
     `;
@@ -1006,11 +1657,16 @@ function renderCheckoutPage() {
         <div class="list-stack">
           ${items.map((item) => `
             <div class="order-item">
-              <strong>${escapeHtml(item.name)}</strong>
-              <div class="mini-meta">
-                <span>${escapeHtml(item.game)}</span>
-                <span>SL: ${item.qty}</span>
-                <span>${formatCurrency(item.subtotal)}</span>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                ${renderGameAvatar(item.game, true)}
+                <div>
+                  <strong>${escapeHtml(item.name)}</strong>
+                  <div class="mini-meta">
+                    <span>${escapeHtml(item.game)}</span>
+                    <span>SL: ${item.qty}</span>
+                    <span>${formatCurrency(item.subtotal)}</span>
+                  </div>
+                </div>
               </div>
             </div>
           `).join("")}
@@ -1071,7 +1727,7 @@ function renderCheckoutPage() {
           </div>
 
           <button class="btn btn-primary btn-block" type="submit" id="checkoutSubmitBtn">Đặt dịch vụ ngay</button>
-          <a class="btn btn-soft btn-block" href="cart.html">Quay lại giỏ hàng</a>
+          <a class="btn btn-soft btn-block" href="services.html">Quay lại dịch vụ</a>
         </form>
       </section>
     </div>
@@ -1125,6 +1781,7 @@ function renderCheckoutPage() {
       }
 
       updateWalletBadges();
+      updateNotificationBadges();
       showToast(`Tạo đơn ${result.order.id} thành công`);
 
       setTimeout(() => {
@@ -1250,6 +1907,7 @@ function initWalletPage() {
         renderWalletHistory();
         renderUserArea();
         updateWalletBadges();
+        updateNotificationBadges();
       }
     });
   }
@@ -1278,6 +1936,7 @@ function initWalletPage() {
         renderWalletHistory();
         renderUserArea();
         updateWalletBadges();
+        updateNotificationBadges();
       }
     });
   }
@@ -1297,7 +1956,10 @@ function renderOrdersPage() {
     return;
   }
 
-  const orders = getOrders().filter((item) => item.user === user.username);
+  const isAdmin = isAdminUser(user);
+  const orders = isAdmin
+    ? getOrders()
+    : getOrders().filter((item) => item.user === user.username);
 
   if (!orders.length) {
     view.innerHTML = `
@@ -1313,10 +1975,22 @@ function renderOrdersPage() {
   }
 
   view.innerHTML = `
+    <div class="orders-head">
+      <div>
+        <h3 style="margin:0;">${isAdmin ? "Tất cả đơn hàng" : "Lịch sử đơn hàng của bạn"}</h3>
+        <p class="muted" style="margin-top:8px;">
+          ${isAdmin
+            ? "Bạn đang ở chế độ admin và có thể đổi trạng thái đơn."
+            : "Theo dõi trạng thái đơn hàng và tiến độ xử lý của shop."}
+        </p>
+      </div>
+      <div class="orders-mode-tag">${isAdmin ? "Admin mode" : "Khách hàng"}</div>
+    </div>
+
     <div class="list-stack">
       ${orders.map((order) => `
         <article class="card order-card">
-          <div class="row" style="justify-content:space-between;align-items:flex-start;">
+          <div class="row" style="justify-content:space-between;align-items:flex-start;gap:14px;">
             <div>
               <div class="kicker">Mã đơn ${escapeHtml(order.id)}</div>
               <h3 style="margin-top:12px;">Tổng ${formatCurrency(order.total)}</h3>
@@ -1324,6 +1998,7 @@ function renderOrdersPage() {
                 <span>${escapeHtml(order.paymentMethod)}</span>
                 <span>${formatDate(order.createdAt)}</span>
                 <span>${escapeHtml(order.gameNick || "Chưa nhập nick game")}</span>
+                ${isAdmin ? `<span>Khách: ${escapeHtml(order.user)}</span>` : ""}
               </div>
             </div>
             <div>${statusBadge(order.status)}</div>
@@ -1332,11 +2007,16 @@ function renderOrdersPage() {
           <div class="order-items">
             ${order.items.map((item) => `
               <div class="order-item">
-                <strong>${escapeHtml(item.name)}</strong>
-                <div class="mini-meta">
-                  <span>${escapeHtml(item.game)}</span>
-                  <span>SL: ${item.qty}</span>
-                  <span>${formatCurrency(item.price * item.qty)}</span>
+                <div style="display:flex;gap:12px;align-items:flex-start;">
+                  ${renderGameAvatar(item.game, true)}
+                  <div>
+                    <strong>${escapeHtml(item.name)}</strong>
+                    <div class="mini-meta">
+                      <span>${escapeHtml(item.game)}</span>
+                      <span>SL: ${item.qty}</span>
+                      <span>${formatCurrency(item.price * item.qty)}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             `).join("")}
@@ -1344,12 +2024,146 @@ function renderOrdersPage() {
 
           <div class="notice">
             Discord: <strong>${escapeHtml(order.discord || "-")}</strong><br />
-            Ghi chú: <strong>${escapeHtml(order.note || "Không có")}</strong>
+            Ghi chú: <strong>${escapeHtml(order.note || "Không có")}</strong><br />
+            Cập nhật gần nhất: <strong>${formatDate(order.updatedAt || order.createdAt)}</strong>
           </div>
+
+          ${isAdmin ? `
+            <div class="admin-status-box">
+              <select class="admin-status-select" data-status-select="${order.id}">
+                ${buildStatusOptions(order.status)}
+              </select>
+              <button class="btn btn-primary btn-sm" type="button" data-status-save="${order.id}">
+                Cập nhật trạng thái
+              </button>
+            </div>
+          ` : ""}
         </article>
       `).join("")}
     </div>
   `;
+
+  $$("[data-status-save]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const orderId = button.dataset.statusSave;
+      const select = $(`[data-status-select="${orderId}"]`);
+      const nextStatus = select?.value || "";
+
+      const result = updateOrderStatus(orderId, nextStatus);
+      if (!result.ok) {
+        showToast(result.message);
+        return;
+      }
+
+      updateNotificationBadges();
+      showToast(`Đã cập nhật ${orderId} → ${nextStatus}`);
+      renderOrdersPage();
+    });
+  });
+}
+
+/* =========================
+   PAGE: NOTIFICATIONS
+========================= */
+
+function renderNotificationsPage() {
+  const view = $("#notificationsView");
+  if (!view) return;
+
+  const user = getCurrentUser();
+  if (!user) {
+    view.innerHTML = loginPromptCard("Bạn cần đăng nhập để xem hộp thư thông báo.");
+    return;
+  }
+
+  const notifications = getUserNotifications(user.username);
+  const logs = getUserAccountLogs(user.username).slice(0, 20);
+
+  view.innerHTML = `
+    <div class="orders-head">
+      <div>
+        <h3 style="margin:0;">Hộp thư thông báo</h3>
+        <p class="muted" style="margin-top:8px;">
+          Theo dõi cập nhật đơn hàng, số dư ví và hoạt động tài khoản.
+        </p>
+      </div>
+      <div class="row">
+        <button class="btn btn-soft btn-sm" type="button" id="markAllReadBtn">Đánh dấu tất cả đã đọc</button>
+      </div>
+    </div>
+
+    ${notifications.length ? `
+      <div class="list-stack" style="margin-bottom:20px;">
+        ${notifications.map((item) => `
+          <article class="card notification-card ${item.isRead ? "" : "unread"}">
+            <div class="row" style="justify-content:space-between;align-items:flex-start;gap:14px;">
+              <div>
+                <h3 style="margin:0;">${escapeHtml(item.title)}</h3>
+                <p class="muted" style="margin-top:10px;">${escapeHtml(item.message)}</p>
+              </div>
+              <div>${item.isRead ? statusBadge("Đã đọc") : statusBadge("Mới")}</div>
+            </div>
+
+            <div class="notification-meta">
+              <span>🕒 ${formatDate(item.createdAt)}</span>
+              ${item.orderId ? `<span>🧾 ${escapeHtml(item.orderId)}</span>` : ""}
+            </div>
+
+            <div class="notification-actions">
+              ${!item.isRead ? `
+                <button class="btn btn-primary btn-sm" type="button" data-read-notification="${item.id}">
+                  Đánh dấu đã đọc
+                </button>
+              ` : ""}
+              ${item.orderId ? `
+                <a class="btn btn-soft btn-sm" href="orders.html">Xem đơn hàng</a>
+              ` : ""}
+            </div>
+          </article>
+        `).join("")}
+      </div>
+    ` : `
+      <section class="card empty-state" style="margin-bottom:20px;">
+        <h3>Chưa có thông báo nào</h3>
+        <p class="muted">Khi có cập nhật đơn hàng hoặc hoạt động tài khoản, hộp thư sẽ hiển thị tại đây.</p>
+      </section>
+    `}
+
+    <section class="card">
+      <h3>Lịch sử tài khoản</h3>
+      <div class="list-stack" style="margin-top:14px;">
+        ${logs.length ? logs.map((log) => `
+          <article class="order-item account-log-card">
+            <strong>${escapeHtml(log.action)}</strong>
+            <div class="muted" style="margin-top:8px;">${escapeHtml(log.detail || "-")}</div>
+            <div class="mini-meta" style="margin-top:8px;">
+              <span>${formatDate(log.createdAt)}</span>
+            </div>
+          </article>
+        `).join("") : `
+          <p class="muted">Chưa có lịch sử tài khoản.</p>
+        `}
+      </div>
+    </section>
+  `;
+
+  const markAllReadBtn = $("#markAllReadBtn");
+  if (markAllReadBtn) {
+    markAllReadBtn.addEventListener("click", () => {
+      markAllNotificationsRead(user.username);
+      updateNotificationBadges();
+      renderNotificationsPage();
+      showToast("Đã đánh dấu tất cả thông báo là đã đọc");
+    });
+  }
+
+  $$("[data-read-notification]").forEach((button) => {
+    button.addEventListener("click", () => {
+      markNotificationRead(button.dataset.readNotification);
+      updateNotificationBadges();
+      renderNotificationsPage();
+    });
+  });
 }
 
 /* =========================
@@ -1391,6 +2205,10 @@ function renderProfilePage() {
           <div class="order-item">
             <strong>Ngày tham gia</strong>
             <div class="muted" style="margin-top:6px;">${formatDate(user.createdAt)}</div>
+          </div>
+          <div class="order-item">
+            <strong>Quyền tài khoản</strong>
+            <div class="muted" style="margin-top:6px;">${isAdminUser(user) ? "Admin" : "Người dùng"}</div>
           </div>
           <div class="order-item">
             <strong>Số dư ví</strong>
@@ -1457,6 +2275,7 @@ function renderProfilePage() {
       if (result.ok) {
         if ($("#profileNewPassword")) $("#profileNewPassword").value = "";
         renderUserArea();
+        updateNotificationBadges();
         showToast("Cập nhật hồ sơ thành công");
       }
     });
@@ -1490,6 +2309,7 @@ function initLoginPage() {
         renderUserArea();
         updateCartBadges();
         updateWalletBadges();
+        updateNotificationBadges();
         showToast("Đã đăng xuất");
         setTimeout(() => window.location.reload(), 400);
       });
@@ -1532,6 +2352,7 @@ function initLoginPage() {
       renderUserArea();
       updateCartBadges();
       updateWalletBadges();
+      updateNotificationBadges();
 
       showToast("Xin chào, " + (result.user.displayName || result.user.username));
 
@@ -1626,6 +2447,7 @@ function initPageSpecific() {
   if (page === "orders") renderOrdersPage();
   if (page === "profile") renderProfilePage();
   if (page === "login") initLoginPage();
+  if (page === "notifications") renderNotificationsPage();
 }
 
 /* =========================
@@ -1634,10 +2456,13 @@ function initPageSpecific() {
 
 document.addEventListener("DOMContentLoaded", () => {
   seedData();
+  ensureRuntimeStyles();
   initTheme();
+  normalizeTopbar();
   renderUserArea();
   updateCartBadges();
   updateWalletBadges();
+  updateNotificationBadges();
   bindAddToCartButtons(document);
   bindDiscordButtons();
   initPageSpecific();
@@ -1646,4 +2471,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (year) {
     year.textContent = new Date().getFullYear();
   }
+
+  window.shopAdminUpdateOrderStatus = updateOrderStatus;
 });
