@@ -665,22 +665,27 @@ function ensureRuntimeStyles() {
   const style = document.createElement("style");
   style.id = "runtimeShopStyles";
   style.textContent = `
+    .topbar .container {
+      width: min(100% - 20px, 1800px);
+      max-width: 1800px;
+    }
+
     .topbar-inner {
       display: grid !important;
-      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-columns: minmax(260px, 340px) minmax(420px, 1fr) auto;
       align-items: center;
-      gap: 20px;
+      gap: 32px;
     }
 
     .brand {
-      min-width: 250px;
+      min-width: 0;
     }
 
     .nav-links {
       display: flex !important;
       justify-content: center;
       align-items: center;
-      gap: 22px;
+      gap: 28px;
       flex-wrap: nowrap;
       min-width: 0;
     }
@@ -694,9 +699,9 @@ function ensureRuntimeStyles() {
       display: flex !important;
       align-items: center;
       justify-content: flex-end;
-      gap: 10px;
+      gap: 12px;
       flex-wrap: nowrap;
-      min-width: fit-content;
+      min-width: max-content;
       margin-left: auto;
     }
 
@@ -709,17 +714,18 @@ function ensureRuntimeStyles() {
     .theme-pills {
       display: none !important;
     }
-    
-.user-menu-caret {
-  font-size: 12px;
-  line-height: 1;
-  opacity: 0.9;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
 
-.user-menu-toggle.active .user-menu-caret {
-  transform: rotate(180deg);
-}
+    .user-menu-caret {
+      font-size: 12px;
+      line-height: 1;
+      opacity: 0.9;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .user-menu-toggle.active .user-menu-caret {
+      transform: rotate(180deg);
+    }
+
     .notify-count {
       min-width: 18px;
       height: 18px;
@@ -977,7 +983,22 @@ function ensureRuntimeStyles() {
       scroll-margin-top: 100px;
     }
 
-    @media (max-width: 1200px) {
+    @media (max-width: 1400px) {
+      .topbar-inner {
+        grid-template-columns: minmax(220px, 300px) minmax(320px, 1fr) auto;
+        gap: 22px;
+      }
+
+      .nav-links {
+        gap: 18px;
+      }
+
+      .top-actions {
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 1180px) {
       .topbar-inner {
         grid-template-columns: 1fr;
         gap: 12px;
@@ -992,6 +1013,7 @@ function ensureRuntimeStyles() {
       .top-actions {
         justify-content: flex-start;
         flex-wrap: wrap;
+        min-width: 0;
       }
     }
 
