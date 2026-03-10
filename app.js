@@ -709,7 +709,17 @@ function ensureRuntimeStyles() {
     .theme-pills {
       display: none !important;
     }
+    
+.user-menu-caret {
+  font-size: 12px;
+  line-height: 1;
+  opacity: 0.9;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
 
+.user-menu-toggle.active .user-menu-caret {
+  transform: rotate(180deg);
+}
     .notify-count {
       min-width: 18px;
       height: 18px;
@@ -1132,17 +1142,17 @@ function renderUserArea() {
   const panel = $("#userMenuPanel");
   const logoutBtn = $("#logoutBtnHeader");
 
-  if (toggle && panel) {
-    toggle.addEventListener("click", (event) => {
-      event.stopPropagation();
-      panel.classList.toggle("show");
-    });
+if (toggle && panel) {
+  toggle.addEventListener("click", (event) => {
+    event.stopPropagation();
+    panel.classList.toggle("show");
+    toggle.classList.toggle("active", panel.classList.contains("show"));
+  });
 
-    panel.addEventListener("click", (event) => {
-      event.stopPropagation();
-    });
-  }
-
+  panel.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+}
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
       logoutUser();
