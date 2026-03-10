@@ -1062,9 +1062,10 @@ function renderUserArea() {
   userArea.innerHTML = `
     <div class="user-menu-wrap">
       <button class="user-menu-toggle" type="button" id="userMenuToggle">
-        <span class="dot"></span>
-        <span>${escapeHtml(currentUser.displayName || currentUser.username)}</span>
-      </button>
+  <span class="dot"></span>
+  <span>${escapeHtml(currentUser.displayName || currentUser.username)}</span>
+  <span class="user-menu-caret">▼</span>
+</button>
 
       <div class="user-menu-panel" id="userMenuPanel">
         <div class="user-menu-head">
