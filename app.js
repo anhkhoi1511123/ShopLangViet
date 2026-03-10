@@ -5,9 +5,9 @@ const STORAGE_KEYS = {
   CART: "shopLangVietCartV3",
   ORDERS: "shopLangVietOrdersV3",
   TOPUPS: "shopLangVietTopupsV3",
-  NOTIFICATIONS: "shopLangVietNotificationsV1",
-  ACCOUNT_LOGS: "shopLangVietAccountLogsV1",
-  DIRECT_CHECKOUT: "shopLangVietDirectCheckoutV1"
+  NOTIFICATIONS: "shopLangVietNotificationsV2",
+  ACCOUNT_LOGS: "shopLangVietAccountLogsV2",
+  DIRECT_CHECKOUT: "shopLangVietDirectCheckoutV2"
 };
 
 const ORDER_STATUS = {
@@ -23,12 +23,12 @@ const DISCORD_NAME = "ngai_hamster";
 const LOCKED_THEME = "royal-red";
 
 /* DÁN WEBHOOK MỚI CỦA BẠN VÀO ĐÂY */
-const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1480583732330107091/q0izkFd7-vCnrp6rERRQVOWmtNVsmEen0M9T5slJQw3IMHpJOt_cjIXNjYboQJrqPJsM";
-const DISCORD_STAFF_ROLE_ID = "1467060755156308095";
+const DISCORD_WEBHOOK_URL = "DAN_WEBHOOK_MOI_CUA_BAN_VAO_DAY";
+const DISCORD_STAFF_ROLE_ID = "";
 
 const GAME_META = {
   "Blox Fruits": { avatar: "BF", emoji: "🍎" },
-  "Fisch": { avatar: "FI", emoji: "🐟" },
+  Fisch: { avatar: "FI", emoji: "🐟" },
   "Grow a Garden": { avatar: "GG", emoji: "🌱" }
 };
 
@@ -232,6 +232,23 @@ function uid(prefix) {
   return `${prefix}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
 }
 
+function createShopId() {
+  const base = `${Date.now()}${Math.floor(Math.random() * 100000)
+    .toString()
+    .padStart(5, "0")}`;
+  return base.slice(0, 17);
+}
+
+function getInitials(name = "") {
+  return String(name)
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0] || "")
+    .join("")
+    .toUpperCase() || "SV";
+}
+
 function ensureToast() {
   let toast = $("#appToast");
   if (!toast) {
@@ -331,6 +348,17 @@ function getStatusNotificationContent(status, orderId) {
     message: `Đơn ${orderId} có trạng thái mới: ${status}.`,
     type: "info"
   };
+}
+
+function jumpToHashIfNeeded() {
+  const hash = window.location.hash;
+  if (!hash) return;
+  const target = $(hash);
+  if (!target) return;
+
+  setTimeout(() => {
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 150);
 }
 
 /* =========================
@@ -509,13 +537,15 @@ function seedData() {
         displayName: "ngai_hamster",
         balance: 300000,
         role: "admin",
+        shopId: "11313091767368760",
         createdAt: "2026-03-01T09:00:00"
       }
     ]);
   } else {
     const migratedUsers = users.map((user) => ({
       ...user,
-      role: user.role || (isAdminUsername(user.username) ? "admin" : "user")
+      role: user.role || (isAdminUsername(user.username) ? "admin" : "user"),
+      shopId: user.shopId || createShopId()
     }));
     saveUsers(migratedUsers);
   }
@@ -533,7 +563,6 @@ function seedData() {
         updatedAt: "2026-03-02T18:40:00",
         completedAt: "2026-03-02T18:40:00",
         gameNick: "DemoBloxUser",
-        discord: "ngai_hamster",
         note: "Đơn demo có sẵn để xem lịch sử.",
         items: [
           {
@@ -582,10 +611,10 @@ function seedData() {
       {
         id: "TP1001",
         user: "demo",
-        method: "MoMo",
+        method: "ATM",
         amount: 200000,
         status: "Thành công",
-        detail: "MOMO-DEMO-001",
+        detail: "BANK-DEMO-001",
         createdAt: "2026-03-01T10:10:00"
       },
       {
@@ -627,7 +656,7 @@ function initTheme() {
 }
 
 /* =========================
-   RUNTIME UI STYLES
+   RUNTIME STYLES
 ========================= */
 
 function ensureRuntimeStyles() {
@@ -637,54 +666,190 @@ function ensureRuntimeStyles() {
   style.id = "runtimeShopStyles";
   style.textContent = `
     .topbar-inner {
-      gap: 16px;
+      display: grid !important;
+      grid-template-columns: auto minmax(0, 1fr) auto;
       align-items: center;
-      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .brand {
+      min-width: 250px;
     }
 
     .nav-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
+      display: flex !important;
+      justify-content: center;
       align-items: center;
+      gap: 22px;
+      flex-wrap: nowrap;
+      min-width: 0;
     }
 
     .nav-links a {
       white-space: nowrap;
+      font-size: 15px;
     }
 
     .top-actions {
-      margin-left: auto;
-      display: flex;
+      display: flex !important;
       align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
       justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: nowrap;
+      min-width: fit-content;
+      margin-left: auto;
     }
 
-    .bell-link,
-    .wallet-pill,
-    .icon-link {
-      position: relative;
+    .top-actions .btn,
+    .top-actions .icon-link,
+    .user-menu-toggle {
+      white-space: nowrap;
+    }
+
+    .theme-pills {
+      display: none !important;
     }
 
     .notify-count {
-      min-width: 20px;
-      height: 20px;
-      padding: 0 6px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
       border-radius: 999px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
-      margin-left: 6px;
+      margin-left: 4px;
       background: #f7d36a;
       color: #4d1707;
     }
 
     .notify-count.zero {
       opacity: .75;
+    }
+
+    .user-menu-wrap {
+      position: relative;
+    }
+
+    .user-menu-toggle {
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      color: inherit;
+      border-radius: 14px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      min-height: 44px;
+    }
+
+    .user-menu-toggle .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #2fd16c;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 3px rgba(47, 209, 108, .12);
+    }
+
+    .user-menu-panel {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 10px);
+      width: 340px;
+      max-width: min(92vw, 340px);
+      background: linear-gradient(180deg, rgba(42, 10, 8, .98), rgba(58, 17, 10, .98));
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(0,0,0,.35);
+      padding: 16px;
+      display: none;
+      z-index: 1200;
+    }
+
+    .user-menu-panel.show {
+      display: block;
+    }
+
+    .user-menu-head {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px dashed rgba(255,255,255,.15);
+    }
+
+    .user-menu-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      background: linear-gradient(135deg, #f7d36a, #d9912d);
+      color: #5a1a08;
+      font-size: 18px;
+    }
+
+    .user-menu-head strong {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .user-menu-head p {
+      margin: 0;
+      opacity: .92;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .user-menu-section {
+      margin-top: 14px;
+    }
+
+    .user-menu-section-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #f7d36a;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .user-menu-links {
+      display: grid;
+      gap: 6px;
+    }
+
+    .user-menu-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.04);
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    .user-menu-link:hover {
+      transform: translateX(2px);
+      background: rgba(255,255,255,.06);
+    }
+
+    .user-menu-logout {
+      width: 100%;
+      margin-top: 14px;
     }
 
     .game-avatar {
@@ -705,8 +870,8 @@ function ensureRuntimeStyles() {
     .game-avatar.small {
       width: 32px;
       height: 32px;
-      font-size: 11px;
       border-radius: 10px;
+      font-size: 11px;
     }
 
     .service-head {
@@ -790,15 +955,41 @@ function ensureRuntimeStyles() {
       opacity: .96;
     }
 
-    .theme-pills {
-      display: none !important;
+    .history-block {
+      margin-top: 20px;
     }
 
-    @media (max-width: 980px) {
-      .top-actions {
-        width: 100%;
-        margin-left: 0;
+    .history-block h3 {
+      margin-bottom: 12px;
+    }
+
+    .profile-section-id {
+      scroll-margin-top: 100px;
+    }
+
+    @media (max-width: 1200px) {
+      .topbar-inner {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .nav-links {
         justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .top-actions {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .user-menu-panel {
+        left: 0;
+        right: auto;
+        width: min(94vw, 340px);
       }
     }
   `;
@@ -822,9 +1013,35 @@ function ensureBellLink() {
   }
 }
 
+function ensureWalletLink() {
+  const topActions = $(".top-actions");
+  if (!topActions) return;
+
+  if (!topActions.querySelector(".wallet-pill")) {
+    const wallet = document.createElement("a");
+    wallet.className = "icon-link wallet-pill";
+    wallet.href = "wallet.html";
+    wallet.innerHTML = `💰 <span data-wallet-balance>0đ</span>`;
+    topActions.insertBefore(wallet, topActions.firstChild);
+  }
+}
+
 function normalizeTopbar() {
   $$(".theme-pills").forEach((el) => el.remove());
+  ensureWalletLink();
   ensureBellLink();
+}
+
+function bindGlobalUserMenuClose() {
+  if (window.__shopUserMenuBound) return;
+
+  document.addEventListener("click", () => {
+    $$(".user-menu-panel.show").forEach((panel) => {
+      panel.classList.remove("show");
+    });
+  });
+
+  window.__shopUserMenuBound = true;
 }
 
 function renderUserArea() {
@@ -840,16 +1057,91 @@ function renderUserArea() {
     return;
   }
 
+  const shopId = currentUser.shopId || createShopId();
+
   userArea.innerHTML = `
-    <div class="user-mini">
-      <span class="user-dot"></span>
-      <span>${escapeHtml(currentUser.displayName || currentUser.username)}</span>
+    <div class="user-menu-wrap">
+      <button class="user-menu-toggle" type="button" id="userMenuToggle">
+        <span class="dot"></span>
+        <span>${escapeHtml(currentUser.displayName || currentUser.username)}</span>
+      </button>
+
+      <div class="user-menu-panel" id="userMenuPanel">
+        <div class="user-menu-head">
+          <div class="user-menu-avatar">${escapeHtml(getInitials(currentUser.displayName || currentUser.username))}</div>
+          <div>
+            <strong>${escapeHtml(currentUser.displayName || currentUser.username)}</strong>
+            <p>ID: ${escapeHtml(shopId)}</p>
+            <p>Số dư: ${formatCurrency(currentUser.balance || 0)}</p>
+          </div>
+        </div>
+
+        <div class="user-menu-section">
+          <div class="user-menu-section-title">Tài khoản</div>
+          <div class="user-menu-links">
+            <a class="user-menu-link" href="profile.html#profile-info">
+              <span>&gt; Thông tin</span><span>→</span>
+            </a>
+            <a class="user-menu-link" href="profile.html#password-change">
+              <span>&gt; Đổi mật khẩu</span><span>→</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="user-menu-section">
+          <div class="user-menu-section-title">Nạp tiền</div>
+          <div class="user-menu-links">
+            <a class="user-menu-link" href="wallet.html#card-topup">
+              <span>&gt; Nạp thẻ cào (Tự động)</span><span>→</span>
+            </a>
+            <a class="user-menu-link" href="wallet.html#atm-topup">
+              <span>&gt; Nạp qua ATM (Ưu đãi hơn)</span><span>→</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="user-menu-section">
+          <div class="user-menu-section-title">Lịch sử</div>
+          <div class="user-menu-links">
+            <a class="user-menu-link" href="wallet.html#card-history">
+              <span>&gt; Lịch sử nạp thẻ</span><span>→</span>
+            </a>
+            <a class="user-menu-link" href="wallet.html#atm-history">
+              <span>&gt; Lịch sử nạp ATM</span><span>→</span>
+            </a>
+            <a class="user-menu-link" href="wallet.html#trade-history">
+              <span>&gt; Lịch sử rút/mua</span><span>→</span>
+            </a>
+            <a class="user-menu-link" href="orders.html">
+              <span>&gt; Lịch sử đơn hàng</span><span>→</span>
+            </a>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-block user-menu-logout" type="button" id="logoutBtnHeader">
+          Đăng xuất
+        </button>
+      </div>
     </div>
-    <a class="btn btn-soft btn-sm" href="profile.html">Hồ sơ</a>
-    <button class="btn btn-soft btn-sm" id="logoutBtnHeader" type="button">Đăng xuất</button>
   `;
 
+  bindGlobalUserMenuClose();
+
+  const toggle = $("#userMenuToggle");
+  const panel = $("#userMenuPanel");
   const logoutBtn = $("#logoutBtnHeader");
+
+  if (toggle && panel) {
+    toggle.addEventListener("click", (event) => {
+      event.stopPropagation();
+      panel.classList.toggle("show");
+    });
+
+    panel.addEventListener("click", (event) => {
+      event.stopPropagation();
+    });
+  }
+
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
       logoutUser();
@@ -886,7 +1178,7 @@ function updateWalletBadges() {
 }
 
 function updateNotificationBadges() {
-  const count = getUnreadNotificationCount();
+  const count = getCurrentUser() ? getUnreadNotificationCount() : 0;
 
   $$("[data-notification-count]").forEach((el) => {
     el.textContent = count;
@@ -956,6 +1248,7 @@ function registerUser(username, password, displayName) {
     displayName: cleanDisplayName || cleanUsername,
     balance: 0,
     role: isAdminUsername(cleanUsername) ? "admin" : "user",
+    shopId: createShopId(),
     createdAt: new Date().toISOString()
   };
 
@@ -1264,7 +1557,7 @@ async function notifyDiscordOrder(order, extra = {}) {
    ORDER / CHECKOUT
 ========================= */
 
-function createOrderFromCart({ paymentMethod, gameNick, discord, note }) {
+function createOrderFromCart({ paymentMethod, gameNick, note }) {
   const user = getCurrentUser();
   if (!user) return { ok: false, message: "Bạn chưa đăng nhập." };
 
@@ -1272,7 +1565,6 @@ function createOrderFromCart({ paymentMethod, gameNick, discord, note }) {
   if (!items.length) return { ok: false, message: "Không có gói nào để thanh toán." };
 
   const cleanGameNick = String(gameNick || "").trim();
-  const cleanDiscord = String(discord || "").trim();
   const cleanNote = String(note || "").trim();
 
   if (!cleanGameNick) {
@@ -1309,7 +1601,6 @@ function createOrderFromCart({ paymentMethod, gameNick, discord, note }) {
     updatedAt: new Date().toISOString(),
     completedAt: "",
     gameNick: cleanGameNick,
-    discord: cleanDiscord,
     note: cleanNote,
     items: items.map((item) => ({
       serviceId: item.serviceId,
@@ -1350,6 +1641,11 @@ function updateOrderStatus(orderId, nextStatus) {
     return { ok: false, message: "Không tìm thấy đơn hàng." };
   }
 
+  const oldStatus = orders[index].status;
+  if (oldStatus === nextStatus) {
+    return { ok: true, order: orders[index], message: "Trạng thái không đổi." };
+  }
+
   orders[index].status = nextStatus;
   orders[index].updatedAt = new Date().toISOString();
 
@@ -1367,6 +1663,12 @@ function updateOrderStatus(orderId, nextStatus) {
     message: notify.message,
     type: notify.type,
     orderId
+  });
+
+  addAccountLog({
+    username: orders[index].user,
+    action: "Cập nhật đơn hàng",
+    detail: `Đơn ${orderId} đã chuyển sang trạng thái "${nextStatus}".`
   });
 
   return { ok: true, order: orders[index] };
@@ -1509,7 +1811,7 @@ function renderCartPage() {
   if (!items.length) {
     view.innerHTML = `
       <section class="card empty-state">
-        <h3>Giỏ hàng hiện không còn là bước bắt buộc</h3>
+        <h3>Giỏ hàng không còn là bước bắt buộc</h3>
         <p class="muted">Giờ bạn có thể bấm trực tiếp <strong>Mua ngay</strong> ở từng gói để sang thanh toán luôn.</p>
         <div class="row" style="justify-content:center;margin-top:14px;">
           <a class="btn btn-primary" href="services.html">Xem dịch vụ</a>
@@ -1704,11 +2006,6 @@ function renderCheckoutPage() {
           </label>
 
           <label>
-            Discord liên hệ
-            <input class="input" type="text" id="checkoutDiscord" placeholder="Ví dụ: ngai_hamster" />
-          </label>
-
-          <label>
             Ghi chú cho shop
             <textarea class="textarea" id="checkoutNote" placeholder="Mô tả mục tiêu, yêu cầu cụ thể..."></textarea>
           </label>
@@ -1745,12 +2042,10 @@ function renderCheckoutPage() {
       }
 
       const gamePassword = $("#checkoutGamePassword")?.value || "";
-      const discordValue = $("#checkoutDiscord")?.value || "";
 
       const result = createOrderFromCart({
         paymentMethod: $("#checkoutPayment")?.value || "manual",
         gameNick: $("#checkoutGameNick")?.value || "",
-        discord: discordValue,
         note: $("#checkoutNote")?.value || ""
       });
 
@@ -1772,7 +2067,7 @@ function renderCheckoutPage() {
 
       try {
         await notifyDiscordOrder(result.order, {
-          customer: discordValue || getCurrentUser()?.displayName || getCurrentUser()?.username,
+          customer: getCurrentUser()?.displayName || getCurrentUser()?.username,
           gamePassword
         });
       } catch (error) {
@@ -1794,6 +2089,20 @@ function renderCheckoutPage() {
 /* =========================
    PAGE: WALLET
 ========================= */
+
+function ensureWalletSectionIds() {
+  const momoForm = $("#momoForm");
+  if (momoForm) {
+    const wrap = momoForm.closest("section, .card, .form-card") || momoForm.parentElement;
+    if (wrap) wrap.id = "atm-topup";
+  }
+
+  const cardForm = $("#cardForm");
+  if (cardForm) {
+    const wrap = cardForm.closest("section, .card, .form-card") || cardForm.parentElement;
+    if (wrap) wrap.id = "card-topup";
+  }
+}
 
 function renderWalletStats() {
   const target = $("#walletStats");
@@ -1843,50 +2152,125 @@ function renderWalletHistory() {
   if (!user) return;
 
   const topups = getTopups().filter((item) => item.user === user.username);
-
-  if (!topups.length) {
-    target.innerHTML = `
-      <section class="card empty-state">
-        <h3>Chưa có lịch sử nạp tiền</h3>
-        <p class="muted">Hãy thử nạp demo bằng MoMo hoặc thẻ cào.</p>
-      </section>
-    `;
-    return;
-  }
+  const cardTopups = topups.filter((item) => /thẻ cào/i.test(item.method));
+  const atmTopups = topups.filter((item) => !/thẻ cào/i.test(item.method));
+  const orders = getOrders()
+    .filter((item) => item.user === user.username)
+    .filter((item) => /đã thanh toán|hoàn thành|đang xử lý|đang cày/i.test(item.status));
 
   target.innerHTML = `
-    <section class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Mã GD</th>
-            <th>Phương thức</th>
-            <th>Số tiền</th>
-            <th>Chi tiết</th>
-            <th>Trạng thái</th>
-            <th>Thời gian</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${topups.map((item) => `
-            <tr>
-              <td><strong>${escapeHtml(item.id)}</strong></td>
-              <td>${escapeHtml(item.method)}</td>
-              <td><strong>${formatCurrency(item.amount)}</strong></td>
-              <td>${escapeHtml(item.detail || "-")}</td>
-              <td>${statusBadge(item.status)}</td>
-              <td>${formatDate(item.createdAt)}</td>
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
-    </section>
+    <div class="history-block" id="card-history">
+      <h3>Lịch sử nạp thẻ</h3>
+      ${cardTopups.length ? `
+        <section class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Mã GD</th>
+                <th>Phương thức</th>
+                <th>Số tiền</th>
+                <th>Chi tiết</th>
+                <th>Trạng thái</th>
+                <th>Thời gian</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${cardTopups.map((item) => `
+                <tr>
+                  <td><strong>${escapeHtml(item.id)}</strong></td>
+                  <td>${escapeHtml(item.method)}</td>
+                  <td><strong>${formatCurrency(item.amount)}</strong></td>
+                  <td>${escapeHtml(item.detail || "-")}</td>
+                  <td>${statusBadge(item.status)}</td>
+                  <td>${formatDate(item.createdAt)}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </section>
+      ` : `
+        <section class="card empty-state">
+          <p class="muted">Chưa có lịch sử nạp thẻ.</p>
+        </section>
+      `}
+    </div>
+
+    <div class="history-block" id="atm-history">
+      <h3>Lịch sử nạp ATM</h3>
+      ${atmTopups.length ? `
+        <section class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Mã GD</th>
+                <th>Phương thức</th>
+                <th>Số tiền</th>
+                <th>Chi tiết</th>
+                <th>Trạng thái</th>
+                <th>Thời gian</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${atmTopups.map((item) => `
+                <tr>
+                  <td><strong>${escapeHtml(item.id)}</strong></td>
+                  <td>${escapeHtml(item.method)}</td>
+                  <td><strong>${formatCurrency(item.amount)}</strong></td>
+                  <td>${escapeHtml(item.detail || "-")}</td>
+                  <td>${statusBadge(item.status)}</td>
+                  <td>${formatDate(item.createdAt)}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </section>
+      ` : `
+        <section class="card empty-state">
+          <p class="muted">Chưa có lịch sử nạp ATM.</p>
+        </section>
+      `}
+    </div>
+
+    <div class="history-block" id="trade-history">
+      <h3>Lịch sử rút/mua</h3>
+      ${orders.length ? `
+        <section class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Mã đơn</th>
+                <th>Dịch vụ</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th>Thời gian</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${orders.map((order) => `
+                <tr>
+                  <td><strong>${escapeHtml(order.id)}</strong></td>
+                  <td>${escapeHtml((order.items || []).map((item) => item.name).join(", ") || "-")}</td>
+                  <td><strong>${formatCurrency(order.total)}</strong></td>
+                  <td>${statusBadge(order.status)}</td>
+                  <td>${formatDate(order.createdAt)}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </section>
+      ` : `
+        <section class="card empty-state">
+          <p class="muted">Chưa có lịch sử rút/mua.</p>
+        </section>
+      `}
+    </div>
   `;
 }
 
 function initWalletPage() {
   renderWalletStats();
   renderWalletHistory();
+  ensureWalletSectionIds();
 
   const momoForm = $("#momoForm");
   if (momoForm) {
@@ -1894,9 +2278,9 @@ function initWalletPage() {
       event.preventDefault();
 
       const result = addTopup({
-        method: "MoMo",
+        method: "ATM",
         amount: $("#momoAmount")?.value || "",
-        detail: ($("#momoRef")?.value || "").trim() || "MOMO-REF"
+        detail: ($("#momoRef")?.value || "").trim() || "BANK-REF"
       });
 
       showToast(result.message);
@@ -1940,6 +2324,8 @@ function initWalletPage() {
       }
     });
   }
+
+  jumpToHashIfNeeded();
 }
 
 /* =========================
@@ -2023,7 +2409,6 @@ function renderOrdersPage() {
           </div>
 
           <div class="notice">
-            Discord: <strong>${escapeHtml(order.discord || "-")}</strong><br />
             Ghi chú: <strong>${escapeHtml(order.note || "Không có")}</strong><br />
             Cập nhật gần nhất: <strong>${formatDate(order.updatedAt || order.createdAt)}</strong>
           </div>
@@ -2191,9 +2576,13 @@ function renderProfilePage() {
 
   view.innerHTML = `
     <div class="grid-2">
-      <section class="card">
+      <section class="card profile-section-id" id="profile-info">
         <h3>Thông tin tài khoản</h3>
         <div class="list-stack">
+          <div class="order-item">
+            <strong>ID tài khoản</strong>
+            <div class="muted" style="margin-top:6px;">${escapeHtml(user.shopId || "-")}</div>
+          </div>
           <div class="order-item">
             <strong>Tên đăng nhập</strong>
             <div class="muted" style="margin-top:6px;">${escapeHtml(user.username)}</div>
@@ -2217,7 +2606,7 @@ function renderProfilePage() {
         </div>
       </section>
 
-      <section class="form-card">
+      <section class="form-card profile-section-id" id="password-change">
         <h3>Cập nhật hồ sơ</h3>
         <form id="profileForm">
           <label>
@@ -2280,6 +2669,8 @@ function renderProfilePage() {
       }
     });
   }
+
+  jumpToHashIfNeeded();
 }
 
 /* =========================
