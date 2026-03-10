@@ -23,8 +23,8 @@ const DISCORD_NAME = "ngai_hamster";
 const LOCKED_THEME = "royal-red";
 
 /* DÁN WEBHOOK MỚI CỦA BẠN VÀO ĐÂY */
-const DISCORD_WEBHOOK_URL = "DAN_WEBHOOK_MOI_CUA_BAN_VAO_DAY";
-const DISCORD_STAFF_ROLE_ID = "";
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1480583732330107091/q0izkFd7-vCnrp6rERRQVOWmtNVsmEen0M9T5slJQw3IMHpJOt_cjIXNjYboQJrqPJsM";
+const DISCORD_STAFF_ROLE_ID = "1467060755156308095";
 
 const GAME_META = {
   "Blox Fruits": { avatar: "BF", emoji: "🍎" },
