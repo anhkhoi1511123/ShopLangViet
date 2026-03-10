@@ -1049,11 +1049,14 @@ function bindGlobalUserMenuClose() {
     $$(".user-menu-panel.show").forEach((panel) => {
       panel.classList.remove("show");
     });
+
+    $$(".user-menu-toggle.active").forEach((toggle) => {
+      toggle.classList.remove("active");
+    });
   });
 
   window.__shopUserMenuBound = true;
 }
-
 function renderUserArea() {
   const userArea = $("#userArea");
   if (!userArea) return;
