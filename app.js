@@ -28,16 +28,19 @@ const DISCORD_STAFF_ROLE_ID = "1467060755156308095";
 
 const GAME_META = {
   "Blox Fruits": {
-    avatar: "assets/blox-fruits.png",
+    avatar: "BF",
     emoji: "🍎",
+    image: "assets/blox-fruits.png"
   },
   Fisch: {
-    avatar: "assets/fisch.png",
+    avatar: "FI",
     emoji: "🐟",
+    image: "assets/fisch.png"
   },
   "Grow a Garden": {
-    avatar: "assets/grow-a-garden.png",
+    avatar: "GG",
     emoji: "🌱",
+    image: "assets/grow-a-garden.png"
   }
 };
 
