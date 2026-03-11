@@ -27,9 +27,21 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/148058373233010709
 const DISCORD_STAFF_ROLE_ID = "1467060755156308095";
 
 const GAME_META = {
-  "Blox Fruits": { avatar: "BF", emoji: "🍎" },
-  Fisch: { avatar: "FI", emoji: "🐟" },
-  "Grow a Garden": { avatar: "GG", emoji: "🌱" }
+  "Blox Fruits": {
+    avatar: "BF",
+    emoji: "🍎",
+    image: "assets/games/blox-fruits.png"
+  },
+  Fisch: {
+    avatar: "FI",
+    emoji: "🐟",
+    image: "assets/games/fisch.png"
+  },
+  "Grow a Garden": {
+    avatar: "GG",
+    emoji: "🌱",
+    image: "assets/games/grow-a-garden.png"
+  }
 };
 
 const SERVICES = [
@@ -276,6 +288,20 @@ function getGameMeta(game) {
 
 function renderGameAvatar(game, small = false) {
   const meta = getGameMeta(game);
+
+  if (meta.image) {
+    return `
+      <span class="game-avatar ${small ? "small" : ""}">
+        <img
+          src="${escapeHtml(meta.image)}"
+          alt="${escapeHtml(game)}"
+          class="game-avatar-img"
+          loading="lazy"
+        />
+      </span>
+    `;
+  }
+
   return `
     <span class="game-avatar ${small ? "small" : ""}">
       ${escapeHtml(meta.avatar)}
@@ -881,7 +907,18 @@ function ensureRuntimeStyles() {
       background: linear-gradient(135deg, #f6d779, #e0a93d);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.4);
       flex-shrink: 0;
+      
     }
+    .game-avatar {
+  overflow: hidden;
+}
+
+.game-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 
     .game-avatar.small {
       width: 32px;
