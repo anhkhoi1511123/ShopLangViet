@@ -30,17 +30,17 @@ const GAME_META = {
   "Blox Fruits": {
     avatar: "BF",
     emoji: "🍎",
-    image: "assets/games/blox-fruits.png"
+    image: "assets/blox-fruits.png"
   },
   Fisch: {
     avatar: "FI",
     emoji: "🐟",
-    image: "assets/games/fisch.png"
+    image: "assets/fisch.png"
   },
   "Grow a Garden": {
     avatar: "GG",
     emoji: "🌱",
-    image: "assets/games/grow-a-garden.png"
+    image: "assets/grow-a-garden.png"
   }
 };
 
@@ -909,7 +909,7 @@ function ensureRuntimeStyles() {
       flex-shrink: 0;
       
     }
-    .game-avatar {
+.game-avatar {
   overflow: hidden;
 }
 
@@ -919,7 +919,6 @@ function ensureRuntimeStyles() {
   object-fit: cover;
   display: block;
 }
-
     .game-avatar.small {
       width: 32px;
       height: 32px;
