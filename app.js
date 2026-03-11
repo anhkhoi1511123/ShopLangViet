@@ -261,6 +261,15 @@ function getInitials(name = "") {
     .toUpperCase() || "SV";
 }
 
+function normalizeText(value = "") {
+  return String(value)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
 function ensureToast() {
   let toast = $("#appToast");
   if (!toast) {
@@ -307,6 +316,44 @@ function renderGameAvatar(game, small = false) {
       ${escapeHtml(meta.avatar)}
     </span>
   `;
+}
+
+function upgradeStaticGameAvatars(scope = document) {
+  const cards = scope.querySelectorAll(".card, article, section, .game-card");
+
+  cards.forEach((card) => {
+    const avatarEl = card.querySelector(".game-avatar");
+    if (!avatarEl) return;
+    if (avatarEl.querySelector("img")) return;
+
+    const titleEl = card.querySelector("h3, h4, .section-title, .title-lg, strong");
+    if (!titleEl) return;
+
+    const titleText = normalizeText(titleEl.textContent || "");
+    if (!titleText) return;
+
+    const matchedGame = Object.keys(GAME_META).find((gameName) => {
+      const normalizedGame = normalizeText(gameName);
+      return (
+        titleText.includes(normalizedGame) ||
+        normalizedGame.includes(titleText)
+      );
+    });
+
+    if (!matchedGame) return;
+
+    const meta = getGameMeta(matchedGame);
+    if (!meta.image) return;
+
+    avatarEl.innerHTML = `
+      <img
+        src="${escapeHtml(meta.image)}"
+        alt="${escapeHtml(matchedGame)}"
+        class="game-avatar-img"
+        loading="lazy"
+      />
+    `;
+  });
 }
 
 function isAdminUsername(username = "") {
@@ -907,18 +954,16 @@ function ensureRuntimeStyles() {
       background: linear-gradient(135deg, #f6d779, #e0a93d);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.4);
       flex-shrink: 0;
-      
+      overflow: hidden;
     }
-.game-avatar {
-  overflow: hidden;
-}
 
-.game-avatar-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+    .game-avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
     .game-avatar.small {
       width: 32px;
       height: 32px;
@@ -1115,6 +1160,7 @@ function bindGlobalUserMenuClose() {
 
   window.__shopUserMenuBound = true;
 }
+
 function renderUserArea() {
   const userArea = $("#userArea");
   if (!userArea) return;
@@ -1133,10 +1179,10 @@ function renderUserArea() {
   userArea.innerHTML = `
     <div class="user-menu-wrap">
       <button class="user-menu-toggle" type="button" id="userMenuToggle">
-  <span class="dot"></span>
-  <span>${escapeHtml(currentUser.displayName || currentUser.username)}</span>
-  <span class="user-menu-caret">▾</span>
-</button>
+        <span class="dot"></span>
+        <span>${escapeHtml(currentUser.displayName || currentUser.username)}</span>
+        <span class="user-menu-caret">▾</span>
+      </button>
 
       <div class="user-menu-panel" id="userMenuPanel">
         <div class="user-menu-head">
@@ -1203,17 +1249,18 @@ function renderUserArea() {
   const panel = $("#userMenuPanel");
   const logoutBtn = $("#logoutBtnHeader");
 
-if (toggle && panel) {
-  toggle.addEventListener("click", (event) => {
-    event.stopPropagation();
-    panel.classList.toggle("show");
-    toggle.classList.toggle("active", panel.classList.contains("show"));
-  });
+  if (toggle && panel) {
+    toggle.addEventListener("click", (event) => {
+      event.stopPropagation();
+      panel.classList.toggle("show");
+      toggle.classList.toggle("active", panel.classList.contains("show"));
+    });
 
-  panel.addEventListener("click", (event) => {
-    event.stopPropagation();
-  });
-}
+    panel.addEventListener("click", (event) => {
+      event.stopPropagation();
+    });
+  }
+
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
       logoutUser();
@@ -1862,6 +1909,7 @@ function renderServiceGrid(selector, slug) {
     .join("");
 
   bindBuyNowButtons(target);
+  upgradeStaticGameAvatars(target);
 }
 
 /* =========================
@@ -2929,6 +2977,7 @@ document.addEventListener("DOMContentLoaded", () => {
   bindAddToCartButtons(document);
   bindDiscordButtons();
   initPageSpecific();
+  upgradeStaticGameAvatars(document);
 
   const year = $("#year");
   if (year) {
